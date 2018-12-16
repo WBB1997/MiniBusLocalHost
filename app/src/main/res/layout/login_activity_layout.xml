@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/ic_login_bg">
+    android:background="@mipmap/ic_login_bg">
     <!--操作界面-->
     <RelativeLayout
         android:layout_width="@dimen/login_handle_layout_width"
