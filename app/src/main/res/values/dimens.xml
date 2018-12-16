@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--登陆界面的宽度-->
+    <dimen name="login_activity_layout_width">1920px</dimen>
+    <!--登陆界面的高度-->
+    <dimen name="login_activity_layout_height">540px</dimen>
+    <!--登陆界面操作区域的宽度-->
+    <dimen name="login_handle_layout_width">960px</dimen>
+    <!--登陆界面操作区域的高度-->
+    <dimen name="login_handle_layout_height">380px</dimen>
+    <!--登陆界面数字按钮的宽度-->
+    <dimen name="login_activity_number_button_width">164px</dimen>
+    <!--登陆界面数字按钮的高度-->
+    <dimen name="login_activity_number_button_height">64px</dimen>
+    <!--登陆界面数字按钮的字体大小-->
+    <dimen name="login_activity_number_button_textSize"></dimen>
+    <!--登陆界面输入框的宽度-->
+    <dimen name="login_layout_input_edittext_width">374px</dimen>
+    <!--登陆界面输入框的高度-->
+    <dimen name="login_layout_input_edittext_height">64px</dimen>
+    <!--登陆界面输入框字体的大小-->
+    <dimen name="login_layout_input_edittext_textSize"></dimen>
+    <!--登陆界面的左右边距-->
+    <dimen name="login_layout_margin_left_right">15px</dimen>
+    <!--登陆界面的上下边距-->
+    <dimen name="login_layout_margin_top_buttom">15px</dimen>
+    <!--显示主界面-->
+    <!--主界面左边宽度-->
+    <dimen name="main_layout_left_width">422px</dimen>
+    <!--主界面左边高度-->
+    <dimen name="main_layout_left_height">460px</dimen>
+    <!--主界面中间宽度-->
+    <dimen name="main_layout_center_width">910px</dimen>
+    <!--主界面中间高度-->
+    <dimen name="main_layout_center_height">420px</dimen>
+    <!--主界面右边宽度-->
+    <dimen name="main_layout_right_width">370px</dimen>
+    <!--主界面右边高度-->
+    <dimen name="main_layout_right_height">304px</dimen>
+</resources>
