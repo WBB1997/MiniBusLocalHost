@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/ic_login_bg">
     <!--操作界面-->
     <RelativeLayout
         android:layout_width="@dimen/login_handle_layout_width"
@@ -21,13 +22,20 @@
                 android:layout_marginBottom="@dimen/login_layout_margin_top_buttom"
                 android:background="@drawable/circle_border"
                 android:orientation="horizontal">
-
+                <!--切图-->
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:gravity="center">
 
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16px"
+                        android:background="@drawable/ic_username"
+                        android:gravity="center" />
                 </LinearLayout>
-
+                <!--输入框-->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
@@ -38,7 +46,8 @@
                         android:layout_height="match_parent"
                         android:background="@null"
                         android:hint="@string/login_activity_et_hint_username"
-                        android:inputType="number" />
+                        android:inputType="number"
+                        android:textColor="@color/login_hint_color" />
                 </LinearLayout>
             </LinearLayout>
             <!--密码输入框-->
@@ -50,13 +59,20 @@
                 android:layout_marginBottom="@dimen/login_layout_margin_top_buttom"
                 android:background="@drawable/circle_border"
                 android:orientation="horizontal">
-
+                <!--切图-->
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:gravity="center">
 
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16px"
+                        android:background="@drawable/ic_password"
+                        android:gravity="center" />
                 </LinearLayout>
-
+                <!--输入框-->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
@@ -67,22 +83,33 @@
                         android:layout_height="match_parent"
                         android:background="@null"
                         android:hint="@string/login_activity_et_hint_password"
-                        android:inputType="numberPassword" />
+                        android:inputType="numberPassword"
+                        android:textColor="@color/login_hint_color" />
                 </LinearLayout>
             </LinearLayout>
-            <!--信息显示输入框-->
+            <!--确认-->
             <LinearLayout
-                android:id="@+id/login_activity_input_layout_show"
+                android:id="@+id/login_activity_number_row_5"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/login_activity_input_layout_password"
-                android:background="@drawable/circle_border"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/login_activity_input_tv_show"
+                android:layout_height="@dimen/login_activity_number_button_height"
+                android:layout_alignParentBottom="true"
+                android:orientation="vertical">
+                <!--数字1-->
+                <RelativeLayout
+                    android:id="@+id/imageButton_submit"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="@dimen/login_activity_number_button_height"
+                    android:background="@drawable/circle_border"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="确认"
+                        android:textColor="@color/login_number_color"
+                        android:textSize="25px" />
+
+                </RelativeLayout>
             </LinearLayout>
         </RelativeLayout>
         <!--数字按钮部分-->
@@ -96,24 +123,85 @@
                 android:id="@+id/login_activity_number_row_1"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/login_activity_number_button_height"
-                android:layout_marginBottom="@dimen/login_layout_margin_top_buttom">
-
-                <ImageButton
+                android:layout_marginBottom="@dimen/login_layout_margin_top_buttom"
+                android:orientation="horizontal">
+                <!--数字1-->
+                <RelativeLayout
                     android:id="@+id/imageButton_1"
                     android:layout_width="@dimen/login_activity_number_button_width"
-                    android:layout_height="@dimen/login_activity_number_button_height" />
+                    android:layout_height="@dimen/login_activity_number_button_height"
+                    android:background="@drawable/circle_border"
+                    android:gravity="center">
 
-                <ImageButton
+                    <TextView
+                        android:id="@+id/number1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1"
+                        android:textColor="@color/login_number_color"
+                        android:textSize="@dimen/login_activity_number_button_textSize_left" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/login_activity_number_button_left_right_margin"
+                        android:layout_toRightOf="@id/number1"
+                        android:text="ONE"
+                        android:textColor="@color/login_number_color"
+                        android:textSize="@dimen/login_activity_number_button_textSize_right" />
+                </RelativeLayout>
+                <!--数字2-->
+                <RelativeLayout
                     android:id="@+id/imageButton_2"
                     android:layout_width="@dimen/login_activity_number_button_width"
                     android:layout_height="@dimen/login_activity_number_button_height"
                     android:layout_marginLeft="@dimen/login_layout_margin_left_right"
-                    android:layout_marginRight="@dimen/login_layout_margin_left_right" />
+                    android:layout_marginRight="@dimen/login_layout_margin_left_right"
+                    android:background="@drawable/circle_border"
+                    android:gravity="center">
 
-                <ImageButton
+                    <TextView
+                        android:id="@+id/number2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2"
+                        android:textColor="@color/login_number_color"
+                        android:textSize="@dimen/login_activity_number_button_textSize_left" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/login_activity_number_button_left_right_margin"
+                        android:layout_toRightOf="@id/number2"
+                        android:text="TWO"
+                        android:textColor="@color/login_number_color"
+                        android:textSize="@dimen/login_activity_number_button_textSize_right" />
+                </RelativeLayout>
+
+                <RelativeLayout
                     android:id="@+id/imageButton_3"
                     android:layout_width="@dimen/login_activity_number_button_width"
-                    android:layout_height="@dimen/login_activity_number_button_height" />
+                    android:layout_height="@dimen/login_activity_number_button_height"
+                    android:background="@drawable/circle_border"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/number3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="3"
+                        android:textColor="@color/login_number_color"
+                        android:textSize="@dimen/login_activity_number_button_textSize_left" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/login_activity_number_button_left_right_margin"
+                        android:layout_toRightOf="@id/number3"
+                        android:text="THREE"
+                        android:textColor="@color/login_number_color"
+                        android:textSize="@dimen/login_activity_number_button_textSize_right" />
+                </RelativeLayout>
             </LinearLayout>
             <!--第二排数字-->
             <LinearLayout
@@ -123,22 +211,83 @@
                 android:layout_below="@id/login_activity_number_row_1"
                 android:layout_marginBottom="@dimen/login_layout_margin_top_buttom">
 
-                <ImageButton
+                <!--数字4-->
+                <RelativeLayout
                     android:id="@+id/imageButton_4"
                     android:layout_width="@dimen/login_activity_number_button_width"
-                    android:layout_height="@dimen/login_activity_number_button_height" />
+                    android:layout_height="@dimen/login_activity_number_button_height"
+                    android:background="@drawable/circle_border"
+                    android:gravity="center">
 
-                <ImageButton
+                    <TextView
+                        android:id="@+id/number4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="4"
+                        android:textColor="@color/login_number_color"
+                        android:textSize="@dimen/login_activity_number_button_textSize_left" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/login_activity_number_button_left_right_margin"
+                        android:layout_toRightOf="@id/number4"
+                        android:text="FOUR"
+                        android:textColor="@color/login_number_color"
+                        android:textSize="@dimen/login_activity_number_button_textSize_right" />
+                </RelativeLayout>
+                <!--数字5-->
+                <RelativeLayout
                     android:id="@+id/imageButton_5"
                     android:layout_width="@dimen/login_activity_number_button_width"
                     android:layout_height="@dimen/login_activity_number_button_height"
                     android:layout_marginLeft="@dimen/login_layout_margin_left_right"
-                    android:layout_marginRight="@dimen/login_layout_margin_left_right" />
+                    android:layout_marginRight="@dimen/login_layout_margin_left_right"
+                    android:background="@drawable/circle_border"
+                    android:gravity="center">
 
-                <ImageButton
+                    <TextView
+                        android:id="@+id/number5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="5"
+                        android:textColor="@color/login_number_color"
+                        android:textSize="@dimen/login_activity_number_button_textSize_left" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/login_activity_number_button_left_right_margin"
+                        android:layout_toRightOf="@id/number5"
+                        android:text="FIVE"
+                        android:textColor="@color/login_number_color"
+                        android:textSize="@dimen/login_activity_number_button_textSize_right" />
+                </RelativeLayout>
+                <!--数字6-->
+                <RelativeLayout
                     android:id="@+id/imageButton_6"
                     android:layout_width="@dimen/login_activity_number_button_width"
-                    android:layout_height="@dimen/login_activity_number_button_height" />
+                    android:layout_height="@dimen/login_activity_number_button_height"
+                    android:background="@drawable/circle_border"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/number6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="6"
+                        android:textColor="@color/login_number_color"
+                        android:textSize="@dimen/login_activity_number_button_textSize_left" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/login_activity_number_button_left_right_margin"
+                        android:layout_toRightOf="@id/number6"
+                        android:text="SIX"
+                        android:textColor="@color/login_number_color"
+                        android:textSize="@dimen/login_activity_number_button_textSize_right" />
+                </RelativeLayout>
             </LinearLayout>
             <!--第三排数字-->
             <LinearLayout
@@ -148,53 +297,134 @@
                 android:layout_below="@id/login_activity_number_row_2"
                 android:layout_marginBottom="@dimen/login_layout_margin_top_buttom">
 
-                <ImageButton
+                <!--数字7-->
+                <RelativeLayout
                     android:id="@+id/imageButton_7"
                     android:layout_width="@dimen/login_activity_number_button_width"
-                    android:layout_height="@dimen/login_activity_number_button_height" />
+                    android:layout_height="@dimen/login_activity_number_button_height"
+                    android:background="@drawable/circle_border"
+                    android:gravity="center">
 
-                <ImageButton
+                    <TextView
+                        android:id="@+id/number7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="7"
+                        android:textColor="@color/login_number_color"
+                        android:textSize="@dimen/login_activity_number_button_textSize_left" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/login_activity_number_button_left_right_margin"
+                        android:layout_toRightOf="@id/number7"
+                        android:text="SEVEN"
+                        android:textColor="@color/login_number_color"
+                        android:textSize="@dimen/login_activity_number_button_textSize_right" />
+                </RelativeLayout>
+                <!--数字8-->
+                <RelativeLayout
                     android:id="@+id/imageButton_8"
                     android:layout_width="@dimen/login_activity_number_button_width"
                     android:layout_height="@dimen/login_activity_number_button_height"
                     android:layout_marginLeft="@dimen/login_layout_margin_left_right"
-                    android:layout_marginRight="@dimen/login_layout_margin_left_right" />
+                    android:layout_marginRight="@dimen/login_layout_margin_left_right"
+                    android:background="@drawable/circle_border"
+                    android:gravity="center">
 
-                <ImageButton
+                    <TextView
+                        android:id="@+id/number8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="8"
+                        android:textColor="@color/login_number_color"
+                        android:textSize="@dimen/login_activity_number_button_textSize_left" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/login_activity_number_button_left_right_margin"
+                        android:layout_toRightOf="@id/number8"
+                        android:text="EIGHT"
+                        android:textColor="@color/login_number_color"
+                        android:textSize="@dimen/login_activity_number_button_textSize_right" />
+                </RelativeLayout>
+                <!--数字9-->
+                <RelativeLayout
                     android:id="@+id/imageButton_9"
                     android:layout_width="@dimen/login_activity_number_button_width"
-                    android:layout_height="@dimen/login_activity_number_button_height" />
+                    android:layout_height="@dimen/login_activity_number_button_height"
+                    android:background="@drawable/circle_border"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/number9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="9"
+                        android:textColor="@color/login_number_color"
+                        android:textSize="@dimen/login_activity_number_button_textSize_left" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/login_activity_number_button_left_right_margin"
+                        android:layout_toRightOf="@id/number9"
+                        android:text="NINE"
+                        android:textColor="@color/login_number_color"
+                        android:textSize="@dimen/login_activity_number_button_textSize_right" />
+                </RelativeLayout>
             </LinearLayout>
             <!--第四排数字-->
             <LinearLayout
                 android:id="@+id/login_activity_number_row_4"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/login_activity_number_button_height"
-                android:layout_below="@id/login_activity_number_row_3"
-                android:layout_marginBottom="@dimen/login_layout_margin_top_buttom">
-
-                <ImageButton
+                android:layout_below="@id/login_activity_number_row_3">
+                <!--数字0-->
+                <RelativeLayout
                     android:id="@+id/imageButton_0"
                     android:layout_width="@dimen/login_activity_number_button_width"
-                    android:layout_height="@dimen/login_activity_number_button_height" />
+                    android:layout_height="@dimen/login_activity_number_button_height"
+                    android:background="@drawable/circle_border"
+                    android:gravity="center">
 
-                <ImageButton
+                    <TextView
+                        android:id="@+id/number0"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textColor="@color/login_number_color"
+                        android:textSize="@dimen/login_activity_number_button_textSize_left" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/login_activity_number_button_left_right_margin"
+                        android:layout_toRightOf="@id/number0"
+                        android:text="ZERO"
+                        android:textColor="@color/login_number_color"
+                        android:textSize="@dimen/login_activity_number_button_textSize_right" />
+                </RelativeLayout>
+                <!--backSpace-->
+                <RelativeLayout
                     android:id="@+id/imageButton_backSpace"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/login_activity_number_button_height"
-                    android:layout_marginLeft="@dimen/login_layout_margin_left_right" />
-            </LinearLayout>
-            <!--第五排数字-->
-            <LinearLayout
-                android:id="@+id/login_activity_number_row_5"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/login_activity_number_button_height"
-                android:layout_below="@id/login_activity_number_row_4">
+                    android:layout_marginLeft="@dimen/login_layout_margin_left_right"
+                    android:background="@drawable/circle_border"
+                    android:gravity="center">
 
-                <ImageButton
-                    android:id="@+id/imageButton_submit"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/login_activity_number_button_height" />
+                    <TextView
+                        android:id="@+id/numberBack"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="BackSpace"
+                        android:textColor="@color/login_number_color"
+                        android:textSize="@dimen/login_activity_number_button_textSize_left" />
+
+                </RelativeLayout>
+
             </LinearLayout>
         </RelativeLayout>
     </RelativeLayout>

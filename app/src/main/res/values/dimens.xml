@@ -7,13 +7,17 @@
     <!--登陆界面操作区域的宽度-->
     <dimen name="login_handle_layout_width">960px</dimen>
     <!--登陆界面操作区域的高度-->
-    <dimen name="login_handle_layout_height">380px</dimen>
+    <dimen name="login_handle_layout_height">304px</dimen>
     <!--登陆界面数字按钮的宽度-->
     <dimen name="login_activity_number_button_width">164px</dimen>
     <!--登陆界面数字按钮的高度-->
     <dimen name="login_activity_number_button_height">64px</dimen>
-    <!--登陆界面数字按钮的字体大小-->
-    <dimen name="login_activity_number_button_textSize"></dimen>
+    <!--登陆界面数字按钮的左边字体大小-->
+    <dimen name="login_activity_number_button_textSize_left">40px</dimen>
+    <!--登陆界面数字按钮的右边字体大小-->
+    <dimen name="login_activity_number_button_textSize_right">10px</dimen>
+    <!--登陆界面数字按钮的左边右边字体间距-->
+    <dimen name="login_activity_number_button_left_right_margin">32px</dimen>
     <!--登陆界面输入框的宽度-->
     <dimen name="login_layout_input_edittext_width">374px</dimen>
     <!--登陆界面输入框的高度-->
