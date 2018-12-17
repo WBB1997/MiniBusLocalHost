@@ -29,8 +29,8 @@
                     android:gravity="center">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="31px"
+                        android:layout_height="31px"
                         android:layout_margin="16px"
                         android:background="@drawable/ic_username"
                         android:gravity="center" />
@@ -47,7 +47,7 @@
                         android:background="@null"
                         android:hint="@string/login_activity_et_hint_username"
                         android:inputType="number"
-                        android:textColor="@color/login_hint_color" />
+                        android:textColorHint="@color/login_hint_color" />
                 </LinearLayout>
             </LinearLayout>
             <!--密码输入框-->
@@ -66,8 +66,8 @@
                     android:gravity="center">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="31px"
+                        android:layout_height="31px"
                         android:layout_margin="16px"
                         android:background="@drawable/ic_password"
                         android:gravity="center" />
@@ -84,7 +84,7 @@
                         android:background="@null"
                         android:hint="@string/login_activity_et_hint_password"
                         android:inputType="numberPassword"
-                        android:textColor="@color/login_hint_color" />
+                        android:textColorHint="@color/login_hint_color" />
                 </LinearLayout>
             </LinearLayout>
             <!--确认-->
@@ -94,12 +94,12 @@
                 android:layout_height="@dimen/login_activity_number_button_height"
                 android:layout_alignParentBottom="true"
                 android:orientation="vertical">
-                <!--数字1-->
+                <!--确认-->
                 <RelativeLayout
                     android:id="@+id/imageButton_submit"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/login_activity_number_button_height"
-                    android:background="@drawable/circle_border"
+                    android:background="@drawable/circle_border_pressed"
                     android:gravity="center">
 
                     <TextView
@@ -130,7 +130,7 @@
                     android:id="@+id/imageButton_1"
                     android:layout_width="@dimen/login_activity_number_button_width"
                     android:layout_height="@dimen/login_activity_number_button_height"
-                    android:background="@drawable/circle_border"
+                    android:background="@drawable/circle_border_pressed"
                     android:gravity="center">
 
                     <TextView
@@ -157,7 +157,7 @@
                     android:layout_height="@dimen/login_activity_number_button_height"
                     android:layout_marginLeft="@dimen/login_layout_margin_left_right"
                     android:layout_marginRight="@dimen/login_layout_margin_left_right"
-                    android:background="@drawable/circle_border"
+                    android:background="@drawable/circle_border_pressed"
                     android:gravity="center">
 
                     <TextView
@@ -177,12 +177,12 @@
                         android:textColor="@color/login_number_color"
                         android:textSize="@dimen/login_activity_number_button_textSize_right" />
                 </RelativeLayout>
-
+                <!--数字3-->
                 <RelativeLayout
                     android:id="@+id/imageButton_3"
                     android:layout_width="@dimen/login_activity_number_button_width"
                     android:layout_height="@dimen/login_activity_number_button_height"
-                    android:background="@drawable/circle_border"
+                    android:background="@drawable/circle_border_pressed"
                     android:gravity="center">
 
                     <TextView
@@ -216,7 +216,7 @@
                     android:id="@+id/imageButton_4"
                     android:layout_width="@dimen/login_activity_number_button_width"
                     android:layout_height="@dimen/login_activity_number_button_height"
-                    android:background="@drawable/circle_border"
+                    android:background="@drawable/circle_border_pressed"
                     android:gravity="center">
 
                     <TextView
@@ -243,7 +243,7 @@
                     android:layout_height="@dimen/login_activity_number_button_height"
                     android:layout_marginLeft="@dimen/login_layout_margin_left_right"
                     android:layout_marginRight="@dimen/login_layout_margin_left_right"
-                    android:background="@drawable/circle_border"
+                    android:background="@drawable/circle_border_pressed"
                     android:gravity="center">
 
                     <TextView
@@ -268,7 +268,7 @@
                     android:id="@+id/imageButton_6"
                     android:layout_width="@dimen/login_activity_number_button_width"
                     android:layout_height="@dimen/login_activity_number_button_height"
-                    android:background="@drawable/circle_border"
+                    android:background="@drawable/circle_border_pressed"
                     android:gravity="center">
 
                     <TextView
@@ -302,7 +302,7 @@
                     android:id="@+id/imageButton_7"
                     android:layout_width="@dimen/login_activity_number_button_width"
                     android:layout_height="@dimen/login_activity_number_button_height"
-                    android:background="@drawable/circle_border"
+                    android:background="@drawable/circle_border_pressed"
                     android:gravity="center">
 
                     <TextView
@@ -329,7 +329,7 @@
                     android:layout_height="@dimen/login_activity_number_button_height"
                     android:layout_marginLeft="@dimen/login_layout_margin_left_right"
                     android:layout_marginRight="@dimen/login_layout_margin_left_right"
-                    android:background="@drawable/circle_border"
+                    android:background="@drawable/circle_border_pressed"
                     android:gravity="center">
 
                     <TextView
@@ -354,7 +354,7 @@
                     android:id="@+id/imageButton_9"
                     android:layout_width="@dimen/login_activity_number_button_width"
                     android:layout_height="@dimen/login_activity_number_button_height"
-                    android:background="@drawable/circle_border"
+                    android:background="@drawable/circle_border_pressed"
                     android:gravity="center">
 
                     <TextView
@@ -386,7 +386,7 @@
                     android:id="@+id/imageButton_0"
                     android:layout_width="@dimen/login_activity_number_button_width"
                     android:layout_height="@dimen/login_activity_number_button_height"
-                    android:background="@drawable/circle_border"
+                    android:background="@drawable/circle_border_pressed"
                     android:gravity="center">
 
                     <TextView
@@ -412,7 +412,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/login_activity_number_button_height"
                     android:layout_marginLeft="@dimen/login_layout_margin_left_right"
-                    android:background="@drawable/circle_border"
+                    android:background="@drawable/circle_border_pressed"
                     android:gravity="center">
 
                     <TextView
