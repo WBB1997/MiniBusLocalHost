@@ -1,5 +1,7 @@
 package com.hasee.minibuslocalhost.util;
 
+import com.alibaba.fastjson.JSONObject;
+
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -14,21 +16,22 @@ public class SendToScreenThread extends Thread {
     private DatagramSocket dSocket = null;
     private DatagramPacket dPacket = null;
     private byte[] buffer = null;//数据报大小
-    private String message = null;//接收的can总线信息
+    private JSONObject object = null;//接收的can总线信息
+    private int target = -1;//屏幕编号
 
-    public SendToScreenThread(String message){
-        this.message = message;
+    public SendToScreenThread(JSONObject object,int target){
+        this.object = object;
+        this.target = target;
     }
 
     @Override
     public void run() {
-        //处理can总线的信息
-        int flag = 1;
+        String message = object.toJSONString();
         buffer = message.getBytes();
         //发送给特定显示屏
         try {
             //根据命令号确定hostName
-            InetAddress address = InetAddress.getByName(hostNames[seekHostName(flag)]);
+            InetAddress address = InetAddress.getByName(hostNames[target]);
             dSocket = new DatagramSocket();
             dPacket = new DatagramPacket(buffer,buffer.length,address,port);
             dSocket.send(dPacket);
@@ -41,19 +44,4 @@ public class SendToScreenThread extends Thread {
         }
     }
 
-    /**
-     * 判断消息发送给哪个显示屏
-     * @param flag
-     * @return
-     */
-    public int seekHostName(int flag){
-        if(flag >= 1&& flag <= 3){//前风挡
-            return 0;
-        }else if(flag >= 11&& flag <= 14){//右车门
-            return 1;
-        }else if(flag >= 21&& flag <= 24){//左车门
-            return 2;
-        }
-        return 3;
-    }
 }
