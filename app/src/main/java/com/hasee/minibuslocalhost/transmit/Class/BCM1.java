@@ -1,6 +1,10 @@
 package com.hasee.minibuslocalhost.transmit.Class;
 
 
+import android.os.Message;
+
+import com.hasee.minibuslocalhost.util.MyHandler;
+
 import java.lang.reflect.Field;
 
 public class BCM1 extends BaseClass{

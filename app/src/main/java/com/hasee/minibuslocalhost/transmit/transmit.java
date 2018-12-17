@@ -17,6 +17,7 @@ import com.hasee.minibuslocalhost.transmit.Class.HAD3;
 import com.hasee.minibuslocalhost.transmit.Class.MCU1;
 import com.hasee.minibuslocalhost.transmit.Class.VCU1;
 import com.hasee.minibuslocalhost.transmit.Class.VCU2;
+import com.hasee.minibuslocalhost.util.MyHandler;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -28,6 +29,7 @@ public class transmit {
     private final int MAX_LENGTH = 2048; // 最大接收字节长度
     private final int PORT = 5066;   // port号
     private final static transmit instance = new transmit();
+    private MyHandler handler;
 
     public static void main(String[] args) {
         new transmit();
@@ -35,6 +37,10 @@ public class transmit {
 
     public transmit() {
         init();
+    }
+
+    public void setHandler(MyHandler handler) {
+        this.handler = handler;
     }
 
     private void UDP_receive() {
