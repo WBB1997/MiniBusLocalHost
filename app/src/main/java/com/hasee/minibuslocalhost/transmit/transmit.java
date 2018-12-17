@@ -1,6 +1,22 @@
-package com.hasee.minibuslocalhost.Translate;
+package com.hasee.minibuslocalhost.transmit;
 
 import android.util.Pair;
+
+import com.hasee.minibuslocalhost.transmit.Class.BCM1;
+import com.hasee.minibuslocalhost.transmit.Class.BaseClass;
+import com.hasee.minibuslocalhost.transmit.Class.EPB;
+import com.hasee.minibuslocalhost.transmit.Class.EPS1;
+import com.hasee.minibuslocalhost.transmit.Class.EPS2;
+import com.hasee.minibuslocalhost.transmit.Class.EPS3;
+import com.hasee.minibuslocalhost.transmit.Class.ESC1;
+import com.hasee.minibuslocalhost.transmit.Class.ESC2;
+import com.hasee.minibuslocalhost.transmit.Class.ESC3;
+import com.hasee.minibuslocalhost.transmit.Class.HAD1;
+import com.hasee.minibuslocalhost.transmit.Class.HAD2;
+import com.hasee.minibuslocalhost.transmit.Class.HAD3;
+import com.hasee.minibuslocalhost.transmit.Class.MCU1;
+import com.hasee.minibuslocalhost.transmit.Class.VCU1;
+import com.hasee.minibuslocalhost.transmit.Class.VCU2;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -8,18 +24,16 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.*;
 
-public class Translate {
+public class transmit {
     private final int MAX_LENGTH = 2048; // 最大接收字节长度
     private final int PORT = 5066;   // port号
+    private final static transmit instance = new transmit();
 
     public static void main(String[] args) {
-        new Translate();
+        new transmit();
     }
 
-    public Translate() {
-//        new Thread(()->{
-//            UDP_receive();
-//        }).start();
+    public transmit() {
         init();
     }
 
@@ -64,54 +78,52 @@ public class Translate {
     }
 
     // 消息标识符
-    private final static ArrayList<Pair<String, String>> list = new ArrayList<>(Arrays.asList(
-            new Pair<>("00000222", "VUC1"),
-            new Pair<>("00000220", "VCU2"),
-            new Pair<>("000003E1", "EPB"),
-            new Pair<>("00000300", "MCU1"),
-            new Pair<>("00000373", "EPS1"),
-            new Pair<>("00000228", "EPS2"),
-            new Pair<>("00000225", "EPS3"),
-            new Pair<>("00000226", "ESC1"),
-            new Pair<>("00000227", "ESC2"),
-            new Pair<>("000004C0", "ESC3"),
-            new Pair<>("00000361", "BCM1"),
-            new Pair<>("00000219", "HAD1"),
-            new Pair<>("00000363", "HAD2"),
-            new Pair<>("00000233", "HAD3")
+    private ArrayList<Pair<String,? extends BaseClass>> list = new ArrayList<>(Arrays.asList(
+            new Pair<>("00000222", new VCU1()),
+            new Pair<>("00000220", new VCU2()),
+            new Pair<>("000003E1", new EPB()),
+            new Pair<>("00000300", new MCU1()),
+            new Pair<>("00000373", new EPS1()),
+            new Pair<>("00000228", new EPS2()),
+            new Pair<>("00000225", new EPS3()),
+            new Pair<>("00000226", new ESC1()),
+            new Pair<>("00000227", new ESC2()),
+            new Pair<>("000004C0", new ESC3()),
+            new Pair<>("00000361", new BCM1()),
+            new Pair<>("00000219", new HAD1()),
+            new Pair<>("00000363", new HAD2()),
+            new Pair<>("00000233", new HAD3())
     ));
     // 消息标识符键值对，方便查找
-    private static Map<String, String> BUS_FLAG = new HashMap<>(50);
-
+    private Map<String, ? super BaseClass> BUS_FLAG = new HashMap<>();
     // 初始化
     private void init() {
-        for (Pair<String, String> pair : list)
+        for (Pair<String, ? extends BaseClass> pair : list)
             BUS_FLAG.put(pair.first, pair.second);
     }
 
     // 处理收到的byte数组
     private void dispose(byte[] receMsgs) {
         String key;
-        byte[] tmp;
         if (receMsgs == null)
             return;
         for (int i = 0; i < receMsgs.length; i += 13) {
             key = bytesToHex(subBytes(receMsgs, 1, 4));
-            tmp = subBytes(receMsgs, 5, 8);
             // 如果数据更新了
             if (BUS_FLAG.containsKey(key)) {
+                ((BaseClass)BUS_FLAG.get(key)).setBytes(receMsgs);
             } else
                 System.err.println("消息标识符错误");
         }
     }
 
     // send函数
-    public static void send(String clazz, String field, Object o) {
+    public void send(String clazz, String field, Object o) {
 
     }
 
     //byte转16进制
-    private static String bytesToHex(byte[] bytes) {
+    private String bytesToHex(byte[] bytes) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < bytes.length; i++) {
             String hex = Integer.toHexString(bytes[i] & 0xFF);
@@ -123,12 +135,12 @@ public class Translate {
     }
 
     //16进制转byte
-    private static byte hexToByte(String inHex) {
+    private byte hexToByte(String inHex) {
         return (byte) Integer.parseInt(inHex, 16);
     }
 
     //16进制转byte
-    private static byte[] hexToByteArray(String inHex) {
+    private byte[] hexToByteArray(String inHex) {
         int hexlen = inHex.length();
         byte[] result;
         if (hexlen % 2 == 1) {
@@ -149,7 +161,7 @@ public class Translate {
     }
 
     // 返回子数组
-    private static byte[] subBytes(byte[] bytes, int start, int length) {
+    private byte[] subBytes(byte[] bytes, int start, int length) {
         byte[] sub = new byte[length];
         for (int i = 0; i < length; i++)
             sub[i] = bytes[i + start];
@@ -157,7 +169,11 @@ public class Translate {
     }
 
     // 查看一个Byte的某位是否为1
-    private static boolean viewBinary(byte Byte, int position) {
+    private boolean viewBinary(byte Byte, int position) {
         return (Byte & 0x01 << position) != 0;
+    }
+
+    public static transmit getInstance() {
+        return instance;
     }
 }

@@ -1,38 +1,36 @@
-package com.hasee.minibuslocalhost.Translate.Class;
+package com.hasee.minibuslocalhost.transmit.Class;
 
 
 import java.lang.reflect.Field;
-import java.util.Map;
 
-public class BCM1 {
+public class BCM1 extends BaseClass{
     //字段
-    private boolean BCM_Dig_Ord_HandLightCtr = false;
-    private boolean BCM_Flg_Stat_LeftTurningLamp = false;
-    private boolean BCM_Flg_Stat_RightTurningLamp = false;
-    private boolean BCM_Flg_Stat_HandLightCtr = false;
-    private boolean BCM_Flg_Stat_HighBeam = false;
-    private boolean BCM_Flg_Stat_LowBeam = false;
-    private boolean BCM_Flg_Stat_RearFogLamp = false;
-    private boolean BCM_Flg_Stat_DangerAlarmLamp = false;
-    private boolean BCM_Flg_Stat_BrakeLamp = false;
-    private boolean BCM_Flg_Stat_BackupLamp = false;
-    private boolean BCM_Flg_Stat_SeatSensor1 = false;
-    private boolean BCM_Flg_Stat_SeatSensor2 = false;
-    private boolean BCM_Flg_Stat_SeatSensor3 = false;
-    private boolean BCM_Flg_Stat_SeatSensor4 = false;
-    private boolean BCM_Flg_Stat_SeatSensor5 = false;
-    private boolean BCM_Flg_Stat_SeatSensor6 = false;
-    private boolean BCM_Flg_Stat_BeltsSensor1 = false;
-    private boolean BCM_Flg_Stat_BeltsSensor2 = false;
-    private boolean BCM_Flg_Stat_BeltsSensor3 = false;
-    private boolean BCM_Flg_Stat_BeltsSensor4 = false;
-    private boolean BCM_Flg_Stat_BeltsSensor5 = false;
-    private boolean BCM_Flg_Stat_BeltsSensor6 = false;
+    private boolean BCM_Dig_Ord_HandLightCtr = false; // 手势灯光控制信号
+    private boolean BCM_Flg_Stat_LeftTurningLamp = false; // 左转向状态信号
+    private boolean BCM_Flg_Stat_RightTurningLamp = false; // 右转向状态信号
+    private boolean BCM_Flg_Stat_HandLightCtr = false; // 手势灯光控制状态信号
+    private boolean BCM_Flg_Stat_HighBeam = false; // 远光灯状态信号
+    private boolean BCM_Flg_Stat_LowBeam = false; // 近光灯状态信号
+    private boolean BCM_Flg_Stat_RearFogLamp = false; // 后雾灯状态信号
+    private boolean BCM_Flg_Stat_DangerAlarmLamp = false; // 危险报警灯控制（双闪）状态信号
+    private boolean BCM_Flg_Stat_BrakeLamp = false; // 制动灯状态信号
+    private boolean BCM_Flg_Stat_BackupLamp = false; // 倒车灯状态信号
+    private boolean BCM_Flg_Stat_SeatSensor1 = false; // 座椅传感器1
+    private boolean BCM_Flg_Stat_SeatSensor2 = false; // 座椅传感器2
+    private boolean BCM_Flg_Stat_SeatSensor3 = false; // 座椅传感器3
+    private boolean BCM_Flg_Stat_SeatSensor4 = false; // 座椅传感器4
+    private boolean BCM_Flg_Stat_SeatSensor5 = false; // 座椅传感器5
+    private boolean BCM_Flg_Stat_SeatSensor6 = false; // 座椅传感器6
+    private boolean BCM_Flg_Stat_BeltsSensor1 = false; // 安全带传感器1
+    private boolean BCM_Flg_Stat_BeltsSensor2 = false; // 安全带传感器2
+    private boolean BCM_Flg_Stat_BeltsSensor3 = false; // 安全带传感器3
+    private boolean BCM_Flg_Stat_BeltsSensor4 = false; // 安全带传感器4
+    private boolean BCM_Flg_Stat_BeltsSensor5 = false; // 安全带传感器5
+    private boolean BCM_Flg_Stat_BeltsSensor6 = false; // 安全带传感器6
 
 
     // 属性
     private final static int  FIELDS_LENGTH = 22;
-    private final static String MESSAGE_FLAG = "0x361";
     private Field[] fields = this.getClass().getDeclaredFields();
     private byte[] bytes = new byte[13];
 
@@ -51,9 +49,9 @@ public class BCM1 {
     }
 
     public void setBytes(byte[] bytes) {
-        for(int i = 5; i < 5 + FIELDS_LENGTH; i++){
-            for(int j = 0; j < 8; j++){
-                if(viewBinary(this.bytes[i], j) != viewBinary(this.bytes[i], j)){
+        for(int i = 0; i < bytes.length - 5; i++){
+            for(int j = 0; i * 8 + j < FIELDS_LENGTH; j++){
+                if(viewBinary(this.bytes[i + 5], j) != viewBinary(bytes[i + 5], j)){
 
                 }
             }

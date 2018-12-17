@@ -1,6 +1,6 @@
-package com.hasee.minibuslocalhost.Translate.Class;
+package com.hasee.minibuslocalhost.transmit.Class;
 
-public class ESC1 {
+public class ESC1 extends BaseClass{
     double ESC_Ang_Stat_FLWHeelPulseCounter;
     double ESC_Ang_Stat_FRWHeelPulseCounter;
     double ESC_Ang_Stat_RLWHeelPulseCounter;
@@ -11,4 +11,14 @@ public class ESC1 {
     double ESC_Ang_Stat_RRWHeelPulseCoutVal;
     double ESC_Flg_Stat_AccelerationID;
     double ESC_Ang_Stat_Acceleration;
+
+    @Override
+    public byte[] getBytes() {
+        return new byte[0];
+    }
+
+    @Override
+    public void setBytes(byte[] bytes) {
+
+    }
 }
