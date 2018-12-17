@@ -4,13 +4,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragment.MainRightFragment1">
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <!--自动驾驶-->
+    <Button
+        android:id="@+id/rightFragment1_autoDrive"
+        android:layout_width="370px"
+        android:layout_height="85px"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="22px"
+        android:background="@drawable/circle_border_pressed"
+        android:text="自动驾驶"
+        android:textColor="@color/right_fragment1_text_color"
+        android:textSize="40px" />
+    <!--远程驾驶-->
+    <Button
+        android:id="@+id/rightFragment1_longDrive"
+        android:layout_width="370px"
+        android:layout_height="85px"
+        android:layout_below="@id/rightFragment1_autoDrive"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="22px"
+        android:background="@drawable/circle_border"
+        android:text="远程驾驶"
+        android:textColor="@color/right_fragment1_text_color"
+        android:textSize="40px" />
+    <!--待机-->
+    <Button
+        android:id="@+id/rightFragment1_await"
+        android:layout_width="370px"
+        android:layout_height="85px"
+        android:layout_below="@id/rightFragment1_longDrive"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/circle_border"
+        android:text="待  机"
+        android:textColor="@color/right_fragment1_text_color"
+        android:textSize="40px" />
 </RelativeLayout>
