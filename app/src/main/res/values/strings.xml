@@ -10,6 +10,6 @@
     <string name="et_empty">用户名或密码不能为空</string>
     <string name="login_success">登陆成功</string>
     <string name="login_failed">登陆出错</string>
-    <!-- TODO: Remove or change this placeholder text -->
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

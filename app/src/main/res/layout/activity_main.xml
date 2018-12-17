@@ -2,38 +2,57 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <!--左部分-->
-    <fragment
-        android:id="@+id/left_fragment"
-        android:name="com.hasee.minibuslocalhost.fragment.MainLeftFragment"
-        android:layout_width="@dimen/main_layout_left_width"
-        android:layout_height="@dimen/main_layout_left_height"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="30px"
-        android:layout_marginRight="50px"
-        tools:layout="@layout/fragment_main_left" />
-    <!--中间部分-->
-    <fragment
-        android:id="@+id/center_fragment"
-        android:name="com.hasee.minibuslocalhost.fragment.MainCenterFragment"
-        android:layout_width="@dimen/main_layout_center_width"
-        android:layout_height="@dimen/main_layout_center_height"
-        android:layout_centerInParent="true"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/left_fragment"
-        tools:layout="@layout/fragment_main_center" />
-    <!--右部分-->
-    <fragment
-        android:id="@+id/right_fragment"
-        android:name="com.hasee.minibuslocalhost.fragment.MainRightFragment1"
-        android:layout_width="@dimen/main_layout_right_width"
-        android:layout_height="@dimen/main_layout_right_height"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="50px"
-        android:layout_marginRight="30px"
-        android:layout_toRightOf="@id/center_fragment"
-        tools:layout="@layout/fragment_main_right1" />
+    android:layout_height="match_parent"
+    android:background="@mipmap/ic_main_bg">
+    <!--Top-->
+    <LinearLayout
+        android:id="@+id/top_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+        <fragment
+            android:layout_width="@dimen/main_layout_top_width"
+            android:layout_height="@dimen/main_layout_top_height"
+            android:name="com.hasee.minibuslocalhost.MainTopFragment"
+            tools:layout="@layout/fragment_main_top" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_below="@id/top_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <!--左部分-->
+        <fragment
+            android:id="@+id/left_fragment"
+            android:name="com.hasee.minibuslocalhost.fragment.MainLeftFragment"
+            android:layout_width="@dimen/main_layout_left_width"
+            android:layout_height="@dimen/main_layout_left_height"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="30px"
+            android:layout_marginRight="50px"
+            android:layout_marginTop="20px"
+            tools:layout="@layout/fragment_main_left" />
+        <!--中间部分-->
+        <fragment
+            android:id="@+id/center_fragment"
+            android:name="com.hasee.minibuslocalhost.fragment.MainCenterFragment"
+            android:layout_width="@dimen/main_layout_center_width"
+            android:layout_height="@dimen/main_layout_center_height"
+            android:layout_marginTop="62px"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@id/left_fragment"
+            tools:layout="@layout/fragment_main_center" />
+        <!--右部分-->
+        <fragment
+            android:id="@+id/right_fragment"
+            android:name="com.hasee.minibuslocalhost.fragment.MainRightFragment1"
+            android:layout_width="@dimen/main_layout_right_width"
+            android:layout_height="@dimen/main_layout_right_height"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="50px"
+            android:layout_marginRight="30px"
+            android:layout_toRightOf="@id/center_fragment"
+            tools:layout="@layout/fragment_main_right1" />
+    </LinearLayout>
 </RelativeLayout>

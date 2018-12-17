@@ -3,4 +3,9 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="cicle_border">#9cf8f8</color>
+    <color name="login_hint_color">#72747b</color>
+    <color name="login_number_color">#fff</color>
+    <color name="main_battery_color">#fe6e00</color>
+    <color name="left_fragment_text_color">#9bf7f7</color>
 </resources>

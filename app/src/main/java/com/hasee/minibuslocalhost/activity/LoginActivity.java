@@ -1,5 +1,6 @@
 package com.hasee.minibuslocalhost.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -12,6 +13,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.hasee.minibuslocalhost.R;
@@ -26,19 +28,18 @@ public class LoginActivity extends BaseActivity {
     private int focuState = -1;//判断输入框焦点在哪个上面
     private EditText userNameEt;//用户名输入框
     private EditText passWordEt;//密码输入框
-    private TextView showTv;//显示框
-    private ImageButton number1Button;//数字1
-    private ImageButton number2Button;//数字2
-    private ImageButton number3Button;//数字3
-    private ImageButton number4Button;//数字4
-    private ImageButton number5Button;//数字5
-    private ImageButton number6Button;//数字6
-    private ImageButton number7Button;//数字7
-    private ImageButton number8Button;//数字8
-    private ImageButton number9Button;//数字9
-    private ImageButton number0Button;//数字0
-    private ImageButton backSpaceButton;//删除按钮
-    private ImageButton submitButton;//确认按钮
+    private RelativeLayout number1Button;//数字1
+    private RelativeLayout number2Button;//数字2
+    private RelativeLayout number3Button;//数字3
+    private RelativeLayout number4Button;//数字4
+    private RelativeLayout number5Button;//数字5
+    private RelativeLayout number6Button;//数字6
+    private RelativeLayout number7Button;//数字7
+    private RelativeLayout number8Button;//数字8
+    private RelativeLayout number9Button;//数字9
+    private RelativeLayout number0Button;//数字0
+    private RelativeLayout backSpaceButton;//删除按钮
+    private RelativeLayout submitButton;//确认按钮
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,6 +53,7 @@ public class LoginActivity extends BaseActivity {
     /**
      * 界面初始化
      */
+    @SuppressLint("WrongViewCast")
     private void viewInit() {
         userNameEt = (EditText)findViewById(R.id.username_et);
         userNameEt.setOnFocusChangeListener(onFocusChangeListener);
@@ -62,30 +64,29 @@ public class LoginActivity extends BaseActivity {
             passWordEt.setShowSoftInputOnFocus(false);
         }
         passWordEt.setOnFocusChangeListener(onFocusChangeListener);
-        showTv = (TextView)findViewById(R.id.login_activity_input_tv_show);
-        number0Button = (ImageButton)findViewById(R.id.imageButton_0);
+        number0Button = (RelativeLayout)findViewById(R.id.imageButton_0);
         number0Button.setOnClickListener(onClickListener);
-        number1Button = (ImageButton)findViewById(R.id.imageButton_1);
+        number1Button = (RelativeLayout)findViewById(R.id.imageButton_1);
         number1Button.setOnClickListener(onClickListener);
-        number2Button = (ImageButton)findViewById(R.id.imageButton_2);
+        number2Button = (RelativeLayout)findViewById(R.id.imageButton_2);
         number2Button.setOnClickListener(onClickListener);
-        number3Button = (ImageButton)findViewById(R.id.imageButton_3);
+        number3Button = (RelativeLayout)findViewById(R.id.imageButton_3);
         number3Button.setOnClickListener(onClickListener);
-        number4Button = (ImageButton)findViewById(R.id.imageButton_4);
+        number4Button = (RelativeLayout)findViewById(R.id.imageButton_4);
         number4Button.setOnClickListener(onClickListener);
-        number5Button = (ImageButton)findViewById(R.id.imageButton_5);
+        number5Button = (RelativeLayout)findViewById(R.id.imageButton_5);
         number5Button.setOnClickListener(onClickListener);
-        number6Button = (ImageButton)findViewById(R.id.imageButton_6);
+        number6Button = (RelativeLayout)findViewById(R.id.imageButton_6);
         number6Button.setOnClickListener(onClickListener);
-        number7Button = (ImageButton)findViewById(R.id.imageButton_7);
+        number7Button = (RelativeLayout)findViewById(R.id.imageButton_7);
         number7Button.setOnClickListener(onClickListener);
-        number8Button = (ImageButton)findViewById(R.id.imageButton_8);
+        number8Button = (RelativeLayout)findViewById(R.id.imageButton_8);
         number8Button.setOnClickListener(onClickListener);
-        number9Button = (ImageButton)findViewById(R.id.imageButton_9);
+        number9Button = (RelativeLayout)findViewById(R.id.imageButton_9);
         number9Button.setOnClickListener(onClickListener);
-        backSpaceButton = (ImageButton)findViewById(R.id.imageButton_backSpace);
+        backSpaceButton = (RelativeLayout)findViewById(R.id.imageButton_backSpace);
         backSpaceButton.setOnClickListener(onClickListener);
-        submitButton = (ImageButton)findViewById(R.id.imageButton_submit);
+        submitButton = (RelativeLayout)findViewById(R.id.imageButton_submit);
         submitButton.setOnClickListener(onClickListener);
     }
 
