@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="@dimen/main_layout_left_width"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/main_layout_left_height"
     tools:context=".fragment.MainLeftFragment">
     <!--汽车背景-->
     <RelativeLayout

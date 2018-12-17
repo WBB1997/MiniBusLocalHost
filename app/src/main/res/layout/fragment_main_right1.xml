@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="@dimen/main_layout_right1_width"
+    android:layout_height="@dimen/main_layout_right1_height"
     tools:context=".fragment.MainRightFragment1">
     <!--自动驾驶-->
     <Button
@@ -23,7 +23,7 @@
         android:layout_below="@id/rightFragment1_autoDrive"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="22px"
-        android:background="@drawable/circle_border"
+        android:background="@drawable/circle_border_pressed"
         android:text="远程驾驶"
         android:textColor="@color/right_fragment1_text_color"
         android:textSize="40px" />
@@ -34,7 +34,7 @@
         android:layout_height="85px"
         android:layout_below="@id/rightFragment1_longDrive"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/circle_border"
+        android:background="@drawable/circle_border_pressed"
         android:text="待  机"
         android:textColor="@color/right_fragment1_text_color"
         android:textSize="40px" />
