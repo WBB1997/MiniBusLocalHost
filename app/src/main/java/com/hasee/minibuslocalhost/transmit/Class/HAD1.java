@@ -1,6 +1,6 @@
-package com.hasee.minibuslocalhost.Translate.Class;
+package com.hasee.minibuslocalhost.transmit.Class;
 
-public class HAD1 {
+public class HAD1 extends BaseClass{
     double HAD_Dig_Ord_Brake;
     double HAD_Dig_Ord_VCUAutoDriveEnable;
     double HAD_Dig_Ord_ESCAutoDriveEnable;
@@ -12,4 +12,14 @@ public class HAD1 {
     double HAD_Ang_Stat_BrakeAccleration;
     double HAD_Dig_Ord_Gear;
     double HAD_Dig_Ord_BCMAutoDriveEnable;
+
+    @Override
+    public byte[] getBytes() {
+        return new byte[0];
+    }
+
+    @Override
+    public void setBytes(byte[] bytes) {
+
+    }
 }

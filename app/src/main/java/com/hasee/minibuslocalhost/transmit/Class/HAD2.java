@@ -1,6 +1,6 @@
-package com.hasee.minibuslocalhost.Translate.Class;
+package com.hasee.minibuslocalhost.transmit.Class;
 
-public class HAD2 {
+public class HAD2 extends BaseClass{
     double HAD_Dig_Ord_HighBeam;
     double HAD_Dig_Ord_LowBeam;
     double HAD_Dig_Ord_LeftTurningLamp;
@@ -12,4 +12,14 @@ public class HAD2 {
     double HAD_Dig_Ord_WindowProjection;
     double HAD_Dig_Ord_Horn;
     double HAD_Dig_Ord_DoorLock;
+
+    @Override
+    public byte[] getBytes() {
+        return new byte[0];
+    }
+
+    @Override
+    public void setBytes(byte[] bytes) {
+
+    }
 }
