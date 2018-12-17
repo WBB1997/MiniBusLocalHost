@@ -8,4 +8,5 @@
     <color name="login_number_color">#fff</color>
     <color name="main_battery_color">#fe6e00</color>
     <color name="left_fragment_text_color">#9bf7f7</color>
+    <color name="right_fragment1_text_color">#9bf7f9</color>
 </resources>
