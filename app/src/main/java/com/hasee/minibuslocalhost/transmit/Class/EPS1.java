@@ -8,7 +8,7 @@ public class EPS1 extends BaseClass{
     }
 
     @Override
-    public void setBytes(byte[] bytes) {
+    public void setBytes(byte[] bytes){
 
     }
 }
