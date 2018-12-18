@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="@dimen/main_layout_left_width"
-    android:layout_height="@dimen/main_layout_left_height"
+    android:layout_height="wrap_content"
     tools:context=".fragment.MainLeftFragment">
     <!--汽车背景-->
     <RelativeLayout
@@ -28,13 +28,15 @@
             android:id="@+id/leftFragment_car_foglight_open"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_car_foglight_true" />
+            android:background="@drawable/ic_car_foglight_true"
+            android:visibility="invisible" />
         <!--转向灯-->
         <ImageView
             android:id="@+id/leftFragment_car_leftlight_open"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_car_left_light_true" />
+            android:background="@drawable/ic_car_left_light_true"
+            android:visibility="invisible" />
         <!--近光灯-->
         <ImageView
             android:id="@+id/leftFragment_car_lowbeam_open"
@@ -47,7 +49,8 @@
             android:id="@+id/leftFragment_car_highbeam_open"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_car_highbeam_true" />
+            android:background="@drawable/ic_car_highbeam_true"
+            android:visibility="invisible" />
     </RelativeLayout>
     <!--车外灯光部分-->
     <RelativeLayout
@@ -272,7 +275,7 @@
                 android:background="@drawable/conditioner_size" />
 
             <TextView
-                android:id="@+id/left_fragment_condition_size"
+                android:id="@+id/leftFragment_condition_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -285,7 +288,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_toRightOf="@id/left_fragment_condition_size" />
+                android:layout_toRightOf="@id/leftFragment_condition_size" />
         </RelativeLayout>
     </RelativeLayout>
 

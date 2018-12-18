@@ -13,19 +13,13 @@ import com.hasee.minibuslocalhost.R;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * 右边Fragment（仪表盘）
  */
-@SuppressLint("ValidFragment")
 public class MainRightFragment2 extends Fragment {
     private Context mContext;
 
     public MainRightFragment2(){
 
-    }
-
-    public MainRightFragment2(Context mContext) {
-        // Required empty public constructor
-        this.mContext = mContext;
     }
 
 

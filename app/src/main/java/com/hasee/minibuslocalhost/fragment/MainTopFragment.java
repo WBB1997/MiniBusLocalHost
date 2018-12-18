@@ -11,7 +11,7 @@ import com.hasee.minibuslocalhost.R;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * 上部分Fragment
  */
 public class MainTopFragment extends Fragment {
 

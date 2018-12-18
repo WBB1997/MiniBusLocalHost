@@ -87,9 +87,10 @@ public class BCM1 extends BaseClass{
                         JSONArray jsonArray = new JSONArray();
                         jsonArray.add(((MyPair<Boolean>)fields[i].get(this)).getFirst());
                         jsonObject.put("data", jsonArray);
-                        // target
-                        jsonObject.put("target", ((MyPair<Boolean>)fields[i].get(this)).getSecond().second);
-                        transmit.getInstance().callback(jsonObject);
+//                        // target
+//                        jsonObject.put("target", ((MyPair<Boolean>)fields[i].get(this)).getSecond().second);
+                        int target = ((MyPair<Boolean>)fields[i].get(this)).getSecond().second;
+                        transmit.getInstance().callback(jsonObject,target);
                     }
                 }
             }
