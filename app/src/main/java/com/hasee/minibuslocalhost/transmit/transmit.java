@@ -1,7 +1,9 @@
 package com.hasee.minibuslocalhost.transmit;
 
+import android.os.Message;
 import android.util.Pair;
 
+import com.alibaba.fastjson.JSONObject;
 import com.hasee.minibuslocalhost.transmit.Class.BCM1;
 import com.hasee.minibuslocalhost.transmit.Class.BaseClass;
 import com.hasee.minibuslocalhost.transmit.Class.EPB;
@@ -23,7 +25,10 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class transmit {
     private final int MAX_LENGTH = 2048; // 最大接收字节长度
@@ -39,10 +44,27 @@ public class transmit {
         init();
     }
 
+    // 主机发送数据给CAN总线
+    public void hostToCAN(String clazz, String field, Object o) {
+
+    }
+
     public void setHandler(MyHandler handler) {
         this.handler = handler;
     }
 
+    public static transmit getInstance() {
+        return instance;
+    }
+
+    // 以下为私有方法，对外部是隐藏的
+    // 回调
+    // jsonObject:{'id':1, 'data':[1,1,...], 'target':1}
+    private void callback(JSONObject jsonObject){
+        //通过message 发给ui
+    }
+
+    // 接收CAN总线
     private void UDP_receive() {
         byte[] receMsgs = new byte[MAX_LENGTH];
         DatagramSocket datagramSocket = null;
@@ -64,6 +86,7 @@ public class transmit {
         }
     }
 
+    // 发到CAN总线
     private void UDP_send(Object o, String ip) {
         byte[] sendMsgs = new byte[MAX_LENGTH];
         DatagramSocket datagramSocket = null;
@@ -84,7 +107,7 @@ public class transmit {
     }
 
     // 消息标识符
-    private ArrayList<Pair<String,? extends BaseClass>> list = new ArrayList<>(Arrays.asList(
+    private ArrayList<Pair<String, ? extends BaseClass>> list = new ArrayList<>(Arrays.asList(
             new Pair<>("00000222", new VCU1()),
             new Pair<>("00000220", new VCU2()),
             new Pair<>("000003E1", new EPB()),
@@ -102,6 +125,7 @@ public class transmit {
     ));
     // 消息标识符键值对，方便查找
     private Map<String, ? super BaseClass> BUS_FLAG = new HashMap<>();
+
     // 初始化
     private void init() {
         for (Pair<String, ? extends BaseClass> pair : list)
@@ -117,15 +141,10 @@ public class transmit {
             key = bytesToHex(subBytes(receMsgs, 1, 4));
             // 如果数据更新了
             if (BUS_FLAG.containsKey(key)) {
-                ((BaseClass)BUS_FLAG.get(key)).setBytes(receMsgs);
+                ((BaseClass) BUS_FLAG.get(key)).setBytes(receMsgs);
             } else
                 System.err.println("消息标识符错误");
         }
-    }
-
-    // send函数
-    public void send(String clazz, String field, Object o) {
-
     }
 
     //byte转16进制
@@ -177,9 +196,5 @@ public class transmit {
     // 查看一个Byte的某位是否为1
     private boolean viewBinary(byte Byte, int position) {
         return (Byte & 0x01 << position) != 0;
-    }
-
-    public static transmit getInstance() {
-        return instance;
     }
 }
