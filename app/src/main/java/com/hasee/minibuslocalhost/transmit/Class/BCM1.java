@@ -39,7 +39,7 @@ public class BCM1 extends BaseClass{
     private  MyPair<Boolean>BCM_Flg_Stat_HandLightCtr = new MyPair<>(false, 1,1); // 手势灯光控制状态信号
     private  MyPair<Boolean> BCM_Flg_Stat_HighBeam = new MyPair<>(false, 1,1); // 远光灯状态信号
     private  MyPair<Boolean> BCM_Flg_Stat_LowBeam = new MyPair<>(false, 1,1); // 近光灯状态信号
-    private   MyPair<Boolean> BCM_Flg_Stat_RearFogLamp = new MyPair<>(false, 1,1); // 后雾灯状态信号
+    private  MyPair<Boolean> BCM_Flg_Stat_RearFogLamp = new MyPair<>(false, 1,1); // 后雾灯状态信号
     private  MyPair<Boolean> BCM_Flg_Stat_DangerAlarmLamp = new MyPair<>(false, 1,1); // 危险报警灯控制（双闪）状态信号
     private  MyPair<Boolean> BCM_Flg_Stat_BrakeLamp = new MyPair<>(false, 1,1); // 制动灯状态信号
     private  MyPair<Boolean> BCM_Flg_Stat_BackupLamp = new MyPair<>(false, 1,1); // 倒车灯状态信号
@@ -67,7 +67,7 @@ public class BCM1 extends BaseClass{
     public byte[] getBytes() {
         try {
             for (int i = 0; i < FIELDS_LENGTH; i++)
-                setByte(i, fields[i].getBoolean(this));
+                setByteOfBoolean(bytes, i, fields[i].getBoolean(this));
             return bytes;
         } catch (IllegalAccessException e) {
             e.printStackTrace();
@@ -101,7 +101,7 @@ public class BCM1 extends BaseClass{
     }
 
     // 设置某一位
-    private void setByte(int offset, boolean flag) {
+    private void setByteOfBoolean(byte[] bytes, int offset, boolean flag) {
         int i = offset / 8;
         int j = offset % 8;
         if (flag)
@@ -113,6 +113,10 @@ public class BCM1 extends BaseClass{
     // 查看一个Byte的某位是否为1
     private boolean viewBinary(byte Byte, int position) {
         return (Byte & 0x01 << position) != 0;
+    }
+
+    public Field[] getFields() {
+        return fields;
     }
 
     public boolean isBCM_Dig_Ord_HandLightCtr() {

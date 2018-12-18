@@ -1,5 +1,7 @@
 package com.hasee.minibuslocalhost.transmit.Class;
 
+import java.lang.reflect.Field;
+
 public class VCU1 extends BaseClass{
     double VCU_Ang_Stat_PhysicsAccPedal;
     double VCU_Ang_Stat_RealAccPedal;
@@ -19,5 +21,9 @@ public class VCU1 extends BaseClass{
     @Override
     public void setBytes(byte[] bytes) {
 
+    }
+    @Override
+    public Field[] getFields() {
+        return new Field[0];
     }
 }

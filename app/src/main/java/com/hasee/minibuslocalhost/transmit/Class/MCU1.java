@@ -1,5 +1,7 @@
 package com.hasee.minibuslocalhost.transmit.Class;
 
+import java.lang.reflect.Field;
+
 public class MCU1 extends BaseClass{
     double can_num_MotTemp;
     double can_num_MCUTemp;
@@ -14,5 +16,9 @@ public class MCU1 extends BaseClass{
     @Override
     public void setBytes(byte[] bytes) {
 
+    }
+    @Override
+    public Field[] getFields() {
+        return new Field[0];
     }
 }

@@ -1,5 +1,7 @@
 package com.hasee.minibuslocalhost.transmit.Class;
 
+import java.lang.reflect.Field;
+
 public class HAD3 extends BaseClass{
     double HAD_Dig_Ord_RegenTq;
     double HAD_Ang_Stat_MotTorque;
@@ -12,5 +14,9 @@ public class HAD3 extends BaseClass{
     @Override
     public void setBytes(byte[] bytes) {
 
+    }
+    @Override
+    public Field[] getFields() {
+        return new Field[0];
     }
 }

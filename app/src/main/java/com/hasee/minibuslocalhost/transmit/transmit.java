@@ -22,6 +22,7 @@ import com.hasee.minibuslocalhost.transmit.Class.VCU2;
 import com.hasee.minibuslocalhost.util.MyHandler;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -33,6 +34,7 @@ import java.util.Map;
 public class transmit {
     private final int MAX_LENGTH = 2048; // 最大接收字节长度
     private final int PORT = 5066;   // port号
+    private final static String IP = "127.0.0.1"; // 总线ip地址
     private final static transmit instance = new transmit();
     private MyHandler handler;
 
@@ -46,7 +48,22 @@ public class transmit {
 
     // 主机发送数据给CAN总线
     public void hostToCAN(String clazz, String field, Object o) {
+        BaseClass baseClass = (BaseClass) BUS_FLAG.get(clazz);
+        if(baseClass == null) {
+            System.out.println("Class: transmit, hostToCAN, 类转换错误");
+            return;
+        }
+        byte[] bytes = baseClass.getBytes();
+        Field[] fields = baseClass.getFields();
+        if(o instanceof Boolean) {
+            for (int i = 0; i < fields.length; i++) {
+                if (fields[i].getName().equals(field))
+                    setByteOfBoolean(bytes, i, (Boolean) o);
+            }
+        }else if (o instanceof Double){
 
+        }
+        UDP_send(bytes);
     }
 
     public void setHandler(MyHandler handler) {
@@ -91,15 +108,13 @@ public class transmit {
     }
 
     // 发到CAN总线
-    private void UDP_send(Object o, String ip) {
-        byte[] sendMsgs = new byte[MAX_LENGTH];
+    private void UDP_send(byte[] sendMsgs) {
         DatagramSocket datagramSocket = null;
         DatagramPacket datagramPacket;
         try {
-            datagramSocket = new DatagramSocket(PORT, InetAddress.getByName(ip));
+            datagramSocket = new DatagramSocket(PORT, InetAddress.getByName(IP));
             datagramPacket = new DatagramPacket(sendMsgs, sendMsgs.length);
             datagramSocket.send(datagramPacket);
-            dispose(datagramPacket.getData());
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -133,7 +148,7 @@ public class transmit {
     // 初始化
     private void init() {
         for (Pair<String, ? extends BaseClass> pair : list)
-            BUS_FLAG.put(pair.first, pair.second);
+            BUS_FLAG.put(pair.getClass().getSimpleName(), pair.second);
     }
 
     // 处理收到的byte数组
@@ -197,6 +212,15 @@ public class transmit {
         return sub;
     }
 
+    // 设置某一位
+    private void setByteOfBoolean(byte[] bytes, int offset, boolean flag) {
+        int i = offset / 8;
+        int j = offset % 8;
+        if (flag)
+            bytes[5 + i] |= (0x01 << j);
+        else
+            bytes[5 + i] |= ~(0x01 << j);
+    }
     // 查看一个Byte的某位是否为1
     private boolean viewBinary(byte Byte, int position) {
         return (Byte & 0x01 << position) != 0;
