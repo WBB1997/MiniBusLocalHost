@@ -58,6 +58,13 @@ public class transmit {
     }
 
     // 以下为私有方法，对外部是隐藏的
+    // 回调
+    // jsonObject:{'id':1, 'data':[1,1,...], 'target':1}
+    private void callback(JSONObject jsonObject){
+        //通过message 发给ui
+    }
+
+    // 接收CAN总线
     private void UDP_receive() {
         byte[] receMsgs = new byte[MAX_LENGTH];
         DatagramSocket datagramSocket = null;
@@ -79,6 +86,7 @@ public class transmit {
         }
     }
 
+    // 发到CAN总线
     private void UDP_send(Object o, String ip) {
         byte[] sendMsgs = new byte[MAX_LENGTH];
         DatagramSocket datagramSocket = null;
@@ -137,12 +145,6 @@ public class transmit {
             } else
                 System.err.println("消息标识符错误");
         }
-    }
-
-    // 回调
-    // jsonObject:{'id':1, 'data':[1,1,...], 'target':1}
-    public void callback(JSONObject jsonObject){
-        //通过message 发给ui
     }
 
     //byte转16进制
