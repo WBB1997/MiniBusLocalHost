@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <!--近光灯切换-->
-    <item android:state_pressed="true" android:drawable="@drawable/front_foglight_true"/>
-    <item android:state_pressed="false" android:drawable="@drawable/front_foglight_false"/>
+    <!--前雾灯切换-->
+    <item android:state_activated="true" android:drawable="@drawable/front_foglight_true"/>
+    <item android:state_activated="false" android:drawable="@drawable/front_foglight_false"/>
 </selector>

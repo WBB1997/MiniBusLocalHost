@@ -60,8 +60,12 @@ public class transmit {
     // 以下为私有方法，对外部是隐藏的
     // 回调
     // jsonObject:{'id':1, 'data':[1,1,...], 'target':1}
-    private void callback(JSONObject jsonObject){
+    public void callback(JSONObject jsonObject,int target){
         //通过message 发给ui
+        Message msg = handler.obtainMessage();
+        msg.what = target;
+        msg.obj = jsonObject;
+        handler.sendMessage(msg);
     }
 
     // 接收CAN总线
