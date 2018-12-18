@@ -1,5 +1,7 @@
 package com.hasee.minibuslocalhost.transmit.Class;
 
+import java.lang.reflect.Field;
+
 public class ESC3 extends BaseClass{
     double EBD_Fault;
     double ABS_Fault;
@@ -18,5 +20,9 @@ public class ESC3 extends BaseClass{
     @Override
     public void setBytes(byte[] bytes) {
 
+    }
+    @Override
+    public Field[] getFields() {
+        return new Field[0];
     }
 }

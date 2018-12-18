@@ -1,5 +1,7 @@
 package com.hasee.minibuslocalhost.transmit.Class;
 
+import java.lang.reflect.Field;
+
 public class HAD2 extends BaseClass{
     double HAD_Dig_Ord_HighBeam;
     double HAD_Dig_Ord_LowBeam;
@@ -21,5 +23,9 @@ public class HAD2 extends BaseClass{
     @Override
     public void setBytes(byte[] bytes) {
 
+    }
+    @Override
+    public Field[] getFields() {
+        return new Field[0];
     }
 }

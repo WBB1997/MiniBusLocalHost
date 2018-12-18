@@ -1,5 +1,7 @@
 package com.hasee.minibuslocalhost.transmit.Class;
 
+import java.lang.reflect.Field;
+
 public class ESC1 extends BaseClass{
     double ESC_Ang_Stat_FLWHeelPulseCounter;
     double ESC_Ang_Stat_FRWHeelPulseCounter;
@@ -20,5 +22,9 @@ public class ESC1 extends BaseClass{
     @Override
     public void setBytes(byte[] bytes) {
 
+    }
+    @Override
+    public Field[] getFields() {
+        return new Field[0];
     }
 }

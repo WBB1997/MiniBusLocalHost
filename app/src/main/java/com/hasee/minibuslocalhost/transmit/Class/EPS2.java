@@ -1,5 +1,7 @@
 package com.hasee.minibuslocalhost.transmit.Class;
 
+import java.lang.reflect.Field;
+
 public class EPS2 extends BaseClass{
     double EPS_Flg_Stat_Steering_IfrDet;
     double EPS_Flg_Stat_Steering_IfrDetVal;
@@ -15,5 +17,9 @@ public class EPS2 extends BaseClass{
     @Override
     public void setBytes(byte[] bytes) {
 
+    }
+    @Override
+    public Field[] getFields() {
+        return new Field[0];
     }
 }

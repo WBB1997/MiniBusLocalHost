@@ -1,5 +1,7 @@
 package com.hasee.minibuslocalhost.transmit.Class;
 
+import java.lang.reflect.Field;
+
 public class HAD1 extends BaseClass{
     double HAD_Dig_Ord_Brake;
     double HAD_Dig_Ord_VCUAutoDriveEnable;
@@ -21,5 +23,9 @@ public class HAD1 extends BaseClass{
     @Override
     public void setBytes(byte[] bytes) {
 
+    }
+    @Override
+    public Field[] getFields() {
+        return new Field[0];
     }
 }
