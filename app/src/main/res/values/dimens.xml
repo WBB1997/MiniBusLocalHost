@@ -34,7 +34,7 @@
     <!--主界面上部高度-->
     <dimen name="main_layout_top_height">56px</dimen>
     <!--主界面左边宽度-->
-    <dimen name="main_layout_left_width">418px</dimen>
+    <dimen name="main_layout_left_width">376px</dimen>
     <!--主界面左边高度-->
     <dimen name="main_layout_left_height">446px</dimen>
     <!--主界面中间宽度-->
@@ -60,4 +60,8 @@
     <dimen name="textSize_20px">20px</dimen>
     <dimen name="textSize_16px">16px</dimen>
     <dimen name="textSize_10px">10px</dimen>
+    <!--Margin-->
+    <dimen name="margin_20px">20px</dimen>
+    <dimen name="margin_24px">24px</dimen>
+    <dimen name="margin_40px">40px</dimen>
 </resources>

@@ -19,6 +19,7 @@ import com.hasee.minibuslocalhost.transmit.Class.HAD3;
 import com.hasee.minibuslocalhost.transmit.Class.MCU1;
 import com.hasee.minibuslocalhost.transmit.Class.VCU1;
 import com.hasee.minibuslocalhost.transmit.Class.VCU2;
+import com.hasee.minibuslocalhost.util.LogUtil;
 import com.hasee.minibuslocalhost.util.MyHandler;
 
 import java.io.IOException;
@@ -50,7 +51,8 @@ public class transmit {
     public void hostToCAN(String clazz, String field, Object o) {
         BaseClass baseClass = (BaseClass) BUS_FLAG.get(clazz);
         if(baseClass == null) {
-            System.out.println("Class: transmit, hostToCAN, 类转换错误");
+//            System.out.println("Class: transmit, hostToCAN, 类转换错误");
+            LogUtil.d("transmit","Class: transmit, hostToCAN, 类转换错误");
             return;
         }
         byte[] bytes = baseClass.getBytes();

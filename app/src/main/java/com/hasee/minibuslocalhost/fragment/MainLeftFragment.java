@@ -37,9 +37,12 @@ public class MainLeftFragment extends Fragment {
     private ImageButton leftFragmentRightLight;//右转向灯
     private LinearLayout leftFragmentAuto;//自动调节
     private ImageButton leftFragmentErrorLight;//警示灯
-    private ImageButton leftFragmentCoolAir;//冷气
-    private ImageButton leftFragmentHotAir;//冷气
-    private ImageButton leftFragmentDeFog;//除雾
+    private ImageView leftFragmentCoolAirImg;//冷气
+    private ImageView leftFragmentHotAirImg;//暖气
+    private ImageView leftFragmentDeFogImg;//除雾
+    private LinearLayout leftFragmentCoolAir;//冷气布局
+    private LinearLayout leftFragmentHotAir;//暖气布局
+    private LinearLayout leftFragmentDeFog;//除雾布局
     private TextView leftFragmentConditionSize;//风扇大小
     private SeekBar leftFragmentSeekBar;//风扇滑动条
 
@@ -78,17 +81,40 @@ public class MainLeftFragment extends Fragment {
         leftFragmentAuto = (LinearLayout) view.findViewById(R.id.leftFragment_auto);
         leftFragmentErrorLight = (ImageButton) view.findViewById(R.id.leftFragment_errorLight);
         leftFragmentErrorLight.setOnClickListener(onClickListener);
-        leftFragmentCoolAir = (ImageButton) view.findViewById(R.id.leftFragment_coolAir);
+        leftFragmentCoolAirImg = (ImageView) view.findViewById(R.id.leftFragment_coolAir_img);
+        leftFragmentHotAirImg = (ImageView) view.findViewById(R.id.leftFragment_hotAir_img);
+        leftFragmentDeFogImg = (ImageView) view.findViewById(R.id.leftFragment_deFog_img);
+        leftFragmentCoolAir = (LinearLayout)view.findViewById(R.id.leftFragment_coolAir);
         leftFragmentCoolAir.setOnClickListener(onClickListener);
-        leftFragmentHotAir = (ImageButton) view.findViewById(R.id.leftFragment_hotAir);
+        leftFragmentHotAir = (LinearLayout)view.findViewById(R.id.leftFragment_hotAir);
         leftFragmentHotAir.setOnClickListener(onClickListener);
-        leftFragmentDeFog = (ImageButton) view.findViewById(R.id.leftFragment_deFog);
+        leftFragmentDeFog = (LinearLayout)view.findViewById(R.id.leftFragment_deFog);
+        leftFragmentDeFog.setOnClickListener(onClickListener);
         leftFragmentConditionSize = (TextView) view.findViewById(R.id.leftFragment_condition_size);
         leftFragmentSeekBar = (SeekBar) view.findViewById(R.id.leftFragment_seekBar);
-
+        leftFragmentSeekBar.setOnSeekBarChangeListener(onSeekBarChangeListener);
         return view;
     }
 
+    /**
+     * 滑动条事件监听
+     */
+    private SeekBar.OnSeekBarChangeListener onSeekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+
+        }
+    };
 
     /**
      * 事件点击监听器
@@ -167,6 +193,48 @@ public class MainLeftFragment extends Fragment {
                     }else{//警示灯关闭
                         leftFragmentRightLight.setActivated(false);//左转向灯关闭
                         leftFragmentLeftLight.setActivated(false);//右转向灯关闭
+                    }
+                    break;
+                }
+                case R.id.leftFragment_coolAir:{//冷气
+                    leftFragmentCoolAir.setActivated(!leftFragmentCoolAir.isActivated());
+                    if(leftFragmentCoolAir.isActivated()){//如果冷气是开的
+                        leftFragmentCoolAirImg.setActivated(true);
+                        //关闭暖气和除雾
+                        leftFragmentHotAirImg.setActivated(false);
+                        leftFragmentHotAir.setActivated(false);
+                        leftFragmentDeFogImg.setActivated(false);
+                        leftFragmentDeFog.setActivated(false);
+                    }else{
+                        leftFragmentCoolAirImg.setActivated(false);
+                    }
+                    break;
+                }
+                case R.id.leftFragment_hotAir:{//暖气
+                    leftFragmentHotAir.setActivated(!leftFragmentHotAir.isActivated());
+                    if(leftFragmentHotAir.isActivated()){//如果暖气是开的
+                        leftFragmentHotAirImg.setActivated(true);
+                        //关闭冷气和除雾
+                        leftFragmentCoolAirImg.setActivated(false);
+                        leftFragmentCoolAir.setActivated(false);
+                        leftFragmentDeFogImg.setActivated(false);
+                        leftFragmentDeFog.setActivated(false);
+                    }else{
+                        leftFragmentHotAirImg.setActivated(false);
+                    }
+                    break;
+                }
+                case R.id.leftFragment_deFog:{//除雾
+                    leftFragmentDeFog.setActivated(!leftFragmentDeFog.isActivated());
+                    if(leftFragmentDeFog.isActivated()){//如果除雾是开的
+                        leftFragmentDeFogImg.setActivated(true);
+                        //关闭冷气和暖气
+                        leftFragmentCoolAirImg.setActivated(false);
+                        leftFragmentCoolAir.setActivated(false);
+                        leftFragmentHotAirImg.setActivated(false);
+                        leftFragmentHotAir.setActivated(false);
+                    }else{
+                        leftFragmentDeFogImg.setActivated(false);
                     }
                     break;
                 }

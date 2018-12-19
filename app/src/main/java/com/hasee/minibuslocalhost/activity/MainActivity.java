@@ -23,13 +23,19 @@ public class MainActivity extends BaseActivity{
     private final int SEND_TO_LOCALHOST = 3;//主控屏
     private Context mContext;//上下文
     private FragmentManager fragmentManager;//Fragment管理器对象
-    private FragmentTransaction transaction;//Fragment事物对象
+    private FragmentTransaction transaction;//Fragment事务对象
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mContext = MainActivity.this;
-        transmit.getInstance().setHandler(handler);
+
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                transmit.getInstance().setHandler(handler);
+//            }
+//        }).start();
         viewInit();
     }
 

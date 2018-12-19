@@ -11,7 +11,7 @@
             <stroke android:width="2px" android:color="@color/cicle_border"/>
         </shape>
     </item>
-    <!--没有按压-->
+    <!--按压了-->
     <item android:state_pressed="true">
         <shape android:shape="rectangle">
             <!--填充的颜色-->
