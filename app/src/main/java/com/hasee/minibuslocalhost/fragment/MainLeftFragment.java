@@ -13,6 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.hasee.minibuslocalhost.R;
 import com.hasee.minibuslocalhost.activity.MainActivity;
 
@@ -239,7 +241,21 @@ public class MainLeftFragment extends Fragment {
                     break;
                 }
             }
+            activity.sendToCAN("BCM1", "BCM_Flg_Stat_LeftTurningLamp", false);
         }
     };
+
+    /**
+     * 更新布局
+     */
+    public void refresh(JSONObject object){
+        JSONArray array = object.getJSONArray("data");
+        switch (object.getIntValue("id")){
+            case 2:{
+                leftFragmentLeftLight.setActivated(array.getBoolean(0));
+                break;
+            }
+        }
+    }
 
 }

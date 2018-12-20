@@ -17,6 +17,7 @@ import com.hasee.minibuslocalhost.transmit.Class.HAD1;
 import com.hasee.minibuslocalhost.transmit.Class.HAD2;
 import com.hasee.minibuslocalhost.transmit.Class.HAD3;
 import com.hasee.minibuslocalhost.transmit.Class.MCU1;
+import com.hasee.minibuslocalhost.transmit.Class.MyPair;
 import com.hasee.minibuslocalhost.transmit.Class.VCU1;
 import com.hasee.minibuslocalhost.transmit.Class.VCU2;
 import com.hasee.minibuslocalhost.util.LogUtil;
@@ -49,28 +50,29 @@ public class transmit {
 
     // 主机发送数据给CAN总线
     public void hostToCAN(String clazz, String field, Object o) {
-        BaseClass baseClass = (BaseClass) BUS_FLAG.get(clazz);
-        if(baseClass == null) {
-//            System.out.println("Class: transmit, hostToCAN, 类转换错误");
-            LogUtil.d("transmit","Class: transmit, hostToCAN, 类转换错误");
+        BaseClass baseClass = (BaseClass) NAME_AND_CLASS.get(clazz);
+        if (baseClass == null) {
+            LogUtil.d("hostToCAN", "类转换错误");
             return;
         }
         byte[] bytes = baseClass.getBytes();
-        Field[] fields = baseClass.getFields();
-        if(o instanceof Boolean) {
-            for (int i = 0; i < fields.length; i++) {
-                if (fields[i].getName().equals(field))
+        LogUtil.d("hostToCAN", bytesToHex(bytes));
+        HashMap<Integer, MyPair<Boolean>> fields = baseClass.getFields();
+        if (o instanceof Boolean) {
+            for (int i = 0; i < fields.size(); i++) {
+                if (fields.get(i).getClass().getSimpleName().equals(field))
                     setByteOfBoolean(bytes, i, (Boolean) o);
             }
-        }else if (o instanceof Double){
+        } else if (o instanceof Double) {
 
         }
+        LogUtil.d("hostToCAN", bytesToHex(bytes));
         UDP_send(bytes);
     }
 
     public void setHandler(MyHandler handler) {
         this.handler = handler;
-        LogUtil.d("transmit","setHandler");
+        LogUtil.d("transmit", "setHandler");
         UDP_receive();
     }
 
@@ -81,7 +83,7 @@ public class transmit {
     // 以下为私有方法，对外部是隐藏的
     // 回调
     // jsonObject:{'id':1, 'data':[1,1,...], 'target':1}
-    public void callback(JSONObject jsonObject,int target){
+    public void callback(JSONObject jsonObject, int target) {
         //通过message 发给ui
         Message msg = handler.obtainMessage();
         msg.what = target;
@@ -147,29 +149,31 @@ public class transmit {
             new Pair<>("00000233", new HAD3())
     ));
     // 消息标识符键值对，方便查找
-    private Map<String, ? super BaseClass> BUS_FLAG = new HashMap<>();
+    private Map<String, ? super BaseClass> FLAG_AND_CLASS = new HashMap<>();
+    private Map<String, ? super BaseClass> NAME_AND_CLASS = new HashMap<>();
 
     // 初始化
     private void init() {
-        for (Pair<String, ? extends BaseClass> pair : list)
-            BUS_FLAG.put(pair.first, pair.second);
+        for (Pair<String, ? extends BaseClass> pair : list) {
+            FLAG_AND_CLASS.put(pair.first, pair.second);
+            NAME_AND_CLASS.put(pair.second.getClass().getSimpleName(), pair.second);
+        }
     }
 
     // 处理收到的byte数组
     private void dispose(byte[] receMsgs) {
         String key;
-        LogUtil.d("transmit","dispose："+ bytesToHex(receMsgs));
+        LogUtil.d("dispose", bytesToHex(receMsgs));
         if (receMsgs == null)
             return;
         for (int i = 0; i < receMsgs.length; i += 13) {
             key = bytesToHex(subBytes(receMsgs, 1, 4));
-            LogUtil.d("transmit",key);
+            LogUtil.d("dispose", key);
             // 如果数据更新了
-            if (BUS_FLAG.containsKey(key)) {
-                ((BaseClass) BUS_FLAG.get(key)).setBytes(receMsgs);
+            if (FLAG_AND_CLASS.containsKey(key)) {
+                ((BaseClass) FLAG_AND_CLASS.get(key)).setBytes(receMsgs);
             } else
-//                System.err.println("消息标识符错误");
-            LogUtil.d("transmit","消息标识符错误");
+                LogUtil.d("dispose", "消息标识符错误");
         }
     }
 
@@ -224,10 +228,11 @@ public class transmit {
         int i = offset / 8;
         int j = offset % 8;
         if (flag)
-            bytes[5 + i] |= (0x01 << j);
+            bytes[5 + i] |= (0x01 << (7 - j));
         else
-            bytes[5 + i] |= ~(0x01 << j);
+            bytes[5 + i] |= ~(0x01 << (7 - j));
     }
+
     // 查看一个Byte的某位是否为1
     private boolean viewBinary(byte Byte, int position) {
         return (Byte & 0x01 << position) != 0;

@@ -1,6 +1,7 @@
 package com.hasee.minibuslocalhost.transmit.Class;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
 
 public class HAD1 extends BaseClass{
     double HAD_Dig_Ord_Brake;
@@ -25,7 +26,8 @@ public class HAD1 extends BaseClass{
 
     }
     @Override
-    public Field[] getFields() {
-        return new Field[0];
+    public HashMap<Integer, MyPair<Boolean>> getFields() {
+        return null;
     }
+
 }
