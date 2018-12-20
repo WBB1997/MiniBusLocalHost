@@ -30,12 +30,12 @@ public class MainActivity extends BaseActivity{
         setContentView(R.layout.activity_main);
         mContext = MainActivity.this;
 
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                transmit.getInstance().setHandler(handler);
-//            }
-//        }).start();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                transmit.getInstance().setHandler(handler);
+            }
+        }).start();
         viewInit();
     }
 

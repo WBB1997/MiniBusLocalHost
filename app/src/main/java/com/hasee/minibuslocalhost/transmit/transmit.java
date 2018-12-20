@@ -33,9 +33,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class transmit {
-    private final int MAX_LENGTH = 2048; // 最大接收字节长度
+    private final int MAX_LENGTH = 13; // 最大接收字节长度
     private final int PORT = 5066;   // port号
-    private final static String IP = "127.0.0.1"; // 总线ip地址
+    private final static String IP = "10.13.233.181"; // 总线ip地址
     private final static transmit instance = new transmit();
     private MyHandler handler;
 
@@ -70,6 +70,8 @@ public class transmit {
 
     public void setHandler(MyHandler handler) {
         this.handler = handler;
+        LogUtil.d("transmit","setHandler");
+        UDP_receive();
     }
 
     public static transmit getInstance() {
@@ -150,21 +152,24 @@ public class transmit {
     // 初始化
     private void init() {
         for (Pair<String, ? extends BaseClass> pair : list)
-            BUS_FLAG.put(pair.getClass().getSimpleName(), pair.second);
+            BUS_FLAG.put(pair.first, pair.second);
     }
 
     // 处理收到的byte数组
     private void dispose(byte[] receMsgs) {
         String key;
+        LogUtil.d("transmit","dispose："+ bytesToHex(receMsgs));
         if (receMsgs == null)
             return;
         for (int i = 0; i < receMsgs.length; i += 13) {
             key = bytesToHex(subBytes(receMsgs, 1, 4));
+            LogUtil.d("transmit",key);
             // 如果数据更新了
             if (BUS_FLAG.containsKey(key)) {
                 ((BaseClass) BUS_FLAG.get(key)).setBytes(receMsgs);
             } else
-                System.err.println("消息标识符错误");
+//                System.err.println("消息标识符错误");
+            LogUtil.d("transmit","消息标识符错误");
         }
     }
 
