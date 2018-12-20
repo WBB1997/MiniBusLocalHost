@@ -1,6 +1,7 @@
 package com.hasee.minibuslocalhost.transmit.Class;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
 
 public class MCU1 extends BaseClass{
     double can_num_MotTemp;
@@ -18,7 +19,8 @@ public class MCU1 extends BaseClass{
 
     }
     @Override
-    public Field[] getFields() {
-        return new Field[0];
+    public HashMap<Integer, MyPair<Boolean>> getFields() {
+        return null;
     }
+
 }

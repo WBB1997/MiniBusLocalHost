@@ -9,10 +9,12 @@ import android.os.Bundle;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hasee.minibuslocalhost.R;
+import com.hasee.minibuslocalhost.fragment.MainLeftFragment;
 import com.hasee.minibuslocalhost.fragment.MainRightFragment1;
 import com.hasee.minibuslocalhost.fragment.MainRightFragment2;
 import com.hasee.minibuslocalhost.transmit.transmit;
 import com.hasee.minibuslocalhost.util.ActivityCollector;
+import com.hasee.minibuslocalhost.util.LogUtil;
 import com.hasee.minibuslocalhost.util.MyHandler;
 import com.hasee.minibuslocalhost.util.SendToScreenThread;
 
@@ -57,6 +59,8 @@ public class MainActivity extends BaseActivity{
         @Override
         public void handleMessage(Message msg) {
             JSONObject object = (JSONObject) msg.obj;//CAN总线的数据
+            LogUtil.d("MainActivity",object.toJSONString());
+            LogUtil.d("MainActivity", String.valueOf(msg.what));
             switch (msg.what){
                 case SEND_TO_FRONTSCREEN:{//前风挡
                     new SendToScreenThread(object,SEND_TO_FRONTSCREEN).start();
@@ -72,6 +76,8 @@ public class MainActivity extends BaseActivity{
                 }
                 case SEND_TO_LOCALHOST:{//主控屏
                     //改变主控屏的控件状态
+                    MainLeftFragment leftFragment = (MainLeftFragment) getSupportFragmentManager().findFragmentById(R.id.left_fragment);
+                    leftFragment.refresh(object);
                     break;
                 }
                 default:
@@ -96,7 +102,7 @@ public class MainActivity extends BaseActivity{
      * @param o 对象
      */
     public void sendToCAN(String clazz, String field, Object o) {
-//        transmit.getInstance().hostToCAN();
+        transmit.getInstance().hostToCAN(clazz, field, o);
     }
 
     /**
