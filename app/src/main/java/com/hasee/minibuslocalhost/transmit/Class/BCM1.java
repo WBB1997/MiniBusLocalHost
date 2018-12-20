@@ -4,6 +4,7 @@ package com.hasee.minibuslocalhost.transmit.Class;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.hasee.minibuslocalhost.transmit.transmit;
+import com.hasee.minibuslocalhost.util.LogUtil;
 
 import java.lang.reflect.Field;
 
@@ -34,7 +35,7 @@ public class BCM1 extends BaseClass{
 
     //
     private MyPair<Boolean> BCM_Dig_Ord_HandLightCtr = new MyPair<>(false, 1,1); // 手势灯光控制信号
-    private MyPair<Boolean> BCM_Flg_Stat_LeftTurningLamp =new MyPair<>(false, 1,1); // 左转向状态信号
+    private MyPair<Boolean> BCM_Flg_Stat_LeftTurningLamp =new MyPair<>(false, 2,1); // 左转向状态信号
     private  MyPair<Boolean> BCM_Flg_Stat_RightTurningLamp = new MyPair<>(false, 1,1); // 右转向状态信号
     private  MyPair<Boolean>BCM_Flg_Stat_HandLightCtr = new MyPair<>(false, 1,1); // 手势灯光控制状态信号
     private  MyPair<Boolean> BCM_Flg_Stat_HighBeam = new MyPair<>(false, 1,1); // 远光灯状态信号
@@ -62,6 +63,11 @@ public class BCM1 extends BaseClass{
     private byte[] bytes = new byte[13];
 
     public BCM1(){
+        bytes[0] = 0x00;
+        bytes[1] = 0x00;
+        bytes[2] = 0x00;
+        bytes[3] = 0x03;
+        bytes[4] = 0x61;
     }
 
     public byte[] getBytes() {
@@ -76,21 +82,26 @@ public class BCM1 extends BaseClass{
     }
 
     public void setBytes(byte[] bytes) {
+        LogUtil.d("BCM1","this.bytes："+ bytesToHex(this.bytes));
+        LogUtil.d("BCM1","bytes："+ bytesToHex(bytes));
         try {
             for (int i = 0; i < bytes.length - 5; i++) {
-                for (int j = 0; i * 8 + j < FIELDS_LENGTH; j++) {
+                String t1 = bytesToHex(new byte[] {this.bytes[i + 5]});
+                String t2 = bytesToHex(new byte[] {bytes[i + 5]});
+                for (int j = 0; j < 8; j++) {
                     if (viewBinary(this.bytes[i + 5], j) != viewBinary(bytes[i + 5], j)) {
                         JSONObject jsonObject = new JSONObject();
                         // id
-                        jsonObject.put("id", ((MyPair<Boolean>)fields[i].get(this)).getSecond().first);
+                        jsonObject.put("id", ((MyPair<Boolean>)fields[i * 8 + j].get(this)).getSecond().first);
                         // data
                         JSONArray jsonArray = new JSONArray();
-                        jsonArray.add(((MyPair<Boolean>)fields[i].get(this)).getFirst());
+                        jsonArray.add(((MyPair<Boolean>)fields[i * 8 + j].get(this)).getFirst());
                         jsonObject.put("data", jsonArray);
 //                        // target
 //                        jsonObject.put("target", ((MyPair<Boolean>)fields[i].get(this)).getSecond().second);
-                        int target = ((MyPair<Boolean>)fields[i].get(this)).getSecond().second;
-                        transmit.getInstance().callback(jsonObject,target);
+                        int target = ((MyPair<Boolean>)fields[i * 8 + j].get(this)).getSecond().second;
+                        LogUtil.d("BCM1",jsonObject.toJSONString());
+//                        transmit.getInstance().callback(jsonObject,target);
                     }
                 }
             }
@@ -112,7 +123,7 @@ public class BCM1 extends BaseClass{
 
     // 查看一个Byte的某位是否为1
     private boolean viewBinary(byte Byte, int position) {
-        return (Byte & 0x01 << position) != 0;
+        return (Byte & 0x01 << (7 - position)) != 0;
     }
 
     public Field[] getFields() {
@@ -293,5 +304,17 @@ public class BCM1 extends BaseClass{
 
     public void setBCM_Flg_Stat_BeltsSensor6(boolean BCM_Flg_Stat_BeltsSensor6) {
         this.BCM_Flg_Stat_BeltsSensor6.setFirst(BCM_Flg_Stat_BeltsSensor6);
+    }
+
+    //byte转16进制
+    private String bytesToHex(byte[] bytes) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < bytes.length; i++) {
+            String hex = Integer.toHexString(bytes[i] & 0xFF);
+            if (hex.length() < 2)
+                sb.append(0);
+            sb.append(hex);
+        }
+        return sb.toString();
     }
 }
