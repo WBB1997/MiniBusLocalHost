@@ -6,20 +6,7 @@ import android.util.Pair;
 import com.alibaba.fastjson.JSONObject;
 import com.hasee.minibuslocalhost.transmit.Class.BCM1;
 import com.hasee.minibuslocalhost.transmit.Class.BaseClass;
-import com.hasee.minibuslocalhost.transmit.Class.EPB;
-import com.hasee.minibuslocalhost.transmit.Class.EPS1;
-import com.hasee.minibuslocalhost.transmit.Class.EPS2;
-import com.hasee.minibuslocalhost.transmit.Class.EPS3;
-import com.hasee.minibuslocalhost.transmit.Class.ESC1;
-import com.hasee.minibuslocalhost.transmit.Class.ESC2;
-import com.hasee.minibuslocalhost.transmit.Class.ESC3;
-import com.hasee.minibuslocalhost.transmit.Class.HAD1;
-import com.hasee.minibuslocalhost.transmit.Class.HAD2;
-import com.hasee.minibuslocalhost.transmit.Class.HAD3;
 import com.hasee.minibuslocalhost.transmit.Class.HMI;
-import com.hasee.minibuslocalhost.transmit.Class.MCU1;
-import com.hasee.minibuslocalhost.transmit.Class.VCU1;
-import com.hasee.minibuslocalhost.transmit.Class.VCU2;
 import com.hasee.minibuslocalhost.util.LogUtil;
 import com.hasee.minibuslocalhost.util.MyHandler;
 
@@ -32,18 +19,18 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-public class transmit {
+public class Transmit {
     private final int MAX_LENGTH = 13; // 最大接收字节长度
     private final int PORT = 5066;   // port号
     private final static String IP = "10.13.233.181"; // 总线ip地址
-    private final static transmit instance = new transmit();
+    private final static Transmit instance = new Transmit();
     private MyHandler handler;
 
     public static void main(String[] args) {
-        new transmit();
+        new Transmit();
     }
 
-    public transmit() {
+    public Transmit() {
         init();
     }
 
@@ -51,23 +38,23 @@ public class transmit {
     public void hostToCAN(String clazz, int field, Object o) {
         BaseClass baseClass = (BaseClass) NAME_AND_CLASS.get(clazz);
         if (baseClass == null) {
-            LogUtil.d("hostToCAN", "类转换错误");
+            LogUtil.d("Transmit", "类转换错误");
             return;
         }
         if(baseClass instanceof HMI)
             ((HMI)baseClass).changeStatus(field, o);
         byte[] bytes = baseClass.getBytes();
-        LogUtil.d("hostToCAN", bytesToHex(bytes));
+        LogUtil.d("Transmit", bytesToHex(bytes));
         UDP_send(bytes);
     }
 
     public void setHandler(MyHandler handler) {
         this.handler = handler;
-        LogUtil.d("transmit", "setHandler");
+        LogUtil.d("Transmit", "setHandler");
         UDP_receive();
     }
 
-    public static transmit getInstance() {
+    public static Transmit getInstance() {
         return instance;
     }
 
@@ -93,11 +80,12 @@ public class transmit {
             case 68:
                 ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_Dig_Ord_RearFogLamp, jsonObject.getJSONArray("data").getBoolean(0));
                 break;
-            case 107:
-                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_Dig_Ord_DoorLock, jsonObject.getJSONArray("data").getBoolean(0));
-                break;
-            default:
-                break;
+//            case 107:
+//                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_Dig_Ord_DoorLock, jsonObject.getJSONArray("data").getBoolean(0));
+//                break;
+                default:
+
+                    break;
         }
         //通过message 发给ui
         Message msg = handler.obtainMessage();
@@ -122,9 +110,8 @@ public class transmit {
             e.printStackTrace();
         } finally {
             // 关闭socket
-            if (datagramSocket != null) {
+            if (datagramSocket != null)
                 datagramSocket.close();
-            }
         }
     }
 
@@ -147,21 +134,25 @@ public class transmit {
     }
 
     // 消息标识符
+//    private ArrayList<Pair<String, ? extends BaseClass>> list = new ArrayList<>(Arrays.asList(
+//            new Pair<>("00000222", new VCU1()),
+//            new Pair<>("00000220", new VCU2()),
+//            new Pair<>("000003E1", new EPB()),
+//            new Pair<>("00000300", new MCU1()),
+//            new Pair<>("00000373", new EPS1()),
+//            new Pair<>("00000228", new EPS2()),
+//            new Pair<>("00000225", new EPS3()),
+//            new Pair<>("00000226", new ESC1()),
+//            new Pair<>("00000227", new ESC2()),
+//            new Pair<>("000004C0", new ESC3()),
+//            new Pair<>("00000361", new BCM1()),
+//            new Pair<>("00000219", new HAD1()),
+//            new Pair<>("00000363", new HAD2()),
+//            new Pair<>("00000233", new HAD3()),
+//            new Pair<>("00000383", new HMI())
+//    ));
     private ArrayList<Pair<String, ? extends BaseClass>> list = new ArrayList<>(Arrays.asList(
-            new Pair<>("00000222", new VCU1()),
-            new Pair<>("00000220", new VCU2()),
-            new Pair<>("000003E1", new EPB()),
-            new Pair<>("00000300", new MCU1()),
-            new Pair<>("00000373", new EPS1()),
-            new Pair<>("00000228", new EPS2()),
-            new Pair<>("00000225", new EPS3()),
-            new Pair<>("00000226", new ESC1()),
-            new Pair<>("00000227", new ESC2()),
-            new Pair<>("000004C0", new ESC3()),
             new Pair<>("00000361", new BCM1()),
-            new Pair<>("00000219", new HAD1()),
-            new Pair<>("00000363", new HAD2()),
-            new Pair<>("00000233", new HAD3()),
             new Pair<>("00000383", new HMI())
     ));
     // 消息标识符键值对，方便查找
@@ -179,17 +170,17 @@ public class transmit {
     // 处理收到的byte数组
     private void dispose(byte[] receMsgs) {
         String key;
-        LogUtil.d("dispose", bytesToHex(receMsgs));
-        if (receMsgs == null)
+        LogUtil.d("Transmit", bytesToHex(receMsgs));
+        if (receMsgs.length <= 13)
             return;
         for (int i = 0; i < receMsgs.length; i += 13) {
             key = bytesToHex(subBytes(receMsgs, 1, 4));
-            LogUtil.d("dispose", key);
+            LogUtil.d("Transmit", "key:" + key);
             // 如果数据更新了
-            if (FLAG_AND_CLASS.containsKey(key)) {
+            if (FLAG_AND_CLASS.containsKey(key))
                 ((BaseClass) FLAG_AND_CLASS.get(key)).setBytes(receMsgs);
-            } else
-                LogUtil.d("dispose", "消息标识符错误");
+            else
+                LogUtil.d("Transmit", "消息标识符错误");
         }
     }
 

@@ -12,7 +12,7 @@ import com.hasee.minibuslocalhost.R;
 import com.hasee.minibuslocalhost.fragment.MainLeftFragment;
 import com.hasee.minibuslocalhost.fragment.MainRightFragment1;
 import com.hasee.minibuslocalhost.fragment.MainRightFragment2;
-import com.hasee.minibuslocalhost.transmit.transmit;
+import com.hasee.minibuslocalhost.transmit.Transmit;
 import com.hasee.minibuslocalhost.util.ActivityCollector;
 import com.hasee.minibuslocalhost.util.LogUtil;
 import com.hasee.minibuslocalhost.util.MyHandler;
@@ -35,7 +35,7 @@ public class MainActivity extends BaseActivity{
         new Thread(new Runnable() {
             @Override
             public void run() {
-                transmit.getInstance().setHandler(handler);
+                Transmit.getInstance().setHandler(handler);
             }
         }).start();
         viewInit();
@@ -102,7 +102,7 @@ public class MainActivity extends BaseActivity{
      * @param o 对象
      */
     public void sendToCAN(String clazz, int field, Object o) {
-        transmit.getInstance().hostToCAN(clazz, field, o);
+        Transmit.getInstance().hostToCAN(clazz, field, o);
     }
 
     /**

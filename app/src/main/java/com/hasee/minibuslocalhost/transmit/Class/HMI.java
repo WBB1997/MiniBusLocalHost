@@ -4,7 +4,7 @@ import com.hasee.minibuslocalhost.util.LogUtil;
 
 import java.util.HashMap;
 
-import static com.hasee.minibuslocalhost.transmit.transmit.setBit;
+import static com.hasee.minibuslocalhost.transmit.Transmit.setBit;
 
 public class HMI extends BaseClass{
     // flag

@@ -3,7 +3,7 @@ package com.hasee.minibuslocalhost.transmit.Class;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 
-public class HAD2 extends BaseClass{
+public class HAD2{
     double HAD_Dig_Ord_HighBeam;
     double HAD_Dig_Ord_LowBeam;
     double HAD_Dig_Ord_LeftTurningLamp;
@@ -15,19 +15,5 @@ public class HAD2 extends BaseClass{
     double HAD_Dig_Ord_WindowProjection;
     double HAD_Dig_Ord_Horn;
     double HAD_Dig_Ord_DoorLock;
-
-    @Override
-    public byte[] getBytes() {
-        return new byte[0];
-    }
-
-    @Override
-    public void setBytes(byte[] bytes) {
-
-    }
-    @Override
-    public HashMap<Integer, MyPair<Boolean>> getFields() {
-        return null;
-    }
 
 }
