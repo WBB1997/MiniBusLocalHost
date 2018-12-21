@@ -16,6 +16,7 @@ import com.hasee.minibuslocalhost.transmit.Class.ESC3;
 import com.hasee.minibuslocalhost.transmit.Class.HAD1;
 import com.hasee.minibuslocalhost.transmit.Class.HAD2;
 import com.hasee.minibuslocalhost.transmit.Class.HAD3;
+import com.hasee.minibuslocalhost.transmit.Class.HMI;
 import com.hasee.minibuslocalhost.transmit.Class.MCU1;
 import com.hasee.minibuslocalhost.transmit.Class.MyPair;
 import com.hasee.minibuslocalhost.transmit.Class.VCU1;
@@ -24,7 +25,6 @@ import com.hasee.minibuslocalhost.util.LogUtil;
 import com.hasee.minibuslocalhost.util.MyHandler;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -49,23 +49,15 @@ public class transmit {
     }
 
     // 主机发送数据给CAN总线
-    public void hostToCAN(String clazz, String field, Object o) {
+    public void hostToCAN(String clazz, int field, Object o) {
         BaseClass baseClass = (BaseClass) NAME_AND_CLASS.get(clazz);
         if (baseClass == null) {
             LogUtil.d("hostToCAN", "类转换错误");
             return;
         }
+        if(baseClass instanceof HMI)
+            ((HMI)baseClass).changeStatus(field, o);
         byte[] bytes = baseClass.getBytes();
-        LogUtil.d("hostToCAN", bytesToHex(bytes));
-        HashMap<Integer, MyPair<Boolean>> fields = baseClass.getFields();
-        if (o instanceof Boolean) {
-            for (int i = 0; i < fields.size(); i++) {
-                if (fields.get(i).getClass().getSimpleName().equals(field))
-                    setByteOfBoolean(bytes, i, (Boolean) o);
-            }
-        } else if (o instanceof Double) {
-
-        }
         LogUtil.d("hostToCAN", bytesToHex(bytes));
         UDP_send(bytes);
     }
@@ -146,7 +138,8 @@ public class transmit {
             new Pair<>("00000361", new BCM1()),
             new Pair<>("00000219", new HAD1()),
             new Pair<>("00000363", new HAD2()),
-            new Pair<>("00000233", new HAD3())
+            new Pair<>("00000233", new HAD3()),
+            new Pair<>("00000383", new HMI())
     ));
     // 消息标识符键值对，方便查找
     private Map<String, ? super BaseClass> FLAG_AND_CLASS = new HashMap<>();
@@ -178,7 +171,7 @@ public class transmit {
     }
 
     //byte转16进制
-    private String bytesToHex(byte[] bytes) {
+    public static String bytesToHex(byte[] bytes) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < bytes.length; i++) {
             String hex = Integer.toHexString(bytes[i] & 0xFF);
@@ -190,12 +183,12 @@ public class transmit {
     }
 
     //16进制转byte
-    private byte hexToByte(String inHex) {
+    public static byte hexToByte(String inHex) {
         return (byte) Integer.parseInt(inHex, 16);
     }
 
     //16进制转byte
-    private byte[] hexToByteArray(String inHex) {
+    public static byte[] hexToByteArray(String inHex) {
         int hexlen = inHex.length();
         byte[] result;
         if (hexlen % 2 == 1) {
@@ -216,7 +209,7 @@ public class transmit {
     }
 
     // 返回子数组
-    private byte[] subBytes(byte[] bytes, int start, int length) {
+    public static byte[] subBytes(byte[] bytes, int start, int length) {
         byte[] sub = new byte[length];
         for (int i = 0; i < length; i++)
             sub[i] = bytes[i + start];
@@ -224,17 +217,23 @@ public class transmit {
     }
 
     // 设置某一位
-    private void setByteOfBoolean(byte[] bytes, int offset, boolean flag) {
-        int i = offset / 8;
-        int j = offset % 8;
-        if (flag)
-            bytes[5 + i] |= (0x01 << (7 - j));
-        else
-            bytes[5 + i] |= ~(0x01 << (7 - j));
+    public static void setBit(byte[] bytes, int Byte_offset, int bit_index, int changeLength, Object changed) {
+        int i = Byte_offset + bit_index / 8;
+        int j = bit_index % 8;
+        if (changed instanceof Boolean) {
+            if ((Boolean) changed)
+                bytes[i] |= (0b10000000 >> j);
+            else
+                bytes[i] &= ~(0b10000000 >> j);
+        } else if (changed instanceof Integer) {
+            byte b = (byte) (int) changed;
+            for (int k = 8 - changeLength; k < 8; k++)
+                setBit(bytes, Byte_offset, bit_index++, 1, viewBinary(b, k));
+        }
     }
 
     // 查看一个Byte的某位是否为1
-    private boolean viewBinary(byte Byte, int position) {
-        return (Byte & 0x01 << position) != 0;
+    public static boolean viewBinary(byte Byte, int position) {
+        return (Byte & 0b10000000 >> position) != 0;
     }
 }
