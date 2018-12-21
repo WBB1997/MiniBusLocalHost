@@ -18,7 +18,6 @@ import com.hasee.minibuslocalhost.transmit.Class.HAD2;
 import com.hasee.minibuslocalhost.transmit.Class.HAD3;
 import com.hasee.minibuslocalhost.transmit.Class.HMI;
 import com.hasee.minibuslocalhost.transmit.Class.MCU1;
-import com.hasee.minibuslocalhost.transmit.Class.MyPair;
 import com.hasee.minibuslocalhost.transmit.Class.VCU1;
 import com.hasee.minibuslocalhost.transmit.Class.VCU2;
 import com.hasee.minibuslocalhost.util.LogUtil;
@@ -76,6 +75,30 @@ public class transmit {
     // 回调
     // jsonObject:{'id':1, 'data':[1,1,...], 'target':1}
     public void callback(JSONObject jsonObject, int target) {
+        //发给hmi
+        int id = jsonObject.getIntValue("id");
+        switch (id) {
+            case 66:
+                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_Dig_Ord_HighBeam, jsonObject.getJSONArray("data").getBoolean(0));
+                break;
+            case 67:
+                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_Dig_Ord_LowBeam, jsonObject.getJSONArray("data").getBoolean(0));
+                break;
+            case 63:
+                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_Dig_Ord_LeftTurningLamp, jsonObject.getJSONArray("data").getBoolean(0));
+                break;
+            case 64:
+                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_Dig_Ord_RightTurningLamp, jsonObject.getJSONArray("data").getBoolean(0));
+                break;
+            case 68:
+                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_Dig_Ord_RearFogLamp, jsonObject.getJSONArray("data").getBoolean(0));
+                break;
+            case 107:
+                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_Dig_Ord_DoorLock, jsonObject.getJSONArray("data").getBoolean(0));
+                break;
+            default:
+                break;
+        }
         //通过message 发给ui
         Message msg = handler.obtainMessage();
         msg.what = target;

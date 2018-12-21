@@ -3,6 +3,7 @@ package com.hasee.minibuslocalhost.transmit.Class;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.hasee.minibuslocalhost.activity.MainActivity;
 import com.hasee.minibuslocalhost.transmit.transmit;
 import com.hasee.minibuslocalhost.util.LogUtil;
 
@@ -14,29 +15,28 @@ import static com.hasee.minibuslocalhost.transmit.transmit.viewBinary;
 
 public class BCM1 extends BaseClass {
     //字段
-
-    private MyPair<Boolean> BCM_Dig_Ord_HandLightCtr = new MyPair<>(false, 1, 1); // 手势灯光控制信号
-    private MyPair<Boolean> BCM_Flg_Stat_LeftTurningLamp = new MyPair<>(false, 107, 1); // 左转向状态信号
-    private MyPair<Boolean> BCM_Flg_Stat_RightTurningLamp = new MyPair<>(false, 3, 1); // 右转向状态信号
-    private MyPair<Boolean> BCM_Flg_Stat_HandLightCtr = new MyPair<>(false, 1, 1); // 手势灯光控制状态信号
-    private MyPair<Boolean> BCM_Flg_Stat_HighBeam = new MyPair<>(false, 1, 1); // 远光灯状态信号
-    private MyPair<Boolean> BCM_Flg_Stat_LowBeam = new MyPair<>(false, 1, 1); // 近光灯状态信号
-    private MyPair<Boolean> BCM_Flg_Stat_RearFogLamp = new MyPair<>(false, 1, 1); // 后雾灯状态信号
-    private MyPair<Boolean> BCM_Flg_Stat_DangerAlarmLamp = new MyPair<>(false, 1, 1); // 危险报警灯控制（双闪）状态信号
-    private MyPair<Boolean> BCM_Flg_Stat_BrakeLamp = new MyPair<>(false, 1, 1); // 制动灯状态信号
-    private MyPair<Boolean> BCM_Flg_Stat_BackupLamp = new MyPair<>(false, 1, 1); // 倒车灯状态信号
-    private MyPair<Boolean> BCM_Flg_Stat_SeatSensor1 = new MyPair<>(false, 1, 1); // 座椅传感器1
-    private MyPair<Boolean> BCM_Flg_Stat_SeatSensor2 = new MyPair<>(false, 1, 1); // 座椅传感器2
-    private MyPair<Boolean> BCM_Flg_Stat_SeatSensor3 = new MyPair<>(false, 1, 1); // 座椅传感器3
-    private MyPair<Boolean> BCM_Flg_Stat_SeatSensor4 = new MyPair<>(false, 1, 1); // 座椅传感器4
-    private MyPair<Boolean> BCM_Flg_Stat_SeatSensor5 = new MyPair<>(false, 1, 1); // 座椅传感器5
-    private MyPair<Boolean> BCM_Flg_Stat_SeatSensor6 = new MyPair<>(false, 1, 1); // 座椅传感器6
-    private MyPair<Boolean> BCM_Flg_Stat_BeltsSensor1 = new MyPair<>(false, 1, 1); // 安全带传感器1
-    private MyPair<Boolean> BCM_Flg_Stat_BeltsSensor2 = new MyPair<>(false, 1, 1); // 安全带传感器2
-    private MyPair<Boolean> BCM_Flg_Stat_BeltsSensor3 = new MyPair<>(false, 1, 1); // 安全带传感器3
-    private MyPair<Boolean> BCM_Flg_Stat_BeltsSensor4 = new MyPair<>(false, 1, 1); // 安全带传感器4
-    private MyPair<Boolean> BCM_Flg_Stat_BeltsSensor5 = new MyPair<>(false, 1, 1); // 安全带传感器5
-    private MyPair<Boolean> BCM_Flg_Stat_BeltsSensor6 = new MyPair<>(false, 1, 1); // 安全带传感器6
+    private MyPair<Boolean> BCM_Dig_Ord_HandLightCtr = new MyPair<>(false, 62, MainActivity.SEND_TO_LOCALHOST); // 手势灯光控制信号
+    private MyPair<Boolean> BCM_Flg_Stat_LeftTurningLamp = new MyPair<>(false, 63, MainActivity.SEND_TO_LOCALHOST); // 左转向状态信号
+    private MyPair<Boolean> BCM_Flg_Stat_RightTurningLamp = new MyPair<>(false, 64, MainActivity.SEND_TO_LOCALHOST); // 右转向状态信号
+    private MyPair<Boolean> BCM_Flg_Stat_HandLightCtr = new MyPair<>(false, 65, MainActivity.SEND_TO_LOCALHOST); // 手势灯光控制状态信号
+    private MyPair<Boolean> BCM_Flg_Stat_HighBeam = new MyPair<>(false, 66, MainActivity.SEND_TO_LOCALHOST); // 远光灯状态信号
+    private MyPair<Boolean> BCM_Flg_Stat_LowBeam = new MyPair<>(false, 67, MainActivity.SEND_TO_LOCALHOST); // 近光灯状态信号
+    private MyPair<Boolean> BCM_Flg_Stat_RearFogLamp = new MyPair<>(false, 68, MainActivity.SEND_TO_LOCALHOST); // 后雾灯状态信号
+    private MyPair<Boolean> BCM_Flg_Stat_DangerAlarmLamp = new MyPair<>(false, 69, MainActivity.SEND_TO_LOCALHOST); // 危险报警灯控制（双闪）状态信号
+    private MyPair<Boolean> BCM_Flg_Stat_BrakeLamp = new MyPair<>(false, 70, MainActivity.SEND_TO_LOCALHOST); // 制动灯状态信号
+    private MyPair<Boolean> BCM_Flg_Stat_BackupLamp = new MyPair<>(false, 71, MainActivity.SEND_TO_LOCALHOST); // 倒车灯状态信号
+    private MyPair<Boolean> BCM_Flg_Stat_SeatSensor1 = new MyPair<>(false, 72, MainActivity.SEND_TO_LOCALHOST); // 座椅传感器1
+    private MyPair<Boolean> BCM_Flg_Stat_SeatSensor2 = new MyPair<>(false, 73, MainActivity.SEND_TO_LOCALHOST); // 座椅传感器2
+    private MyPair<Boolean> BCM_Flg_Stat_SeatSensor3 = new MyPair<>(false, 74, MainActivity.SEND_TO_LOCALHOST); // 座椅传感器3
+    private MyPair<Boolean> BCM_Flg_Stat_SeatSensor4 = new MyPair<>(false, 75, MainActivity.SEND_TO_LOCALHOST); // 座椅传感器4
+    private MyPair<Boolean> BCM_Flg_Stat_SeatSensor5 = new MyPair<>(false, 76, MainActivity.SEND_TO_LOCALHOST); // 座椅传感器5
+    private MyPair<Boolean> BCM_Flg_Stat_SeatSensor6 = new MyPair<>(false, 77, MainActivity.SEND_TO_LOCALHOST); // 座椅传感器6
+    private MyPair<Boolean> BCM_Flg_Stat_BeltsSensor1 = new MyPair<>(false, 78, MainActivity.SEND_TO_LOCALHOST); // 安全带传感器1
+    private MyPair<Boolean> BCM_Flg_Stat_BeltsSensor2 = new MyPair<>(false, 79, MainActivity.SEND_TO_LOCALHOST); // 安全带传感器2
+    private MyPair<Boolean> BCM_Flg_Stat_BeltsSensor3 = new MyPair<>(false, 80, MainActivity.SEND_TO_LOCALHOST); // 安全带传感器3
+    private MyPair<Boolean> BCM_Flg_Stat_BeltsSensor4 = new MyPair<>(false, 81, MainActivity.SEND_TO_LOCALHOST); // 安全带传感器4
+    private MyPair<Boolean> BCM_Flg_Stat_BeltsSensor5 = new MyPair<>(false, 82, MainActivity.SEND_TO_LOCALHOST); // 安全带传感器5
+    private MyPair<Boolean> BCM_Flg_Stat_BeltsSensor6 = new MyPair<>(false, 83, MainActivity.SEND_TO_LOCALHOST); // 安全带传感器6
 
     // 属性
     private final static int FIELDS_LENGTH = 22;
