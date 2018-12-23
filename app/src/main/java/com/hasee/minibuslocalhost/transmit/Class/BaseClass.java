@@ -21,7 +21,7 @@ public abstract class BaseClass {
         LogUtil.d(TAG, "bytes:" + bytesToHex(bytes));
         LogUtil.d(TAG, "this.bytes:" + bytesToHex(Local_bytes));
         // 如果相同则直接返回
-        if(!Arrays.equals(bytes,Local_bytes)) {
+        if(Arrays.equals(bytes,Local_bytes)) {
             LogUtil.d(TAG, "数据相同");
             return;
         }
@@ -49,12 +49,10 @@ public abstract class BaseClass {
         for (Map.Entry<Integer, MyPair<Integer>> entry : getFields().entrySet()) {
             index = entry.getKey();
             length = entry.getValue().getFirst();
-            flag = true;
+            flag = false;
             for(int i = index; i < index + length; i++) {
-                if (viewBinary(Local_bytes[i / 8 + 5], i % 8) != viewBinary(bytes[i / 8 + 5], i % 8)) {
-                    flag = false;
-                    break;
-                }
+                if (viewBinary(Local_bytes[i / 8 + 5], i % 8) != viewBinary(bytes[i / 8 + 5], i % 8))
+                    flag = true;
             }
             if(flag){
                 JSONObject jsonObject = new JSONObject();

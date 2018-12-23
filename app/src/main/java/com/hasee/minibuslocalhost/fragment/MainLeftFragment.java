@@ -249,12 +249,27 @@ public class MainLeftFragment extends Fragment {
      * 更新布局
      */
     public void refresh(JSONObject object){
-        JSONArray array = object.getJSONArray("data");
         switch (object.getIntValue("id")){
-            case 2:{
-                leftFragmentLeftLight.setActivated(array.getBoolean(0));
+            // 左转
+            case 63:{
+                leftFragmentLeftLight.setActivated(object.getBoolean("data"));
                 break;
             }
+            // 右转
+            case 64:
+                break;
+            // 远光灯
+            case 66:
+                break;
+                // 近光灯
+            case 67:
+                break;
+            // 后雾灯
+            case 68:
+                break;
+            // 双闪
+            case 69:
+                break;
         }
     }
 
