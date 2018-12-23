@@ -13,7 +13,7 @@ public class BCM1 extends BaseClass {
     private final String TAG = "BCM1";
 
     //字段
-    private MyPair<Integer> BCM_Dig_Ord_HandLightCtr = new MyPair<>(1, 62, MainActivity.SEND_TO_LOCALHOST); // 手势灯光控制信号
+    private MyPair<Integer> BCM_Dig_Ord_HandLightCtr = new MyPair<>(1, 62, MainActivity.SEND_TO_RIGHTSCREEN); // 手势灯光控制信号
     private MyPair<Integer> BCM_Flg_Stat_LeftTurningLamp = new MyPair<>(1, 63, MainActivity.SEND_TO_LOCALHOST); // 左转向状态信号
     private MyPair<Integer> BCM_Flg_Stat_RightTurningLamp = new MyPair<>(1, 64, MainActivity.SEND_TO_LOCALHOST); // 右转向状态信号
     private MyPair<Integer> BCM_Flg_Stat_HandLightCtr = new MyPair<>(1, 65, MainActivity.SEND_TO_LOCALHOST); // 手势灯光控制状态信号

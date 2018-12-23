@@ -24,6 +24,7 @@ import static com.hasee.minibuslocalhost.util.ByteUtil.bytesToHex;
 import static com.hasee.minibuslocalhost.util.ByteUtil.subBytes;
 
 public class Transmit {
+    private final static String TAG = "Transmit";
     private final int MAX_LENGTH = 13; // 最大接收字节长度
     private final int PORT = 5066;   // port号
     private final static String IP = "10.13.233.181"; // 总线ip地址
@@ -42,19 +43,19 @@ public class Transmit {
     public void hostToCAN(String clazz, int field, Object o) {
         BaseClass baseClass = (BaseClass) NAME_AND_CLASS.get(clazz);
         if (baseClass == null) {
-            LogUtil.d("Transmit", "类转换错误");
+            LogUtil.d(TAG, "类转换错误");
             return;
         }
         if (baseClass instanceof HMI)
             ((HMI) baseClass).changeStatus(field, o);
         byte[] bytes = baseClass.getBytes();
-        LogUtil.d("Transmit", bytesToHex(bytes));
+        LogUtil.d(TAG, bytesToHex(bytes));
         UDP_send(bytes);
     }
 
     public void setHandler(MyHandler handler) {
         this.handler = handler;
-        LogUtil.d("Transmit", "setHandler");
+        LogUtil.d(TAG, "setHandler");
         UDP_receive();
     }
 
@@ -68,21 +69,22 @@ public class Transmit {
     public void callback(JSONObject jsonObject, int target) {
         //发给hmi
         int id = jsonObject.getIntValue("id");
+        LogUtil.d(TAG, String.valueOf(id));
         switch (id) {
             case 66:
-                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_Dig_Ord_HighBeam, jsonObject.getJSONArray("data").getBoolean(0));
+                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_Dig_Ord_HighBeam, jsonObject.getBooleanValue("data"));
                 break;
             case 67:
-                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_Dig_Ord_LowBeam, jsonObject.getJSONArray("data").getBoolean(0));
+                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_Dig_Ord_LowBeam, jsonObject.getBooleanValue("data"));
                 break;
             case 63:
-                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_Dig_Ord_LeftTurningLamp, jsonObject.getJSONArray("data").getBoolean(0));
+                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_Dig_Ord_LeftTurningLamp, jsonObject.getBooleanValue("data"));
                 break;
             case 64:
-                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_Dig_Ord_RightTurningLamp, jsonObject.getJSONArray("data").getBoolean(0));
+                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_Dig_Ord_RightTurningLamp, jsonObject.getBooleanValue("data"));
                 break;
             case 68:
-                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_Dig_Ord_RearFogLamp, jsonObject.getJSONArray("data").getBoolean(0));
+                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_Dig_Ord_RearFogLamp, jsonObject.getBooleanValue("data"));
                 break;
 //            case 107:
 //                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_Dig_Ord_DoorLock, jsonObject.getJSONArray("data").getBoolean(0));
@@ -157,7 +159,7 @@ public class Transmit {
 //    ));
     private ArrayList<Pair<String, ? extends BaseClass>> list = new ArrayList<>(Arrays.asList(
             new Pair<>("00000361", new BCM1()),
-            new Pair<>("000004C0", new ESC3()),
+            new Pair<>("000004c0", new ESC3()),
             new Pair<>("00000383", new HMI())
     ));
     // 消息标识符键值对，方便查找
@@ -175,17 +177,17 @@ public class Transmit {
     // 处理收到的byte数组
     private void dispose(byte[] receMsgs) {
         String key;
-        LogUtil.d("Transmit", bytesToHex(receMsgs));
-        if (receMsgs.length <= 13)
+        LogUtil.d(TAG, bytesToHex(receMsgs));
+        if (receMsgs.length < 13)
             return;
         for (int i = 0; i < receMsgs.length; i += 13) {
             key = bytesToHex(subBytes(receMsgs, 1, 4));
-            LogUtil.d("Transmit", "key:" + key);
+            LogUtil.d(TAG, "key:" + key);
             // 如果数据更新了
             if (FLAG_AND_CLASS.containsKey(key))
                 ((BaseClass) FLAG_AND_CLASS.get(key)).setBytes(receMsgs);
             else
-                LogUtil.d("Transmit", "消息标识符错误");
+                LogUtil.d(TAG, "消息标识符错误");
         }
     }
 }

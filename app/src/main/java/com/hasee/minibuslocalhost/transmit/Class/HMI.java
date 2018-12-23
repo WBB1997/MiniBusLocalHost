@@ -3,10 +3,14 @@ package com.hasee.minibuslocalhost.transmit.Class;
 import com.hasee.minibuslocalhost.util.LogUtil;
 
 import java.util.HashMap;
+import java.util.Map;
 
-import static com.hasee.minibuslocalhost.transmit.Transmit.setBit;
+import static com.hasee.minibuslocalhost.util.ByteUtil.bytesToHex;
+import static com.hasee.minibuslocalhost.util.ByteUtil.setBit;
 
 public class HMI extends BaseClass{
+    private final static String TAG = "HMI";
+
     // flag
     public static final int HMI_Dig_Ord_HighBeam = 0;
     public static final int HMI_Dig_Ord_LowBeam = 1;
@@ -62,8 +66,10 @@ public class HMI extends BaseClass{
                 setBit(bytes, 5, flag,3, status);
                 break;
             default:
-                LogUtil.d("HMI", "消息转换错误");
+                LogUtil.d(TAG, "消息转换错误");
+                break;
         }
+        LogUtil.d(TAG, bytesToHex(bytes));
     }
 
     @Override
@@ -72,12 +78,17 @@ public class HMI extends BaseClass{
     }
 
     @Override
-    public void setBytes(byte[] bytes) {
-
+    public String getTAG() {
+        return TAG;
     }
 
     @Override
-    public HashMap<Integer, MyPair<Boolean>> getFields() {
+    public Object getValue(Map.Entry<Integer, MyPair<Integer>> entry, byte[] bytes) {
+        return null;
+    }
+
+    @Override
+    public HashMap<Integer, MyPair<Integer>> getFields() {
         return null;
     }
 }
