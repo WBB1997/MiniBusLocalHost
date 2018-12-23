@@ -12,17 +12,17 @@ import com.hasee.minibuslocalhost.R;
 import com.hasee.minibuslocalhost.fragment.MainLeftFragment;
 import com.hasee.minibuslocalhost.fragment.MainRightFragment1;
 import com.hasee.minibuslocalhost.fragment.MainRightFragment2;
-import com.hasee.minibuslocalhost.transmit.transmit;
+import com.hasee.minibuslocalhost.transmit.Transmit;
 import com.hasee.minibuslocalhost.util.ActivityCollector;
 import com.hasee.minibuslocalhost.util.LogUtil;
 import com.hasee.minibuslocalhost.util.MyHandler;
 import com.hasee.minibuslocalhost.util.SendToScreenThread;
 
 public class MainActivity extends BaseActivity{
-    private final int SEND_TO_FRONTSCREEN = 0;//前风挡
-    private final int SEND_TO_RIGHTSCREEN = 1;//右车门
-    private final int SEND_TO_LEFTSCREEN = 2;//左车门
-    private final int SEND_TO_LOCALHOST = 3;//主控屏
+    public final static int SEND_TO_FRONTSCREEN = 0;//前风挡
+    public final static int SEND_TO_RIGHTSCREEN = 1;//右车门
+    public final static int SEND_TO_LEFTSCREEN = 2;//左车门
+    public final static int SEND_TO_LOCALHOST = 3;//主控屏
     private Context mContext;//上下文
     private FragmentManager fragmentManager;//Fragment管理器对象
     private FragmentTransaction transaction;//Fragment事务对象
@@ -35,7 +35,7 @@ public class MainActivity extends BaseActivity{
         new Thread(new Runnable() {
             @Override
             public void run() {
-                transmit.getInstance().setHandler(handler);
+                Transmit.getInstance().setHandler(handler);
             }
         }).start();
         viewInit();
@@ -101,8 +101,8 @@ public class MainActivity extends BaseActivity{
      * @param field 字段名
      * @param o 对象
      */
-    public void sendToCAN(String clazz, String field, Object o) {
-        transmit.getInstance().hostToCAN(clazz, field, o);
+    public void sendToCAN(String clazz, int field, Object o) {
+        Transmit.getInstance().hostToCAN(clazz, field, o);
     }
 
     /**

@@ -1,9 +1,78 @@
 package com.hasee.minibuslocalhost.transmit.Class;
 
+import com.alibaba.fastjson.JSONObject;
+import com.hasee.minibuslocalhost.transmit.Transmit;
+import com.hasee.minibuslocalhost.util.LogUtil;
+
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
+
+import static com.hasee.minibuslocalhost.util.ByteUtil.bytesToHex;
+import static com.hasee.minibuslocalhost.util.ByteUtil.viewBinary;
 
 public abstract class BaseClass {
     public abstract byte[] getBytes();
-    public abstract void setBytes(byte[] bytes);
-    public abstract HashMap<Integer, MyPair<Boolean>> getFields();
+    public abstract String getTAG();
+    public void setBytes(byte[] bytes){
+        String TAG = getTAG();
+        byte[] Local_bytes = getBytes();
+
+        LogUtil.d(TAG, "bytes:" + bytesToHex(bytes));
+        LogUtil.d(TAG, "this.bytes:" + bytesToHex(Local_bytes));
+        // 如果相同则直接返回
+        if(!Arrays.equals(bytes,Local_bytes)) {
+            LogUtil.d(TAG, "数据相同");
+            return;
+        }
+        //        for (int i = 0; i < bytes.length - 5; i++) {
+//            for (int j = 0; j < 8; j++) {
+//                if (viewBinary(this.bytes[i + 5], j) != viewBinary(bytes[i + 5], j)) {
+//                    JSONObject jsonObject = new JSONObject();
+//                    // id
+//                    jsonObject.put("id", fields.get(i * 8 + j).getSecond().first);
+//                    // data
+//                    JSONArray jsonArray = new JSONArray();
+//                    jsonArray.add(viewBinary(bytes[i + 5], j));
+//                    jsonObject.put("data", jsonArray);
+//                    // target
+//                    int target = fields.get(i * 8 + j).getSecond().second;
+//                    LogUtil.d("BCM1", "jsonObject:" + jsonObject.toJSONString());
+//                    Transmit.getInstance().callback(jsonObject, target);
+//                }
+//            }
+//        }
+//        System.arraycopy(bytes, 0, this.bytes, 0, bytes.length);
+        int index;
+        int length;
+        boolean flag;
+        for (Map.Entry<Integer, MyPair<Integer>> entry : getFields().entrySet()) {
+            index = entry.getKey();
+            length = entry.getValue().getFirst();
+            flag = true;
+            for(int i = index; i < index + length; i++) {
+                if (viewBinary(Local_bytes[i / 8 + 5], i % 8) != viewBinary(bytes[i / 8 + 5], i % 8)) {
+                    flag = false;
+                    break;
+                }
+            }
+            if(flag){
+                JSONObject jsonObject = new JSONObject();
+                // id
+                jsonObject.put("id", entry.getValue().getSecond().first);
+                // data
+                jsonObject.put("data", getValue(entry, bytes));
+                // target
+                int target = entry.getValue().getSecond().second;
+                // 发回主函数
+                Transmit.getInstance().callback(jsonObject, target);
+                // debug
+                LogUtil.d(TAG, "jsonObject:" + jsonObject.toJSONString());
+            }
+        }
+        System.arraycopy(bytes, 0, getBytes(), 0, bytes.length);
+        LogUtil.d(TAG, "this.bytes:" + bytesToHex(getBytes()));
+    }
+    public abstract Object getValue(Map.Entry<Integer, MyPair<Integer>> entry, byte[] bytes);
+    public abstract HashMap<Integer, MyPair<Integer>> getFields();
 }

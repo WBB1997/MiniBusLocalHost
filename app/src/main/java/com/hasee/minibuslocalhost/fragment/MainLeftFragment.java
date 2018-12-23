@@ -241,7 +241,7 @@ public class MainLeftFragment extends Fragment {
                     break;
                 }
             }
-            activity.sendToCAN("BCM1", "BCM_Flg_Stat_LeftTurningLamp", false);
+//            activity.sendToCAN("BCM1", "BCM_Flg_Stat_LeftTurningLamp", false);
         }
     };
 
