@@ -72,19 +72,19 @@ public class Transmit {
         LogUtil.d(TAG, String.valueOf(id));
         switch (id) {
             case 66:
-                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_Dig_Ord_HighBeam, jsonObject.getBooleanValue("data"));
+                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_leftFragmentHighBeam, jsonObject.getBooleanValue("data"));
                 break;
             case 67:
-                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_Dig_Ord_LowBeam, jsonObject.getBooleanValue("data"));
+                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_leftFragmentLowBeam, jsonObject.getBooleanValue("data"));
                 break;
             case 63:
-                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_Dig_Ord_LeftTurningLamp, jsonObject.getBooleanValue("data"));
+                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_leftFragmentLeftLight, jsonObject.getBooleanValue("data"));
                 break;
             case 64:
-                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_Dig_Ord_RightTurningLamp, jsonObject.getBooleanValue("data"));
+                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_leftFragmentRightLight, jsonObject.getBooleanValue("data"));
                 break;
             case 68:
-                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_Dig_Ord_RearFogLamp, jsonObject.getBooleanValue("data"));
+                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_leftFragmentFrontFogLight, jsonObject.getBooleanValue("data"));
                 break;
 //            case 107:
 //                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_Dig_Ord_DoorLock, jsonObject.getJSONArray("data").getBoolean(0));

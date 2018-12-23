@@ -11,12 +11,13 @@ import static com.hasee.minibuslocalhost.util.ByteUtil.setBit;
 public class HMI extends BaseClass{
     private final static String TAG = "HMI";
 
-    // flag
-    public static final int HMI_Dig_Ord_HighBeam = 0;
-    public static final int HMI_Dig_Ord_LowBeam = 1;
-    public static final int HMI_Dig_Ord_LeftTurningLamp = 2;
-    public static final int HMI_Dig_Ord_RightTurningLamp = 3;
-    public static final int HMI_Dig_Ord_RearFogLamp = 4;
+    //leftFragment
+    public static final int HMI_leftFragmentHighBeam = 0;//远光灯
+    public static final int HMI_leftFragmentLowBeam = 1;//近光灯
+    public static final int HMI_leftFragmentLeftLight = 2;//左转向灯
+    public static final int HMI_leftFragmentRightLight = 3;//右转向灯
+    public static final int leftFragmentBackFogLight = 4;//后雾灯
+    public static final int HMI_leftFragmentFrontFogLight = 5;//前雾灯
     public static final int HMI_Dig_Ord_DoorLock = 6;
     public static final int HMI_Dig_Ord_Alarm = 7;
     public static final int HMI_Dig_Ord_drive_model = 8;
@@ -47,11 +48,11 @@ public class HMI extends BaseClass{
 
     public void changeStatus(int flag, Object status){
         switch (flag){
-            case HMI_Dig_Ord_HighBeam:
-            case HMI_Dig_Ord_LowBeam:
-            case HMI_Dig_Ord_LeftTurningLamp:
-            case HMI_Dig_Ord_RightTurningLamp:
-            case HMI_Dig_Ord_RearFogLamp:
+            case HMI_leftFragmentHighBeam:
+            case HMI_leftFragmentLowBeam:
+            case HMI_leftFragmentLeftLight:
+            case HMI_leftFragmentRightLight:
+            case HMI_leftFragmentFrontFogLight:
             case HMI_Dig_Ord_DoorLock:
             case HMI_Dig_Ord_Alarm:
                 setBit(bytes, 5, flag,1, status);
