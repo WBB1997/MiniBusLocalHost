@@ -31,14 +31,14 @@ public class MainActivity extends BaseActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mContext = MainActivity.this;
-
+        viewInit();
         new Thread(new Runnable() {
             @Override
             public void run() {
                 Transmit.getInstance().setHandler(handler);
             }
         }).start();
-        viewInit();
+        
     }
 
     /**

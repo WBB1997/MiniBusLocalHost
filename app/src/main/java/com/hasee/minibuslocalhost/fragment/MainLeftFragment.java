@@ -17,6 +17,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.hasee.minibuslocalhost.R;
 import com.hasee.minibuslocalhost.activity.MainActivity;
+import com.hasee.minibuslocalhost.transmit.Class.HMI;
 
 
 /**
@@ -47,7 +48,10 @@ public class MainLeftFragment extends Fragment {
     private LinearLayout leftFragmentDeFog;//除雾布局
     private TextView leftFragmentConditionSize;//风扇大小
     private SeekBar leftFragmentSeekBar;//风扇滑动条
-
+    //发送CAN总线的数据
+    private String clazz = "HMI";//所属类名
+    private int field = -1;//属性
+    private Object o = null;//状态
 
     public MainLeftFragment(){
     }
@@ -136,6 +140,8 @@ public class MainLeftFragment extends Fragment {
                     }else{
                         leftFragmentCarLowbeamOpen.setVisibility(View.INVISIBLE);
                     }
+                    field = HMI.HMI_leftFragmentLowBeam;
+                    o = leftFragmentLowBeam.isActivated();
                     break;
                 }
                 case R.id.leftFragment_highBeam:{//远光灯
@@ -149,10 +155,13 @@ public class MainLeftFragment extends Fragment {
                     }else{
                         leftFragmentCarHighbeamOpen.setVisibility(View.INVISIBLE);
                     }
+                    field = HMI.HMI_leftFragmentHighBeam;
+                    o = leftFragmentLowBeam.isActivated();
                     break;
                 }
                 case R.id.leftFragment_front_fogLight:{//前雾灯
                     leftFragmentFrontFogLight.setActivated(!leftFragmentFrontFogLight.isActivated());
+
                     break;
                 }
                 case R.id.leftFragment_back_fogLight:{//后雾灯
@@ -174,6 +183,8 @@ public class MainLeftFragment extends Fragment {
                     }else{
                         leftFragmentCarLeftlightOpen.setVisibility(View.INVISIBLE);
                     }
+                    field = HMI.HMI_leftFragmentLeftLight;
+                    o = leftFragmentLeftLight.isActivated();
                     break;
                 }
                 case R.id.leftFragment_rightLight:{//右转向灯
@@ -185,6 +196,8 @@ public class MainLeftFragment extends Fragment {
                         }
                     }else{
                     }
+                    field = HMI.HMI_leftFragmentRightLight;
+                    o = leftFragmentRightLight.isActivated();
                     break;
                 }
                 case R.id.leftFragment_errorLight:{//警示灯
@@ -210,6 +223,7 @@ public class MainLeftFragment extends Fragment {
                     }else{
                         leftFragmentCoolAirImg.setActivated(false);
                     }
+
                     break;
                 }
                 case R.id.leftFragment_hotAir:{//暖气
@@ -241,7 +255,7 @@ public class MainLeftFragment extends Fragment {
                     break;
                 }
             }
-//            activity.sendToCAN("BCM1", "BCM_Flg_Stat_LeftTurningLamp", false);
+            activity.sendToCAN(clazz, field, o);
         }
     };
 
@@ -249,27 +263,32 @@ public class MainLeftFragment extends Fragment {
      * 更新布局
      */
     public void refresh(JSONObject object){
+        boolean data = object.getBoolean("data");
         switch (object.getIntValue("id")){
-            // 左转
-            case 63:{
-                leftFragmentLeftLight.setActivated(object.getBoolean("data"));
+            case 63:{// 左转
+                leftFragmentLeftLight.setActivated(data);
                 break;
             }
-            // 右转
-            case 64:
+            case 64:{// 右转
+                leftFragmentRightLight.setActivated(data);
                 break;
-            // 远光灯
-            case 66:
+            }
+            case 66:{// 远光灯
+                leftFragmentHighBeam.setActivated(data);
                 break;
-                // 近光灯
-            case 67:
+            }
+            case 67:{// 近光灯
+                leftFragmentLowBeam.setActivated(data);
                 break;
-            // 后雾灯
-            case 68:
+            }
+            case 68:{// 后雾灯
+                leftFragmentBackFogLight.setActivated(data);
                 break;
-            // 双闪
-            case 69:
+            }
+            case 69:{// 双闪
+                leftFragmentErrorLight.setActivated(data);
                 break;
+            }
         }
     }
 
