@@ -1,22 +1,17 @@
 package com.hasee.minibuslocalhost.transmit.Class;
 
 
-import android.util.Pair;
-
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.hasee.minibuslocalhost.activity.MainActivity;
-import com.hasee.minibuslocalhost.transmit.Transmit;
 import com.hasee.minibuslocalhost.util.LogUtil;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.hasee.minibuslocalhost.transmit.Transmit.bytesToHex;
-import static com.hasee.minibuslocalhost.transmit.Transmit.viewBinary;
+import static com.hasee.minibuslocalhost.util.ByteUtil.viewBinary;
 
 public class BCM1 extends BaseClass {
+    private final String TAG = "BCM1";
+
     //字段
     private MyPair<Integer> BCM_Dig_Ord_HandLightCtr = new MyPair<>(1, 62, MainActivity.SEND_TO_LOCALHOST); // 手势灯光控制信号
     private MyPair<Integer> BCM_Flg_Stat_LeftTurningLamp = new MyPair<>(1, 63, MainActivity.SEND_TO_LOCALHOST); // 左转向状态信号
@@ -72,66 +67,54 @@ public class BCM1 extends BaseClass {
     public BCM1() {
     }
 
+    @Override
     public byte[] getBytes() {
         return bytes;
     }
 
-    public void setBytes(byte[] bytes) {
-        LogUtil.d("BCM1", "bytes:" + bytesToHex(bytes));
-        LogUtil.d("BCM1", "this.bytes:" + bytesToHex(this.bytes));
-        // 如果相同则直接返回
-        if(!Arrays.equals(bytes,this.bytes)) {
-            LogUtil.d("BCM1", "数据相同");
-            return;
-        }
-//        for (int i = 0; i < bytes.length - 5; i++) {
-//            for (int j = 0; j < 8; j++) {
-//                if (viewBinary(this.bytes[i + 5], j) != viewBinary(bytes[i + 5], j)) {
-//                    JSONObject jsonObject = new JSONObject();
-//                    // id
-//                    jsonObject.put("id", fields.get(i * 8 + j).getSecond().first);
-//                    // data
-//                    JSONArray jsonArray = new JSONArray();
-//                    jsonArray.add(viewBinary(bytes[i + 5], j));
-//                    jsonObject.put("data", jsonArray);
-//                    // target
-//                    int target = fields.get(i * 8 + j).getSecond().second;
-//                    LogUtil.d("BCM1", "jsonObject:" + jsonObject.toJSONString());
-//                    Transmit.getInstance().callback(jsonObject, target);
-//                }
-//            }
-//        }
-//        System.arraycopy(bytes, 0, this.bytes, 0, bytes.length);
-        for (Map.Entry<Integer, MyPair<Integer>> entry : fields.entrySet()) {
-            int index = entry.getKey();
-            int length = entry.getValue().getFirst();
-            boolean flag = true;
-            for(int i = index; i < index + length; i++) {
-                if (viewBinary(this.bytes[i / 8 + 5], i % 8) != viewBinary(bytes[i / 8 + 5], i % 8)) {
-                    flag = false;
-                    break;
-                }
-            }
-            if(flag){
-                Object data = getValue(entry.getKey());
-                JSONObject jsonObject = new JSONObject();
-                // id
-                jsonObject.put("id", entry.getValue().getSecond().first);
-                // data
-                jsonObject.put("data", new JSONArray().add(data));
-                // target
-                int target = entry.getValue().getSecond().second;
-                // 发回主函数
-                Transmit.getInstance().callback(jsonObject, target);
-                // debug
-                LogUtil.d("BCM1", "jsonObject:" + jsonObject.toJSONString());
-            }
-        }
-        System.arraycopy(bytes, 0, this.bytes, 0, bytes.length);
-        LogUtil.d("BCM1", "this.bytes:" + bytesToHex(this.bytes));
+    @Override
+    public String getTAG() {
+        return TAG;
     }
 
-    private Object getValue(int index) {
+    @Override
+    public void setBytes(byte[] bytes) {
+        super.setBytes(bytes);
+    }
+
+    @Override
+    public Object getValue(Map.Entry<Integer, MyPair<Integer>> entry, byte[] bytes) {
+        int index = entry.getKey();
+        int length = entry.getValue().getFirst();
+        switch (index) {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+            case 10:
+            case 11:
+            case 12:
+            case 13:
+            case 14:
+            case 15:
+            case 16:
+            case 17:
+            case 18:
+            case 19:
+            case 20:
+            case 21:
+            case 22:
+                return viewBinary(bytes[index / 8 + 5], index % 8);
+            default:
+                LogUtil.d(TAG, "数据下标错误");
+                break;
+        }
         return null;
     }
 
