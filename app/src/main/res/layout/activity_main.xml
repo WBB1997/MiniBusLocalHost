@@ -13,6 +13,7 @@
         android:orientation="vertical">
 
         <fragment
+            android:id="@+id/top_fragment"
             android:name="com.hasee.minibuslocalhost.fragment.MainTopFragment"
             android:layout_width="@dimen/main_layout_top_width"
             android:layout_height="@dimen/main_layout_top_height"
@@ -52,7 +53,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
             android:layout_marginLeft="50px"
-            android:layout_marginRight="10px"
+            android:layout_marginRight="90px"
             android:layout_toRightOf="@id/center_fragment" />
     </RelativeLayout>
 </RelativeLayout>

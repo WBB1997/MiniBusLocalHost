@@ -2,7 +2,10 @@ package com.hasee.minibuslocalhost.fragment;
 
 
 import android.content.Context;
+import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +21,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.hasee.minibuslocalhost.R;
 import com.hasee.minibuslocalhost.activity.MainActivity;
 import com.hasee.minibuslocalhost.transmit.Class.HMI;
+import com.hasee.minibuslocalhost.util.VideoSeparateUtil;
+
+import java.io.File;
+import java.io.IOException;
 
 
 /**
@@ -118,7 +125,7 @@ public class MainLeftFragment extends Fragment {
 
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
-
+            
         }
     };
 
@@ -215,11 +222,9 @@ public class MainLeftFragment extends Fragment {
                     leftFragmentCoolAir.setActivated(!leftFragmentCoolAir.isActivated());
                     if(leftFragmentCoolAir.isActivated()){//如果冷气是开的
                         leftFragmentCoolAirImg.setActivated(true);
-                        //关闭暖气和除雾
+                        //关闭暖气
                         leftFragmentHotAirImg.setActivated(false);
                         leftFragmentHotAir.setActivated(false);
-                        leftFragmentDeFogImg.setActivated(false);
-                        leftFragmentDeFog.setActivated(false);
                     }else{
                         leftFragmentCoolAirImg.setActivated(false);
                     }
@@ -230,11 +235,9 @@ public class MainLeftFragment extends Fragment {
                     leftFragmentHotAir.setActivated(!leftFragmentHotAir.isActivated());
                     if(leftFragmentHotAir.isActivated()){//如果暖气是开的
                         leftFragmentHotAirImg.setActivated(true);
-                        //关闭冷气和除雾
+                        //关闭冷气
                         leftFragmentCoolAirImg.setActivated(false);
                         leftFragmentCoolAir.setActivated(false);
-                        leftFragmentDeFogImg.setActivated(false);
-                        leftFragmentDeFog.setActivated(false);
                     }else{
                         leftFragmentHotAirImg.setActivated(false);
                     }
@@ -244,11 +247,6 @@ public class MainLeftFragment extends Fragment {
                     leftFragmentDeFog.setActivated(!leftFragmentDeFog.isActivated());
                     if(leftFragmentDeFog.isActivated()){//如果除雾是开的
                         leftFragmentDeFogImg.setActivated(true);
-                        //关闭冷气和暖气
-                        leftFragmentCoolAirImg.setActivated(false);
-                        leftFragmentCoolAir.setActivated(false);
-                        leftFragmentHotAirImg.setActivated(false);
-                        leftFragmentHotAir.setActivated(false);
                     }else{
                         leftFragmentDeFogImg.setActivated(false);
                     }
@@ -292,4 +290,24 @@ public class MainLeftFragment extends Fragment {
         }
     }
 
+    /**
+     * 播放音频
+     */
+    private void playAudio(){
+        File video = new File(Environment.getExternalStorageDirectory(),"video.mp4");
+        File out = new File(Environment.getExternalStorageDirectory(),"audio.mp3");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            VideoSeparateUtil.videoToAudio(video.getPath(), out);
+        }
+        MediaPlayer mediaPlayer = new MediaPlayer();
+        try {
+            mediaPlayer.setDataSource(out.getPath());
+            mediaPlayer.prepare();
+            if(!mediaPlayer.isPlaying()){
+                mediaPlayer.start();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

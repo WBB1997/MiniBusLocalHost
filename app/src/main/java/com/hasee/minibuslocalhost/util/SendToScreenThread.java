@@ -12,7 +12,6 @@ import java.net.InetAddress;
  */
 public class SendToScreenThread extends Thread {
     private String[] hostNames = new String[]{"10.13.236.215","10.13.236.215","左车门"};
-//    private String[] hostNames = new String[]{"10.13.235.184","10.13.234.3","左车门"};
     private int port = 5556;
     private DatagramSocket dSocket = null;
     private DatagramPacket dPacket = null;
