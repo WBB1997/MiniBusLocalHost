@@ -14,7 +14,7 @@ public class ESC3 extends BaseClass{
 
     private MyPair<Integer> EBD_Fault = new MyPair<>(1, 53, MainActivity.SEND_TO_LOCALHOST); // EBD故障信号
     private MyPair<Integer> ABS_Fault = new MyPair<>(1, 54, MainActivity.SEND_TO_LOCALHOST); // ABS故障信号
-    private MyPair<Integer> ABS_work_Flag = new MyPair<>(1, 55, MainActivity.SEND_TO_LOCALHOST); // ABS动作标志
+    private MyPair<Integer> ABS_work_Flag = new MyPair<>(1, 55, MainActivity.SEND_TO_FRONTSCREEN); // ABS动作标志
     private MyPair<Integer> Wheel_Speed_Fault = new MyPair<>(1, 56, MainActivity.SEND_TO_LOCALHOST); // 轮速故障标志
     private MyPair<Integer> ABS_Function = new MyPair<>(1, 57, MainActivity.SEND_TO_LOCALHOST); // ABS功能
     private MyPair<Integer> ABS_Fault_Lamp = new MyPair<>(1, 58, MainActivity.SEND_TO_LOCALHOST); // ABS故障状态指示灯

@@ -26,7 +26,6 @@ import com.hasee.minibuslocalhost.util.MyHandler;
 import com.hasee.minibuslocalhost.util.SendToScreenThread;
 import com.hasee.minibuslocalhost.util.ToastUtil;
 
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends BaseActivity{
     public final static int SEND_TO_FRONTSCREEN = 0;//前风挡
@@ -169,11 +168,6 @@ public class MainActivity extends BaseActivity{
         transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.right_fragment,fragment);
         transaction.commit();
-    }
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     /**

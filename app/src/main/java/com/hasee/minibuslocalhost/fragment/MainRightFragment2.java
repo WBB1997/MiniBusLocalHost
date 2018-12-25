@@ -32,14 +32,19 @@ public class MainRightFragment2 extends Fragment {
 
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        activity = (MainActivity) getActivity();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main_right2, container, false);
         rightFragment2BatteryTemperature = (TextView)view.findViewById(R.id.rightFragment2_batteryTemperature);
-//        Typeface typeface = Typeface.createFromAsset(activity.getAssets(),"fonts/font1.TTF");
-//        rightFragment2BatteryTemperature.setTypeface(typeface);
+        Typeface typeface = Typeface.createFromAsset(activity.getAssets(),"font1.ttf");
+        rightFragment2BatteryTemperature.setTypeface(typeface);
         rightFragment2Speed = (TextView)view.findViewById(R.id.rightFragment2_speed);
         rightFragment2Zonlic = (TextView)view.findViewById(R.id.rightFragment2_zonlic);
         rightFragment2Renwujd = (TextView)view.findViewById(R.id.rightFragment2_renwujd);

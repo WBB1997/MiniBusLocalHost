@@ -299,7 +299,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="20px"
                 android:layout_toRightOf="@id/left_fragment_condition_img"
-                android:text="7"
+                android:text="0"
                 android:textColor="@color/left_fragment_text_color"/>
 
             <SeekBar
@@ -307,6 +307,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                android:minHeight="4dip"
+                android:maxHeight="4dip"
+                android:progressDrawable="@drawable/ic_seekbar"
                 android:layout_toRightOf="@id/leftFragment_condition_size" />
         </RelativeLayout>
     </RelativeLayout>
