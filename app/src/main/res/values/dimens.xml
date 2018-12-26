@@ -46,7 +46,7 @@
     <!--主界面右边高度-->
     <dimen name="main_layout_right1_height">304px</dimen>
     <!--主界面右边宽度-->
-    <dimen name="main_layout_right2_width">420px</dimen>
+    <dimen name="main_layout_right2_width">360px</dimen>
     <!--主界面右边高度-->
     <dimen name="main_layout_right2_height">448px</dimen>
     <!--主界面时间字体大小-->
@@ -64,4 +64,5 @@
     <dimen name="margin_20px">20px</dimen>
     <dimen name="margin_24px">24px</dimen>
     <dimen name="margin_40px">40px</dimen>
+    <dimen name="margin_50px">50px</dimen>
 </resources>

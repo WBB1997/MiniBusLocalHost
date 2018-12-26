@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="@dimen/main_layout_right2_width"
     android:layout_height="@dimen/main_layout_right2_height"
+    xmlns:fontPath="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.MainRightFragment2">
     <!--仪表盘-->
     <RelativeLayout
@@ -30,7 +31,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="120px"
+                android:layout_marginTop="60px"
                 android:text="36"
                 android:textColor="@color/right_fragment1_text_color"
                 android:textSize="@dimen/textSize_50px" />
@@ -52,10 +53,12 @@
             android:layout_toRightOf="@id/meterPanel_img">
 
             <TextView
+                tools:ignore="MissingPrefix"
                 android:id="@+id/rightFragment2_batteryTemperature"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="42C"
+                android:text="42℃"
+                fontPath="fonts/font1.TTF"
                 android:textColor="@color/main_battery_color"
                 android:textSize="@dimen/textSize_50px" />
 
@@ -82,7 +85,7 @@
     <!--里程进度-->
     <RelativeLayout
         android:id="@+id/carLic_layout"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/meterPanel_layout"
         android:layout_marginTop="30px">

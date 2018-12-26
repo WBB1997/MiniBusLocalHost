@@ -1,9 +1,13 @@
 package com.hasee.minibuslocalhost.util;
 
+import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.widget.TextView;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -12,10 +16,24 @@ import java.util.Date;
  * 时间线程
  */
 public class TimeThread extends Thread {
-    private final int TIME_FLAG = 1;
+    private static final String TAG = "TimeThread";
+    private final int TIME_FLAG_LOCAL = 1;//本地时间
+    private final int TIME_FLAG_NET = 2;//网络时间
+    private boolean flag = true;
+    private Context mContext;//上下文
     private TextView timeTextView;//时间文本
-    public TimeThread(TextView textView){
+
+    public TimeThread(Context mContext,TextView textView){
+        this.mContext = mContext;
         this.timeTextView = textView;
+    }
+
+    public boolean isFlag() {
+        return flag;
+    }
+
+    public void setFlag(boolean flag) {
+        this.flag = flag;
     }
 
     //更新时间
@@ -24,11 +42,11 @@ public class TimeThread extends Thread {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what){
-                case TIME_FLAG:{//更新UI
-                    long time = System.currentTimeMillis();
-                    Date date = new Date(time);
-                    SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
-                    timeTextView.setText(format.format(date));
+                case TIME_FLAG_NET:{//更新UI
+                    timeTextView.setText(getNetTime());
+                }
+                case TIME_FLAG_LOCAL:{//更新UI
+                    timeTextView.setText(getLocalTime());
                 }
             }
         }
@@ -36,9 +54,13 @@ public class TimeThread extends Thread {
 
     @Override
     public void run() {
-        while (true){
+        while (flag){
             try {
-                sendText();
+                if(NetWorkUtil.getInstance(mContext).isAvailable()){//获取网络时间
+                    sendText(TIME_FLAG_NET);
+                }else{
+                    sendText(TIME_FLAG_LOCAL);
+                }
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -49,9 +71,41 @@ public class TimeThread extends Thread {
     /**
      * 发送更新时间命令给UI线程
      */
-    private void sendText(){
+    private void sendText(int what){
         Message msg = handler.obtainMessage();
-        msg.what = TIME_FLAG;
+        msg.what = what;
         handler.sendMessage(msg);
     }
+
+    /**
+     * 获取本地时间
+     * @return
+     */
+    private String getLocalTime(){
+        long time = System.currentTimeMillis();
+        Date date = new Date(time);
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+        return format.format(date);
+    }
+
+    /**
+     * 获取网络时间
+     * @return
+     */
+    private String getNetTime(){
+        URL url = null;
+        try {
+            url = new URL("http://www.ntsc.ac.cn");
+            URLConnection connection = url.openConnection();
+            connection.connect();//建立连接
+            long time = connection.getDate();//取得网站日期时间
+            Date date = new Date(time);
+            SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+            return format.format(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

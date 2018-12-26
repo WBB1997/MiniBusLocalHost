@@ -90,7 +90,6 @@ public class Transmit {
 //                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_Dig_Ord_DoorLock, jsonObject.getJSONArray("data").getBoolean(0));
 //                break;
             default:
-
                 break;
         }
         //通过message 发给ui

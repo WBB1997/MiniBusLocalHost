@@ -2,7 +2,13 @@ package com.hasee.minibuslocalhost.fragment;
 
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.Typeface;
+import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,13 +24,18 @@ import com.alibaba.fastjson.JSONObject;
 import com.hasee.minibuslocalhost.R;
 import com.hasee.minibuslocalhost.activity.MainActivity;
 import com.hasee.minibuslocalhost.transmit.Class.HMI;
+import com.hasee.minibuslocalhost.util.LogUtil;
+import com.hasee.minibuslocalhost.util.VideoSeparateUtil;
+
+import java.io.File;
+import java.io.IOException;
 
 
 /**
  * 左边Fragment
  */
 public class MainLeftFragment extends Fragment {
-    private Context mContext;//上下文
+    private static final String TAG = "MainLeftFragment";
     private MainActivity activity;//MainActivity
     private ImageView leftFragmentCarCloseDoor;//车门关
     private ImageView leftFragmentCarOpenDoor;//车门开
@@ -52,6 +63,8 @@ public class MainLeftFragment extends Fragment {
     private String clazz = "HMI";//所属类名
     private int field = -1;//属性
     private Object o = null;//状态
+    private double singleIndexNum = 100/7;//每一档对应的大小
+    private int seekBarIndex = 0;
 
     public MainLeftFragment(){
     }
@@ -99,6 +112,10 @@ public class MainLeftFragment extends Fragment {
         leftFragmentConditionSize = (TextView) view.findViewById(R.id.leftFragment_condition_size);
         leftFragmentSeekBar = (SeekBar) view.findViewById(R.id.leftFragment_seekBar);
         leftFragmentSeekBar.setOnSeekBarChangeListener(onSeekBarChangeListener);
+        //设置滑块颜色
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            leftFragmentSeekBar.getThumb().setColorFilter(Color.parseColor("#9cf8f8"), PorterDuff.Mode.SRC_ATOP);
+        }
         return view;
     }
 
@@ -108,7 +125,9 @@ public class MainLeftFragment extends Fragment {
     private SeekBar.OnSeekBarChangeListener onSeekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
+            LogUtil.d(TAG,String.valueOf(progress));
+            seekBarIndex = (int)(progress/singleIndexNum);
+            leftFragmentConditionSize.setText(String.valueOf(seekBarIndex));
         }
 
         @Override
@@ -118,7 +137,7 @@ public class MainLeftFragment extends Fragment {
 
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
-
+            //发送最终数据至CAN
         }
     };
 
@@ -183,6 +202,10 @@ public class MainLeftFragment extends Fragment {
                     }else{
                         leftFragmentCarLeftlightOpen.setVisibility(View.INVISIBLE);
                     }
+//                    if(leftFragmentErrorLight.isActivated()){//如果警示灯是开的关闭它
+//                        leftFragmentErrorLight.setActivated(false);
+//                        leftFragmentLeftLight.setActivated(true);
+//                    }
                     field = HMI.HMI_leftFragmentLeftLight;
                     o = leftFragmentLeftLight.isActivated();
                     break;
@@ -196,45 +219,43 @@ public class MainLeftFragment extends Fragment {
                         }
                     }else{
                     }
+//                    if(leftFragmentErrorLight.isActivated()){//如果警示灯是开的关闭它
+//                        leftFragmentErrorLight.setActivated(false);
+//                    }
                     field = HMI.HMI_leftFragmentRightLight;
                     o = leftFragmentRightLight.isActivated();
                     break;
                 }
                 case R.id.leftFragment_errorLight:{//警示灯
                     leftFragmentErrorLight.setActivated(!leftFragmentErrorLight.isActivated());
-                    if(leftFragmentErrorLight.isActivated()){//警示灯开启
-                        leftFragmentRightLight.setActivated(true);//左转向灯开启
-                        leftFragmentLeftLight.setActivated(true);//右转向灯开启
-                    }else{//警示灯关闭
-                        leftFragmentRightLight.setActivated(false);//左转向灯关闭
-                        leftFragmentLeftLight.setActivated(false);//右转向灯关闭
-                    }
+//                    if(leftFragmentErrorLight.isActivated()){//警示灯开启
+//                        leftFragmentRightLight.setActivated(true);//左转向灯开启
+//                        leftFragmentLeftLight.setActivated(true);//右转向灯开启
+//                    }else{//警示灯关闭
+//                        leftFragmentRightLight.setActivated(false);//左转向灯关闭
+//                        leftFragmentLeftLight.setActivated(false);//右转向灯关闭
+//                    }
                     break;
                 }
                 case R.id.leftFragment_coolAir:{//冷气
                     leftFragmentCoolAir.setActivated(!leftFragmentCoolAir.isActivated());
                     if(leftFragmentCoolAir.isActivated()){//如果冷气是开的
                         leftFragmentCoolAirImg.setActivated(true);
-                        //关闭暖气和除雾
+                        //关闭暖气
                         leftFragmentHotAirImg.setActivated(false);
                         leftFragmentHotAir.setActivated(false);
-                        leftFragmentDeFogImg.setActivated(false);
-                        leftFragmentDeFog.setActivated(false);
                     }else{
                         leftFragmentCoolAirImg.setActivated(false);
                     }
-
                     break;
                 }
                 case R.id.leftFragment_hotAir:{//暖气
                     leftFragmentHotAir.setActivated(!leftFragmentHotAir.isActivated());
                     if(leftFragmentHotAir.isActivated()){//如果暖气是开的
                         leftFragmentHotAirImg.setActivated(true);
-                        //关闭冷气和除雾
+                        //关闭冷气
                         leftFragmentCoolAirImg.setActivated(false);
                         leftFragmentCoolAir.setActivated(false);
-                        leftFragmentDeFogImg.setActivated(false);
-                        leftFragmentDeFog.setActivated(false);
                     }else{
                         leftFragmentHotAirImg.setActivated(false);
                     }
@@ -244,11 +265,6 @@ public class MainLeftFragment extends Fragment {
                     leftFragmentDeFog.setActivated(!leftFragmentDeFog.isActivated());
                     if(leftFragmentDeFog.isActivated()){//如果除雾是开的
                         leftFragmentDeFogImg.setActivated(true);
-                        //关闭冷气和暖气
-                        leftFragmentCoolAirImg.setActivated(false);
-                        leftFragmentCoolAir.setActivated(false);
-                        leftFragmentHotAirImg.setActivated(false);
-                        leftFragmentHotAir.setActivated(false);
                     }else{
                         leftFragmentDeFogImg.setActivated(false);
                     }
@@ -292,4 +308,24 @@ public class MainLeftFragment extends Fragment {
         }
     }
 
+    /**
+     * 播放音频
+     */
+    private void playAudio(){
+        File video = new File(Environment.getExternalStorageDirectory(),"video.mp4");
+        File out = new File(Environment.getExternalStorageDirectory(),"audio.mp3");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            VideoSeparateUtil.videoToAudio(video.getPath(), out);
+        }
+        MediaPlayer mediaPlayer = new MediaPlayer();
+        try {
+            mediaPlayer.setDataSource(out.getPath());
+            mediaPlayer.prepare();
+            if(!mediaPlayer.isPlaying()){
+                mediaPlayer.start();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
