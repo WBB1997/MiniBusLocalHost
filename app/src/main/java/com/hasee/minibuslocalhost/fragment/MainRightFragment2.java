@@ -59,7 +59,7 @@ public class MainRightFragment2 extends Fragment {
     public void refresh(JSONObject object){
         int id = object.getIntValue("id");
         if(id == 60){//车速
-            rightFragment2Speed.setText((int) object.getDoubleValue("data"));
+            rightFragment2Speed.setText(String.valueOf(object.getDoubleValue("data")));
         }
     }
 }

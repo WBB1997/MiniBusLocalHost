@@ -180,6 +180,9 @@ public class MainActivity extends BaseActivity{
         if(id>100){
             return 3;
         }
+        if(id == 60){
+            return 3;
+        }
         return 1;
     }
 }
