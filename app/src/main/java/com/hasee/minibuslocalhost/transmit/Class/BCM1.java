@@ -10,10 +10,11 @@ import java.util.Map;
 import static com.hasee.minibuslocalhost.util.ByteUtil.viewBinary;
 
 public class BCM1 extends BaseClass {
+    private final static int offset = 0;
     private final String TAG = "BCM1";
 
     //字段
-    private MyPair<Integer> BCM_Dig_Ord_HandLightCtr = new MyPair<>(1, 62, MainActivity.SEND_TO_LEFTSCREEN); // 手势灯光控制信号
+    private MyPair<Integer> BCM_Dig_Ord_HandLightCtr = new MyPair<>(1, 62, MainActivity.SEND_TO_LOCALHOST); // 手势灯光控制信号
     private MyPair<Integer> BCM_Flg_Stat_LeftTurningLamp = new MyPair<>(1, 63, MainActivity.SEND_TO_LOCALHOST); // 左转向状态信号
     private MyPair<Integer> BCM_Flg_Stat_RightTurningLamp = new MyPair<>(1, 64, MainActivity.SEND_TO_LOCALHOST); // 右转向状态信号
     private MyPair<Integer> BCM_Flg_Stat_HandLightCtr = new MyPair<>(1, 65, MainActivity.SEND_TO_LOCALHOST); // 手势灯光控制状态信号
@@ -62,7 +63,7 @@ public class BCM1 extends BaseClass {
         put(21, BCM_Flg_Stat_BeltsSensor6);
 
     }};
-    private byte[] bytes = {0x00, 0x00, 0x00, 0x03, 0x61, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    private byte[] bytes = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     public BCM1() {
     }
@@ -85,7 +86,6 @@ public class BCM1 extends BaseClass {
     @Override
     public Object getValue(Map.Entry<Integer, MyPair<Integer>> entry, byte[] bytes) {
         int index = entry.getKey();
-        int length = entry.getValue().getFirst();
         switch (index) {
             case 0:
             case 1:
@@ -110,7 +110,7 @@ public class BCM1 extends BaseClass {
             case 20:
             case 21:
             case 22:
-                return viewBinary(bytes[index / 8 + 5], index % 8);
+                return viewBinary(bytes[index / 8 + offset], index % 8);
             default:
                 LogUtil.d(TAG, "数据下标错误");
                 break;

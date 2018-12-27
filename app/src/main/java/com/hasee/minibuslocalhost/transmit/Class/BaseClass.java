@@ -15,6 +15,7 @@ public abstract class BaseClass {
     public abstract byte[] getBytes();
     public abstract String getTAG();
     public void setBytes(byte[] bytes){
+        int offset = 0;
         String TAG = getTAG();
         byte[] Local_bytes = getBytes();
 
@@ -25,24 +26,6 @@ public abstract class BaseClass {
             LogUtil.d(TAG, "数据相同");
             return;
         }
-        //        for (int i = 0; i < bytes.length - 5; i++) {
-//            for (int j = 0; j < 8; j++) {
-//                if (viewBinary(this.bytes[i + 5], j) != viewBinary(bytes[i + 5], j)) {
-//                    JSONObject jsonObject = new JSONObject();
-//                    // id
-//                    jsonObject.put("id", fields.get(i * 8 + j).getSecond().first);
-//                    // data
-//                    JSONArray jsonArray = new JSONArray();
-//                    jsonArray.add(viewBinary(bytes[i + 5], j));
-//                    jsonObject.put("data", jsonArray);
-//                    // target
-//                    int target = fields.get(i * 8 + j).getSecond().second;
-//                    LogUtil.d("BCM1", "jsonObject:" + jsonObject.toJSONString());
-//                    Transmit.getInstance().callback(jsonObject, target);
-//                }
-//            }
-//        }
-//        System.arraycopy(bytes, 0, this.bytes, 0, bytes.length);
         int index;
         int length;
         boolean flag;
@@ -51,7 +34,7 @@ public abstract class BaseClass {
             length = entry.getValue().getFirst();
             flag = false;
             for(int i = index; i < index + length; i++) {
-                if (viewBinary(Local_bytes[i / 8 + 5], i % 8) != viewBinary(bytes[i / 8 + 5], i % 8))
+                if (viewBinary(Local_bytes[i / 8 + offset], i % 8) != viewBinary(bytes[i / 8 + offset], i % 8))
                     flag = true;
             }
             if(flag){
@@ -65,7 +48,7 @@ public abstract class BaseClass {
                 // 发回主函数
                 Transmit.getInstance().callback(jsonObject, target);
                 // debug
-                LogUtil.d(TAG, "jsonObject:" + jsonObject.toJSONString());
+                LogUtil.d(TAG, jsonObject.toJSONString());
             }
         }
         System.arraycopy(bytes, 0, getBytes(), 0, bytes.length);
