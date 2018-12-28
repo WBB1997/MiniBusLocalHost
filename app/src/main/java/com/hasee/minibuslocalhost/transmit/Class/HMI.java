@@ -8,15 +8,16 @@ import java.util.Map;
 import static com.hasee.minibuslocalhost.util.ByteUtil.bytesToHex;
 import static com.hasee.minibuslocalhost.util.ByteUtil.setBit;
 
-public class HMI extends BaseClass{
+public class HMI extends BaseClass {
     private final static String TAG = "HMI";
+    private final static int offset = 2;
 
     //leftFragment
     public static final int HMI_leftFragmentHighBeam = 0;//远光灯
     public static final int HMI_leftFragmentLowBeam = 1;//近光灯
     public static final int HMI_leftFragmentLeftLight = 2;//左转向灯
     public static final int HMI_leftFragmentRightLight = 3;//右转向灯
-    public static final int leftFragmentBackFogLight = 4;//后雾灯
+    public static final int HMI_leftFragmentBackFogLight = 4;//后雾灯
     public static final int HMI_leftFragmentFrontFogLight = 5;//前雾灯
     public static final int HMI_Dig_Ord_DoorLock = 6;
     public static final int HMI_Dig_Ord_Alarm = 7;
@@ -35,36 +36,38 @@ public class HMI extends BaseClass{
     public static final int AIR_MODEL_HEAT = 1; // 制热
     public static final int AIR_MODEL_DEMIST = 2; // 除雾
     public static final int AIR_GRADE_OFF = 0; // 关闭
-    public static final int AIR_GRADE_FIRST_GEAR  = 1; // 1挡
-    public static final int AIR_GRADE_SECOND_GEAR  = 2; // 2挡
-    public static final int AIR_GRADE_THIRD_GEAR  = 3; // 3挡
-    public static final int AIR_GRADE_FOURTH_GEAR  = 4; // 4挡
-    public static final int AIR_GRADE_FIVE_GEAR  = 5; // 5挡
+    public static final int AIR_GRADE_FIRST_GEAR = 1; // 1挡
+    public static final int AIR_GRADE_SECOND_GEAR = 2; // 2挡
+    public static final int AIR_GRADE_THIRD_GEAR = 3; // 3挡
+    public static final int AIR_GRADE_FOURTH_GEAR = 4; // 4挡
+    public static final int AIR_GRADE_FIVE_GEAR = 5; // 5挡
 
 
-    public HMI(){}
+    public HMI() {
+    }
 
-    private byte[] bytes = {0x00, 0x00, 0x00, 0x03, (byte) 0x83, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    private byte[] bytes = {0x03, (byte) 0x83, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x02};
 
-    public void changeStatus(int flag, Object status){
-        switch (flag){
+    public void changeStatus(int flag, Object status) {
+        switch (flag) {
             case HMI_leftFragmentHighBeam:
             case HMI_leftFragmentLowBeam:
             case HMI_leftFragmentLeftLight:
             case HMI_leftFragmentRightLight:
+            case HMI_leftFragmentBackFogLight:
             case HMI_leftFragmentFrontFogLight:
             case HMI_Dig_Ord_DoorLock:
             case HMI_Dig_Ord_Alarm:
-                setBit(bytes, 5, flag,1, status);
+                setBit(bytes, offset, flag, 1, status);
                 break;
             case HMI_Dig_Ord_drive_model:
-                setBit(bytes, 5, flag,2, status);
+                setBit(bytes, offset, flag, 2, status);
                 break;
             case HMI_Dig_Ord_air_model:
-                setBit(bytes, 5, flag,2, status);
+                setBit(bytes, offset, flag, 2, status);
                 break;
             case HMI_Dig_Ord_air_grade:
-                setBit(bytes, 5, flag,3, status);
+                setBit(bytes, offset, flag, 3, status);
                 break;
             default:
                 LogUtil.d(TAG, "消息转换错误");

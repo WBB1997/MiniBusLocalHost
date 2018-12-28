@@ -69,27 +69,27 @@ public class Transmit {
     public void callback(JSONObject jsonObject, int target) {
         //发给hmi
         int id = jsonObject.getIntValue("id");
-        LogUtil.d(TAG, String.valueOf(id));
         switch (id) {
             case 66:
-                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_leftFragmentHighBeam, jsonObject.getBooleanValue("data"));
+                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_leftFragmentHighBeam, jsonObject.getJSONArray("data").getBoolean(0));
                 break;
             case 67:
-                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_leftFragmentLowBeam, jsonObject.getBooleanValue("data"));
+                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_leftFragmentLowBeam, jsonObject.getJSONArray("data").getBoolean(0));
                 break;
             case 63:
-                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_leftFragmentLeftLight, jsonObject.getBooleanValue("data"));
+                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_leftFragmentLeftLight, jsonObject.getJSONArray("data").getBoolean(0));
                 break;
             case 64:
-                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_leftFragmentRightLight, jsonObject.getBooleanValue("data"));
+                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_leftFragmentRightLight, jsonObject.getJSONArray("data").getBoolean(0));
                 break;
             case 68:
-                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_leftFragmentFrontFogLight, jsonObject.getBooleanValue("data"));
+                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_leftFragmentBackFogLight, jsonObject.getJSONArray("data").getBoolean(0));
                 break;
 //            case 107:
 //                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_Dig_Ord_DoorLock, jsonObject.getJSONArray("data").getBoolean(0));
 //                break;
             default:
+
                 break;
         }
         //通过message 发给ui
@@ -158,7 +158,7 @@ public class Transmit {
 //    ));
     private ArrayList<Pair<String, ? extends BaseClass>> list = new ArrayList<>(Arrays.asList(
             new Pair<>("00000361", new BCM1()),
-            new Pair<>("000004c0", new ESC3()),
+            new Pair<>("000004C0", new ESC3()),
             new Pair<>("00000383", new HMI())
     ));
     // 消息标识符键值对，方便查找
@@ -177,7 +177,7 @@ public class Transmit {
     private void dispose(byte[] receMsgs) {
         String key;
         LogUtil.d(TAG, bytesToHex(receMsgs));
-        if (receMsgs.length < 13)
+        if (receMsgs.length <= 13)
             return;
         for (int i = 0; i < receMsgs.length; i += 13) {
             key = bytesToHex(subBytes(receMsgs, 1, 4));
