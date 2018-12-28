@@ -283,26 +283,67 @@ public class MainLeftFragment extends Fragment {
         switch (object.getIntValue("id")){
             case 63:{// 左转
                 leftFragmentLeftLight.setActivated(data);
+                if(data){//要求左转开
+                    leftFragmentRightLight.setActivated(false);//右转向灯关
+                    leftFragmentErrorLight.setActivated(false);//双闪关
+                    leftFragmentCarLeftlightOpen.setVisibility(View.VISIBLE);
+                }else{
+                    leftFragmentCarLeftlightOpen.setVisibility(View.INVISIBLE);
+                }
                 break;
             }
             case 64:{// 右转
                 leftFragmentRightLight.setActivated(data);
+                if(data){
+                    leftFragmentLeftLight.setActivated(false);//左转向灯关
+                    leftFragmentErrorLight.setActivated(false);//双闪关
+                }else{
+//
+                }
                 break;
             }
             case 66:{// 远光灯
                 leftFragmentHighBeam.setActivated(data);
+                if(data){
+                    leftFragmentLowBeam.setActivated(false);//近光灯关
+                    leftFragmentCarLowbeamOpen.setVisibility(View.INVISIBLE);
+                    leftFragmentCarHighbeamOpen.setVisibility(View.VISIBLE);
+                }else{
+                    leftFragmentCarHighbeamOpen.setVisibility(View.INVISIBLE);
+                }
                 break;
             }
             case 67:{// 近光灯
                 leftFragmentLowBeam.setActivated(data);
+                if(data){
+                    leftFragmentHighBeam.setActivated(false);//远光灯关
+                    leftFragmentCarHighbeamOpen.setVisibility(View.INVISIBLE);
+                    leftFragmentCarLowbeamOpen.setVisibility(View.VISIBLE);
+                }else{
+                    leftFragmentCarLowbeamOpen.setVisibility(View.INVISIBLE);
+                }
                 break;
             }
             case 68:{// 后雾灯
                 leftFragmentBackFogLight.setActivated(data);
+                if(data){
+                    leftFragmentCarFoglightOpen.setVisibility(View.VISIBLE);
+                }else{
+                    leftFragmentCarFoglightOpen.setVisibility(View.INVISIBLE);
+                }
                 break;
             }
             case 69:{// 双闪
                 leftFragmentErrorLight.setActivated(data);
+                if(data){//要求双闪开
+                    leftFragmentLeftLight.setActivated(true);
+                    leftFragmentRightLight.setActivated(true);
+                    leftFragmentCarLeftlightOpen.setVisibility(View.VISIBLE);
+                }else{
+                    leftFragmentLeftLight.setActivated(false);
+                    leftFragmentRightLight.setActivated(false);
+                    leftFragmentCarLeftlightOpen.setVisibility(View.INVISIBLE);
+                }
                 break;
             }
         }

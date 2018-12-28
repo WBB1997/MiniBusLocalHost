@@ -11,5 +11,5 @@
     <string name="login_success">登陆成功</string>
     <string name="login_failed">登陆出错</string>
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="lowSpeed_fragment_text">电池电量低，请及时充电！</string>
 </resources>

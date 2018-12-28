@@ -49,6 +49,10 @@
     <dimen name="main_layout_right2_width">360px</dimen>
     <!--主界面右边高度-->
     <dimen name="main_layout_right2_height">448px</dimen>
+    <!--主界面低速报警宽度-->
+    <dimen name="main_layout_lowSpeed_width">300px</dimen>
+    <!--主界面低速报警高度-->
+    <dimen name="main_layout_lowSpeed_height">54px</dimen>
     <!--主界面时间字体大小-->
     <dimen name="main_layout_time_textSize">40px</dimen>
     <!--左边Fragment字体大小-->
@@ -61,8 +65,12 @@
     <dimen name="textSize_16px">16px</dimen>
     <dimen name="textSize_10px">10px</dimen>
     <!--Margin-->
+    <dimen name="margin_5px">5px</dimen>
+    <dimen name="margin_10px">10px</dimen>
     <dimen name="margin_20px">20px</dimen>
     <dimen name="margin_24px">24px</dimen>
     <dimen name="margin_40px">40px</dimen>
     <dimen name="margin_50px">50px</dimen>
+    <dimen name="margin_60px">60px</dimen>
+    <dimen name="margin_80px">80px</dimen>
 </resources>
