@@ -125,7 +125,7 @@ public class MainLeftFragment extends Fragment {
     private SeekBar.OnSeekBarChangeListener onSeekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            LogUtil.d(TAG,String.valueOf(progress));
+//            LogUtil.d(TAG,String.valueOf(progress));
             seekBarIndex = (int)(progress/singleIndexNum);
             leftFragmentConditionSize.setText(String.valueOf(seekBarIndex));
         }

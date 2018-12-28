@@ -3,13 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="@dimen/main_layout_center_width"
     android:layout_height="@dimen/main_layout_center_height"
-    android:background="@color/colorPrimary"
     tools:context=".fragment.MainCenterFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <com.baidu.mapapi.map.MapView
+        android:id="@+id/mapView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/lowSpeed_fragment_text" />
+        android:layout_height="match_parent">
+
+    </com.baidu.mapapi.map.MapView>
 
 </FrameLayout>

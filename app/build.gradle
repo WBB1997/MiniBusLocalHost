@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+            storeFile file('C:/Users/Hasee-pc/.android/debug.keystore')
+            storePassword 'android'
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.hasee.minibuslocalhost"
@@ -9,6 +17,12 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDir 'libs'
+            //说明so的路径为该libs路径，关联所有地图SDK的so文件
+        }
     }
     buildTypes {
         release {
@@ -30,4 +44,5 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.8.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
     implementation files('libs/fastjson-1.2.53.jar')
+    implementation files('libs/BaiduLBS_Android.jar')
 }
