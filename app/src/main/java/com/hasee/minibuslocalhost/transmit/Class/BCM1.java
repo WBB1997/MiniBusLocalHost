@@ -36,6 +36,10 @@ public class BCM1 extends BaseClass {
     private MyPair<Integer> BCM_Flg_Stat_BeltsSensor4 = new MyPair<>(1, 81, MainActivity.SEND_TO_LOCALHOST); // 安全带传感器4
     private MyPair<Integer> BCM_Flg_Stat_BeltsSensor5 = new MyPair<>(1, 82, MainActivity.SEND_TO_LOCALHOST); // 安全带传感器5
     private MyPair<Integer> BCM_Flg_Stat_BeltsSensor6 = new MyPair<>(1, 83, MainActivity.SEND_TO_LOCALHOST); // 安全带传感器6
+    private MyPair<Integer> FRONTSCREEN_1 = new MyPair<>(1, 111, MainActivity.SEND_TO_FRONTSCREEN); // 前风挡正常通行
+    private MyPair<Integer> FRONTSCREEN_2 = new MyPair<>(1, 112, MainActivity.SEND_TO_FRONTSCREEN); // 前风挡行人停车
+    private MyPair<Integer> LEFTSCREEN_1 = new MyPair<>(1, 200, MainActivity.SEND_TO_LEFTSCREEN); // 左车门左门开关
+    private MyPair<Integer> RIGHTSCREEN_1 = new MyPair<>(1, 400, MainActivity.SEND_TO_RIGHTSCREEN); // 左车门左门开关
 
     // 属性
     private HashMap<Integer, MyPair<Integer>> fields = new HashMap<Integer, MyPair<Integer>>() {{
@@ -61,6 +65,10 @@ public class BCM1 extends BaseClass {
         put(19, BCM_Flg_Stat_BeltsSensor4);
         put(20, BCM_Flg_Stat_BeltsSensor5);
         put(21, BCM_Flg_Stat_BeltsSensor6);
+        put(22, FRONTSCREEN_1);
+        put(23, FRONTSCREEN_2);
+        put(24, LEFTSCREEN_1);
+        put(25, RIGHTSCREEN_1);
 
     }};
     private byte[] bytes = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
@@ -110,6 +118,8 @@ public class BCM1 extends BaseClass {
             case 20:
             case 21:
             case 22:
+            case 23:
+            case 24:
                 return viewBinary(bytes[index / 8 + offset], index % 8);
             default:
                 LogUtil.d(TAG, "数据下标错误");

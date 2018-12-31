@@ -79,10 +79,10 @@ public class MainLeftFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main_left,container,false);
-        leftFragmentCarCloseDoor = (ImageView) view.findViewById(R.id.leftFragment_car_close_door);
-        leftFragmentCarOpenDoor = (ImageView) view.findViewById(R.id.leftFragment_car_open_door);
-        leftFragmentCarFoglightOpen = (ImageView) view.findViewById(R.id.leftFragment_car_foglight_open);
-        leftFragmentCarLeftlightOpen = (ImageView) view.findViewById(R.id.leftFragment_car_leftlight_open);
+        leftFragmentCarCloseDoor = view.findViewById(R.id.leftFragment_car_close_door);
+        leftFragmentCarOpenDoor = view.findViewById(R.id.leftFragment_car_open_door);
+        leftFragmentCarFoglightOpen = view.findViewById(R.id.leftFragment_car_foglight_open);
+        leftFragmentCarLeftlightOpen = view.findViewById(R.id.leftFragment_car_leftlight_open);
         leftFragmentCarLowbeamOpen = (ImageView) view.findViewById(R.id.leftFragment_car_lowbeam_open);
         leftFragmentCarHighbeamOpen = (ImageView) view.findViewById(R.id.leftFragment_car_highbeam_open);
         leftFragmentLowBeam = (ImageButton) view.findViewById(R.id.leftFragment_lowBeam);
@@ -93,7 +93,7 @@ public class MainLeftFragment extends Fragment {
         leftFragmentFrontFogLight.setOnClickListener(onClickListener);
         leftFragmentBackFogLight = (ImageButton) view.findViewById(R.id.leftFragment_back_fogLight);
         leftFragmentBackFogLight.setOnClickListener(onClickListener);
-        leftFragmentLeftLight = (ImageButton) view.findViewById(R.id.leftFragment_leftLight);
+        leftFragmentLeftLight = view.findViewById(R.id.leftFragment_leftLight);
         leftFragmentLeftLight.setOnClickListener(onClickListener);
         leftFragmentRightLight = (ImageButton) view.findViewById(R.id.leftFragment_rightLight);
         leftFragmentRightLight.setOnClickListener(onClickListener);
@@ -175,12 +175,13 @@ public class MainLeftFragment extends Fragment {
                         leftFragmentCarHighbeamOpen.setVisibility(View.INVISIBLE);
                     }
                     field = HMI.HMI_leftFragmentHighBeam;
-                    o = leftFragmentLowBeam.isActivated();
+                    o = leftFragmentHighBeam.isActivated();
                     break;
                 }
                 case R.id.leftFragment_front_fogLight:{//前雾灯
                     leftFragmentFrontFogLight.setActivated(!leftFragmentFrontFogLight.isActivated());
-
+                    field = HMI.HMI_leftFragmentFrontFogLight;
+                    o = leftFragmentFrontFogLight.isActivated();
                     break;
                 }
                 case R.id.leftFragment_back_fogLight:{//后雾灯
@@ -190,6 +191,8 @@ public class MainLeftFragment extends Fragment {
                     }else{
                         leftFragmentCarFoglightOpen.setVisibility(View.INVISIBLE);
                     }
+                    field = HMI.HMI_leftFragmentBackFogLight;
+                    o = leftFragmentBackFogLight.isActivated();
                     break;
                 }
                 case R.id.leftFragment_leftLight:{//左转向灯

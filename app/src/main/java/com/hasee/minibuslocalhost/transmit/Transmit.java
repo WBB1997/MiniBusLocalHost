@@ -25,9 +25,10 @@ import static com.hasee.minibuslocalhost.util.ByteUtil.subBytes;
 
 public class Transmit {
     private final static String TAG = "Transmit";
-    private final int MAX_LENGTH = 13; // 最大接收字节长度
+    private final static int MESSAGELENGTH = 8;
+    private final static int MAX_LENGTH = 100; // 最大接收字节长度
     private final int PORT = 5066;   // port号
-    private final static String IP = "10.13.233.181"; // 总线ip地址
+    private final static String IP = "192.168.43.42"; // 总线ip地址
     private final static Transmit instance = new Transmit();
     private MyHandler handler;
 
@@ -71,25 +72,24 @@ public class Transmit {
         int id = jsonObject.getIntValue("id");
         switch (id) {
             case 66:
-                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_leftFragmentHighBeam, jsonObject.getJSONArray("data").getBoolean(0));
+                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_leftFragmentHighBeam, jsonObject.getBoolean("data"));
                 break;
             case 67:
-                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_leftFragmentLowBeam, jsonObject.getJSONArray("data").getBoolean(0));
+                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_leftFragmentLowBeam, jsonObject.getBoolean("data"));
                 break;
             case 63:
-                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_leftFragmentLeftLight, jsonObject.getJSONArray("data").getBoolean(0));
+                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_leftFragmentLeftLight, jsonObject.getBoolean("data"));
                 break;
             case 64:
-                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_leftFragmentRightLight, jsonObject.getJSONArray("data").getBoolean(0));
+                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_leftFragmentRightLight, jsonObject.getBoolean("data"));
                 break;
             case 68:
-                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_leftFragmentBackFogLight, jsonObject.getJSONArray("data").getBoolean(0));
+                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_leftFragmentBackFogLight, jsonObject.getBoolean("data"));
                 break;
 //            case 107:
 //                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_Dig_Ord_DoorLock, jsonObject.getJSONArray("data").getBoolean(0));
 //                break;
             default:
-
                 break;
         }
         //通过message 发给ui
@@ -109,6 +109,7 @@ public class Transmit {
             while (true) {
                 datagramPacket = new DatagramPacket(receMsgs, receMsgs.length);
                 datagramSocket.receive(datagramPacket);
+                LogUtil.d(TAG, bytesToHex(receMsgs));
                 dispose(datagramPacket.getData());
             }
         } catch (IOException e) {
@@ -156,18 +157,18 @@ public class Transmit {
 //            new Pair<>("00000233", new HAD3()),
 //            new Pair<>("00000383", new HMI())
 //    ));
-    private ArrayList<Pair<String, ? extends BaseClass>> list = new ArrayList<>(Arrays.asList(
-            new Pair<>("00000361", new BCM1()),
-            new Pair<>("000004C0", new ESC3()),
-            new Pair<>("00000383", new HMI())
+    private ArrayList<Pair<Integer, ? extends BaseClass>> list = new ArrayList<>(Arrays.asList(
+            new Pair<>(1, new BCM1()),
+            new Pair<>(0, new ESC3()),
+            new Pair<>(2, new HMI())
     ));
     // 消息标识符键值对，方便查找
-    private Map<String, ? super BaseClass> FLAG_AND_CLASS = new HashMap<>();
+    private Map<Integer, ? super BaseClass> FLAG_AND_CLASS = new HashMap<>();
     private Map<String, ? super BaseClass> NAME_AND_CLASS = new HashMap<>();
 
     // 初始化
     private void init() {
-        for (Pair<String, ? extends BaseClass> pair : list) {
+        for (Pair<Integer, ? extends BaseClass> pair : list) {
             FLAG_AND_CLASS.put(pair.first, pair.second);
             NAME_AND_CLASS.put(pair.second.getClass().getSimpleName(), pair.second);
         }
@@ -175,17 +176,20 @@ public class Transmit {
 
     // 处理收到的byte数组
     private void dispose(byte[] receMsgs) {
-        String key;
+//        String key;
         LogUtil.d(TAG, bytesToHex(receMsgs));
-        if (receMsgs.length <= 13)
-            return;
-        for (int i = 0; i < receMsgs.length; i += 13) {
-            key = bytesToHex(subBytes(receMsgs, 1, 4));
-            LogUtil.d(TAG, "key:" + key);
+//        if (receMsgs.length <= 13)
+//            return;
+        int key = 0;
+
+        for (int i = 0; i < MESSAGELENGTH * 2; i += MESSAGELENGTH, key++) {
+//            key = bytesToHex(subBytes(receMsgs, 1, 4));
+//            LogUtil.d(TAG, "key:" + key);
             // 如果数据更新了
-            if (FLAG_AND_CLASS.containsKey(key))
-                ((BaseClass) FLAG_AND_CLASS.get(key)).setBytes(receMsgs);
-            else
+            if (FLAG_AND_CLASS.containsKey(key)) {
+                LogUtil.d(TAG, bytesToHex(subBytes(receMsgs, i, MESSAGELENGTH)));
+                ((BaseClass) FLAG_AND_CLASS.get(key)).setBytes(subBytes(receMsgs, i, MESSAGELENGTH));
+            } else
                 LogUtil.d(TAG, "消息标识符错误");
         }
     }
