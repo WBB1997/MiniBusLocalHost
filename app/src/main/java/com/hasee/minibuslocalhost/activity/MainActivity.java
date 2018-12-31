@@ -44,6 +44,12 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         mContext = MainActivity.this;
         viewInit();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Transmit.getInstance().setHandler(handler);
+            }
+        }).start();
         //申请相关权限
         if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -153,12 +159,12 @@ public class MainActivity extends BaseActivity {
         switch (flag) {
             case 1: {//自动驾驶
                 replaceFragment(new MainRightFragment2());
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Transmit.getInstance().setHandler(handler);
-                    }
-                }).start();
+//                new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        Transmit.getInstance().setHandler(handler);
+//                    }
+//                }).start();
                 break;
             }
         }

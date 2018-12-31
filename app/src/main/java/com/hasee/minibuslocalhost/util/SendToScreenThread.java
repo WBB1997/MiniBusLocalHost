@@ -11,7 +11,7 @@ import java.net.InetAddress;
  * Created by fangju on 2018/12/8
  */
 public class SendToScreenThread extends Thread {
-    private String[] hostNames = new String[]{"10.13.234.108","10.13.236.215","10.13.236.215"};
+    private String[] hostNames = new String[]{"192.168.43.93","192.168.2.100","192.168.2.100"};
     private int port = 5556;
     private DatagramSocket dSocket = null;
     private DatagramPacket dPacket = null;

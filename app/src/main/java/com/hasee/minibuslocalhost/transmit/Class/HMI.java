@@ -51,11 +51,29 @@ public class HMI extends BaseClass {
     public void changeStatus(int flag, Object status) {
         switch (flag) {
             case HMI_leftFragmentHighBeam:
+                setBit(bytes, offset, flag, 1, status);
+                setBit(bytes, offset, HMI_leftFragmentLowBeam, 1, !((Boolean)status));
+                break;
             case HMI_leftFragmentLowBeam:
+                setBit(bytes, offset, flag, 1, status);
+                setBit(bytes, offset, HMI_leftFragmentHighBeam, 1, !((Boolean)status));
+                break;
             case HMI_leftFragmentLeftLight:
+                setBit(bytes, offset, flag, 1, status);
+                setBit(bytes, offset, HMI_leftFragmentRightLight, 1, !((Boolean)status));
+                break;
             case HMI_leftFragmentRightLight:
+                setBit(bytes, offset, flag, 1, status);
+                setBit(bytes, offset, HMI_leftFragmentLeftLight, 1, !((Boolean)status));
+                break;
             case HMI_leftFragmentBackFogLight:
+                setBit(bytes, offset, flag, 1, status);
+//                setBit(bytes, offset, HMI_leftFragmentFrontFogLight, 1, !((Boolean)status));
+                break;
             case HMI_leftFragmentFrontFogLight:
+                setBit(bytes, offset, flag, 1, status);
+//                setBit(bytes, offset, HMI_leftFragmentBackFogLight, 1, !((Boolean)status));
+                break;
             case HMI_Dig_Ord_DoorLock:
             case HMI_Dig_Ord_Alarm:
                 setBit(bytes, offset, flag, 1, status);
