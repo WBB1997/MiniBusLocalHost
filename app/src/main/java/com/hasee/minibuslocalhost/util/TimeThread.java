@@ -97,17 +97,17 @@ public class TimeThread extends Thread {
     private String getNetTime(){
         URL url = null;
         try {
-            url = new URL("http://www.ntsc.ac.cn");
+            url = new URL("http://www.bjtime.cn");
             URLConnection connection = url.openConnection();
             connection.connect();//建立连接
             long time = connection.getDate();//取得网站日期时间
             Date date = new Date(time);
             SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+//            LogUtil.d(TAG,format.format(date));
             return format.format(date);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
-
 }

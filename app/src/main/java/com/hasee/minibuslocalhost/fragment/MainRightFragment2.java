@@ -27,7 +27,8 @@ public class MainRightFragment2 extends Fragment {
     private TextView rightFragment2Renwujd;//任务进度
     private TextView rightFragment2Pingjunss;//平均时速
     private TextView rightFragment2Speed;//速度
-
+    private double avgSpeed = 1;//平均速度
+    private int speedCount = 0;//统计速度次数
     public MainRightFragment2(){
 
     }
@@ -60,7 +61,22 @@ public class MainRightFragment2 extends Fragment {
         int id = object.getIntValue("id");
         int speed = (int) object.getDoubleValue("data");
         if(id == 60){//车速
+            speedCount++;
+            avgSpeed = (int)calculate(speed,speedCount);
             rightFragment2Speed.setText(String.valueOf(speed));
+            rightFragment2Pingjunss.setText(String.valueOf(avgSpeed));
         }
+    }
+
+
+    /**
+     * 计算平均速度
+     * @param speed
+     * @param count
+     * @return
+     */
+    private double calculate(int speed,int count){
+        double newAvgSpeed = (avgSpeed*(count-1)+speed)/count;
+        return newAvgSpeed;
     }
 }
