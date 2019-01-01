@@ -376,15 +376,15 @@ public class MainLeftFragment extends Fragment {
             }
             case 69: {// 双闪
                 leftFragmentErrorLight.setActivated(data);
-                if (data) {//要求双闪开
-                    leftFragmentLeftLight.setActivated(true);
-                    leftFragmentRightLight.setActivated(true);
-                    leftFragmentCarLeftlightOpen.setVisibility(View.VISIBLE);
-                } else {
-                    leftFragmentLeftLight.setActivated(false);
-                    leftFragmentRightLight.setActivated(false);
-                    leftFragmentCarLeftlightOpen.setVisibility(View.INVISIBLE);
-                }
+//                if (data) {//要求双闪开
+//                    leftFragmentLeftLight.setActivated(true);
+//                    leftFragmentRightLight.setActivated(true);
+//                    leftFragmentCarLeftlightOpen.setVisibility(View.VISIBLE);
+//                } else {
+//                    leftFragmentLeftLight.setActivated(false);
+//                    leftFragmentRightLight.setActivated(false);
+//                    leftFragmentCarLeftlightOpen.setVisibility(View.INVISIBLE);
+//                }
                 break;
             }
         }
