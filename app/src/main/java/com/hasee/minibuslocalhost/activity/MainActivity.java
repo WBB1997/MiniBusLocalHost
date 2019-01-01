@@ -3,8 +3,6 @@ package com.hasee.minibuslocalhost.activity;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -18,7 +16,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.hasee.minibuslocalhost.R;
 import com.hasee.minibuslocalhost.fragment.MainCenterFragment;
 import com.hasee.minibuslocalhost.fragment.MainLeftFragment;
-import com.hasee.minibuslocalhost.fragment.MainLowSpeedFragment;
+import com.hasee.minibuslocalhost.fragment.MainLowBatteryFragment;
 import com.hasee.minibuslocalhost.fragment.MainRightFragment1;
 import com.hasee.minibuslocalhost.fragment.MainRightFragment2;
 import com.hasee.minibuslocalhost.fragment.MainTopFragment;
@@ -28,6 +26,11 @@ import com.hasee.minibuslocalhost.util.LogUtil;
 import com.hasee.minibuslocalhost.util.MyHandler;
 import com.hasee.minibuslocalhost.util.SendToScreenThread;
 import com.hasee.minibuslocalhost.util.ToastUtil;
+
+import static com.hasee.minibuslocalhost.transmit.Class.HMI.DRIVE_MODEL_AUTO;
+import static com.hasee.minibuslocalhost.transmit.Class.HMI.HMI_Dig_Ord_Alarm;
+import static com.hasee.minibuslocalhost.transmit.Class.HMI.OFF;
+import static com.hasee.minibuslocalhost.transmit.Class.HMI.ON;
 
 
 public class MainActivity extends BaseActivity {
@@ -43,7 +46,7 @@ public class MainActivity extends BaseActivity {
     private MainLeftFragment leftFragment;//左部Fragment（灯光、）
     private MainCenterFragment centerFragment;//中间部分Fragment(地图)
     private MainRightFragment2 rightFragment2;//右边Fragment(车速、)
-    private MainLowSpeedFragment lowSpeedFragment;//低速报警
+    private MainLowBatteryFragment lowBatteryFragment;//低电量报警
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,12 +80,12 @@ public class MainActivity extends BaseActivity {
         topFragment = (MainTopFragment) fragmentManager.findFragmentById(R.id.top_fragment);
         leftFragment = (MainLeftFragment) fragmentManager.findFragmentById(R.id.left_fragment);
         centerFragment = (MainCenterFragment) fragmentManager.findFragmentById(R.id.center_fragment);
-        rightFragment2 = (MainRightFragment2) fragmentManager.findFragmentById(R.id.right_fragment);
-        lowSpeedFragment = new MainLowSpeedFragment();
+//        rightFragment2 = (MainRightFragment2) fragmentManager.findFragmentById(R.id.right_fragment);
+        lowBatteryFragment = new MainLowBatteryFragment();
         //
         transaction = fragmentManager.beginTransaction();
         transaction.add(R.id.right_fragment, new MainRightFragment1());//右边
-        transaction.add(R.id.lowSpeed_fragment,lowSpeedFragment).hide(lowSpeedFragment);//
+        transaction.add(R.id.lowBattery_fragment, lowBatteryFragment).hide(lowBatteryFragment);//加入低速报警并隐藏
         transaction.commit();
     }
 
@@ -112,6 +115,12 @@ public class MainActivity extends BaseActivity {
                     //改变主控屏的控件状态
                     int screenId = whatFragment(object);
                     if (screenId == 0) {//上部Fragment
+                        int battery = object.getIntValue("data");
+                        if(battery <= 20){//低电量报警
+                            showLowBatteryFragment(true);
+                        }else{
+                            showLowBatteryFragment(false);
+                        }
                         topFragment.refresh(object);
                     } else if (screenId == 1) {//左边Fragment
                         leftFragment.refresh(object);
@@ -119,16 +128,15 @@ public class MainActivity extends BaseActivity {
                         centerFragment.refresh(object);
                     } else if (screenId == 3) {//右边Fragment
                         if (autoDriveModel) {//自动驾驶模式开启即处理数据
+                            rightFragment2 = (MainRightFragment2) fragmentManager.findFragmentById(R.id.right_fragment);
                             int id = object.getIntValue("id");
                             if (id == 60) {//速度
                                 int speed = (int) object.getDoubleValue("data");
-                                if (speed < 5) {//低速
-                                    //低速报警
-                                    showLowSpeedFragment(true);
+                                if (speed <= 5) {//低速
                                     //发送低速报警消息
-//                                    sendToCAN();
+                                    sendToCAN("HMI",HMI_Dig_Ord_Alarm,ON);
                                 } else {
-                                    showLowSpeedFragment(false);
+                                    sendToCAN("HMI",HMI_Dig_Ord_Alarm,OFF);
                                 }
                             }
                             rightFragment2.refresh(object);
@@ -182,7 +190,7 @@ public class MainActivity extends BaseActivity {
      */
     public void handleFragmentMsg(int flag) {
         switch (flag) {
-            case 1: {//自动驾驶
+            case DRIVE_MODEL_AUTO: {//自动驾驶
                 replaceFragment(new MainRightFragment2());
                 autoDriveModel = true;
 //                new Thread(new Runnable() {
@@ -209,15 +217,15 @@ public class MainActivity extends BaseActivity {
     }
 
     /**
-     * 显示和隐藏低速报警Fragment
+     * 显示和隐藏低电量报警Fragment
      */
-    private void showLowSpeedFragment(boolean show){
+    private void showLowBatteryFragment(boolean show){
         fragmentManager = getSupportFragmentManager();
         transaction = fragmentManager.beginTransaction();
         if(show){
-            transaction.show(lowSpeedFragment);
+            transaction.show(lowBatteryFragment);
         }else{
-            transaction.hide(lowSpeedFragment);
+            transaction.hide(lowBatteryFragment);
         }
         transaction.commit();
     }

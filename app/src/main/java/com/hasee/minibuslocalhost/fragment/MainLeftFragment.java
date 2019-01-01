@@ -139,21 +139,23 @@ public class MainLeftFragment extends Fragment {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 //            LogUtil.d(TAG,String.valueOf(progress));
-            seekBarIndex = (int) (progress / singleIndexNum);//当前档
-            if (seekBarIndex == 0) {
-                seekBarIndex = AIR_GRADE_OFF;
-            } else if (seekBarIndex == 1) {
-                seekBarIndex = AIR_GRADE_FIRST_GEAR;
-            } else if (seekBarIndex == 2) {
-                seekBarIndex = AIR_GRADE_SECOND_GEAR;
-            } else if (seekBarIndex == 3) {
-                seekBarIndex = AIR_GRADE_THIRD_GEAR;
-            } else if (seekBarIndex == 4) {
-                seekBarIndex = AIR_GRADE_FOURTH_GEAR;
-            } else if (seekBarIndex == 5) {
-                seekBarIndex = AIR_GRADE_FIVE_GEAR;
+            if(fromUser){
+                seekBarIndex = (int) (progress / singleIndexNum);//当前档
+                if (seekBarIndex == 0) {
+                    seekBarIndex = AIR_GRADE_OFF;
+                } else if (seekBarIndex == 1) {
+                    seekBarIndex = AIR_GRADE_FIRST_GEAR;
+                } else if (seekBarIndex == 2) {
+                    seekBarIndex = AIR_GRADE_SECOND_GEAR;
+                } else if (seekBarIndex == 3) {
+                    seekBarIndex = AIR_GRADE_THIRD_GEAR;
+                } else if (seekBarIndex == 4) {
+                    seekBarIndex = AIR_GRADE_FOURTH_GEAR;
+                } else if (seekBarIndex == 5) {
+                    seekBarIndex = AIR_GRADE_FIVE_GEAR;
+                }
+                leftFragmentConditionSize.setText(String.valueOf(seekBarIndex));
             }
-            leftFragmentConditionSize.setText(String.valueOf(seekBarIndex));
         }
 
         @Override
