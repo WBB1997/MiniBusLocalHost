@@ -17,14 +17,14 @@
             android:layout_height="@dimen/main_layout_top_height"
             android:layout_centerInParent="true"
             tools:layout="@layout/fragment_main_top" />
-
-        <fragment
-            android:name="com.hasee.minibuslocalhost.fragment.lowSpeedFragment"
+        <!--低速报警部分-->
+        <FrameLayout
+            android:id="@+id/lowSpeed_fragment"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/margin_80px"
-            android:layout_toRightOf="@id/top_fragment"
-            tools:layout="@layout/fragment_low_speed" />
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="68dp"
+            android:layout_toRightOf="@id/top_fragment" />
     </RelativeLayout>
 
     <RelativeLayout

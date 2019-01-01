@@ -4,7 +4,7 @@
     android:layout_width="@dimen/main_layout_lowSpeed_width"
     android:layout_height="@dimen/main_layout_lowSpeed_height"
     android:background="@drawable/error_border"
-    tools:context=".fragment.lowSpeedFragment">
+    tools:context=".fragment.MainLowSpeedFragment">
 
     <TextView
         android:layout_width="match_parent"

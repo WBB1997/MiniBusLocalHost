@@ -13,10 +13,10 @@ import com.hasee.minibuslocalhost.R;
 /**
  * 低速报警
  */
-public class lowSpeedFragment extends Fragment {
+public class MainLowSpeedFragment extends Fragment {
 
 
-    public lowSpeedFragment() {
+    public MainLowSpeedFragment() {
     }
 
 

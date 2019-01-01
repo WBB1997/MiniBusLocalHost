@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
@@ -44,6 +45,7 @@ public class MainCenterFragment extends Fragment {
     private MapView mMapView;//
     private BaiduMap mBaiduMap;//
     private Polyline mPolyline;
+    private List<LatLng> polylines;
     private Marker mMoveMarker;
     private Handler mHandler;
 
@@ -189,8 +191,6 @@ public class MainCenterFragment extends Fragment {
                 while (true) {
 
                     for (int i = 0; i < latlngs.length - 1; i++) {
-
-
                         final LatLng startPoint = latlngs[i];
                         final LatLng endPoint = latlngs[i + 1];
                         mMoveMarker
@@ -248,6 +248,13 @@ public class MainCenterFragment extends Fragment {
             }
 
         }.start();
+    }
+
+    /**
+     * 更新地图信息
+     */
+    public void refresh(JSONObject object){
+
     }
 
     @Override

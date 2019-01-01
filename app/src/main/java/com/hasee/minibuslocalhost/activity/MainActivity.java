@@ -18,6 +18,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.hasee.minibuslocalhost.R;
 import com.hasee.minibuslocalhost.fragment.MainCenterFragment;
 import com.hasee.minibuslocalhost.fragment.MainLeftFragment;
+import com.hasee.minibuslocalhost.fragment.MainLowSpeedFragment;
 import com.hasee.minibuslocalhost.fragment.MainRightFragment1;
 import com.hasee.minibuslocalhost.fragment.MainRightFragment2;
 import com.hasee.minibuslocalhost.fragment.MainTopFragment;
@@ -37,6 +38,12 @@ public class MainActivity extends BaseActivity {
     private Context mContext;//上下文
     private FragmentManager fragmentManager;//Fragment管理器对象
     private FragmentTransaction transaction;//Fragment事务对象
+    private boolean autoDriveModel = false;//默认关闭自动驾驶模式
+    private MainTopFragment topFragment;//上部Fragment(时间、电量)
+    private MainLeftFragment leftFragment;//左部Fragment（灯光、）
+    private MainCenterFragment centerFragment;//中间部分Fragment(地图)
+    private MainRightFragment2 rightFragment2;//右边Fragment(车速、)
+    private MainLowSpeedFragment lowSpeedFragment;//低速报警
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +74,15 @@ public class MainActivity extends BaseActivity {
     private void viewInit() {
         //初始化右边Fragment
         fragmentManager = getSupportFragmentManager();
+        topFragment = (MainTopFragment) fragmentManager.findFragmentById(R.id.top_fragment);
+        leftFragment = (MainLeftFragment) fragmentManager.findFragmentById(R.id.left_fragment);
+        centerFragment = (MainCenterFragment) fragmentManager.findFragmentById(R.id.center_fragment);
+        rightFragment2 = (MainRightFragment2) fragmentManager.findFragmentById(R.id.right_fragment);
+        lowSpeedFragment = new MainLowSpeedFragment();
+        //
         transaction = fragmentManager.beginTransaction();
-        transaction.add(R.id.right_fragment, new MainRightFragment1());
+        transaction.add(R.id.right_fragment, new MainRightFragment1());//右边
+        transaction.add(R.id.lowSpeed_fragment,lowSpeedFragment).hide(lowSpeedFragment);//
         transaction.commit();
     }
 
@@ -96,18 +110,29 @@ public class MainActivity extends BaseActivity {
                 }
                 case SEND_TO_LOCALHOST: {//主控屏
                     //改变主控屏的控件状态
-                    int id = whatFragment(object);
-                    if (id == 0) {//上部Fragment
-                        MainTopFragment topFragment = (MainTopFragment) getSupportFragmentManager().findFragmentById(R.id.top_fragment);
+                    int screenId = whatFragment(object);
+                    if (screenId == 0) {//上部Fragment
                         topFragment.refresh(object);
-                    } else if (id == 1) {//左边Fragment
-                        MainLeftFragment leftFragment = (MainLeftFragment) getSupportFragmentManager().findFragmentById(R.id.left_fragment);
+                    } else if (screenId == 1) {//左边Fragment
                         leftFragment.refresh(object);
-                    } else if (id == 2) {//中间Fragment
-                        MainCenterFragment centerFragment = (MainCenterFragment) getSupportFragmentManager().findFragmentById(R.id.center_fragment);
-                    } else if (id == 3) {//右边Fragment
-                        MainRightFragment2 rightFragment2 = (MainRightFragment2) getSupportFragmentManager().findFragmentById(R.id.right_fragment);
-                        rightFragment2.refresh(object);
+                    } else if (screenId == 2) {//中间Fragment
+                        centerFragment.refresh(object);
+                    } else if (screenId == 3) {//右边Fragment
+                        if (autoDriveModel) {//自动驾驶模式开启即处理数据
+                            int id = object.getIntValue("id");
+                            if (id == 60) {//速度
+                                int speed = (int) object.getDoubleValue("data");
+                                if (speed < 5) {//低速
+                                    //低速报警
+                                    showLowSpeedFragment(true);
+                                    //发送低速报警消息
+//                                    sendToCAN();
+                                } else {
+                                    showLowSpeedFragment(false);
+                                }
+                            }
+                            rightFragment2.refresh(object);
+                        }
                     }
                     break;
                 }
@@ -159,6 +184,7 @@ public class MainActivity extends BaseActivity {
         switch (flag) {
             case 1: {//自动驾驶
                 replaceFragment(new MainRightFragment2());
+                autoDriveModel = true;
 //                new Thread(new Runnable() {
 //                    @Override
 //                    public void run() {
@@ -175,12 +201,28 @@ public class MainActivity extends BaseActivity {
      *
      * @param fragment
      */
-    public void replaceFragment(Fragment fragment) {
+    private void replaceFragment(Fragment fragment) {
         fragmentManager = getSupportFragmentManager();
         transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.right_fragment, fragment);
         transaction.commit();
     }
+
+    /**
+     * 显示和隐藏低速报警Fragment
+     */
+    private void showLowSpeedFragment(boolean show){
+        fragmentManager = getSupportFragmentManager();
+        transaction = fragmentManager.beginTransaction();
+        if(show){
+            transaction.show(lowSpeedFragment);
+        }else{
+            transaction.hide(lowSpeedFragment);
+        }
+        transaction.commit();
+    }
+
+
 
     /**
      * 判断CAN总线的消息显示在哪个部分
