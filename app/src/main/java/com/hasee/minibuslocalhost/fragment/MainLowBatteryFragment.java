@@ -11,19 +11,19 @@ import com.hasee.minibuslocalhost.R;
 
 
 /**
- * 低速报警
+ * 低电量报警
  */
-public class MainLowSpeedFragment extends Fragment {
+public class MainLowBatteryFragment extends Fragment {
 
 
-    public MainLowSpeedFragment() {
+    public MainLowBatteryFragment() {
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_low_speed,container,false);
+        View view = inflater.inflate(R.layout.fragment_low_battery,container,false);
         return view;
     }
 

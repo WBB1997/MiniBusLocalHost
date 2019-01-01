@@ -15,11 +15,12 @@
             android:name="com.hasee.minibuslocalhost.fragment.MainTopFragment"
             android:layout_width="@dimen/main_layout_top_width"
             android:layout_height="@dimen/main_layout_top_height"
-            android:layout_centerInParent="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
             tools:layout="@layout/fragment_main_top" />
-        <!--低速报警部分-->
+        <!--低电量报警部分-->
         <FrameLayout
-            android:id="@+id/lowSpeed_fragment"
+            android:id="@+id/lowBattery_fragment"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
