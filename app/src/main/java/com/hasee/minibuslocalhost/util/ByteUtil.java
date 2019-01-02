@@ -77,6 +77,24 @@ public class ByteUtil {
                 count += Math.pow(2, bit_index + bitLength - i - 1);
             }
         }
-        return count / 100;
+        return count;
+    }
+
+    public static void setBits(byte[] TargetBytes, int SrcNum, int SrcNumLength, int Byte_offset, int start_bit_index, int bitLength) {
+        byte[] SrcBytes = new byte[SrcNumLength];
+        for (int i = SrcBytes.length * 8 - 1; i >= 0; i--) {
+            if (SrcNum / 2 > 0) {
+                setBit(SrcBytes, i / 8, i % 8, 1, SrcNum % 2);
+                SrcNum /= 2;
+            } else {
+                setBit(SrcBytes, i / 8, i % 8, 1, SrcNum % 2);
+                break;
+            }
+        }
+        System.out.println(bytesToHex(SrcBytes));
+        for (int i = start_bit_index; i < start_bit_index + bitLength; i++) {
+            boolean flag = viewBinary(SrcBytes[(i - start_bit_index) / 8], (i - start_bit_index) % 8);
+            setBit(TargetBytes, Byte_offset, i, 1, flag);
+        }
     }
 }

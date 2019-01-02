@@ -27,8 +27,8 @@ public class Transmit {
     private final static String TAG = "Transmit";
     private final static int MESSAGELENGTH = 8;
     private final static int MAX_LENGTH = 100; // 最大接收字节长度
-    private final int PORT = 5066;   // port号
-    private final static String IP = "192.168.43.42"; // 总线ip地址
+    private final int PORT = 4001;   // port号
+    private final static String IP = "192.168.1.3"; // 总线ip地址
     private final static Transmit instance = new Transmit();
     private MyHandler handler;
 
@@ -122,21 +122,26 @@ public class Transmit {
     }
 
     // 发到CAN总线
-    private void UDP_send(byte[] sendMsgs) {
-        DatagramSocket datagramSocket = null;
-        DatagramPacket datagramPacket;
-        try {
-            datagramSocket = new DatagramSocket(PORT, InetAddress.getByName(IP));
-            datagramPacket = new DatagramPacket(sendMsgs, sendMsgs.length);
-            datagramSocket.send(datagramPacket);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            // 关闭socket
-            if (datagramSocket != null) {
-                datagramSocket.close();
+    private void UDP_send(final byte[] sendMsgs) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                DatagramSocket datagramSocket = null;
+                DatagramPacket datagramPacket;
+                try {
+                    datagramSocket = new DatagramSocket();
+                    datagramPacket = new DatagramPacket(sendMsgs, sendMsgs.length, InetAddress.getByName(IP), PORT);
+                    datagramSocket.send(datagramPacket);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    // 关闭socket
+                    if (datagramSocket != null) {
+                        datagramSocket.close();
+                    }
+                }
             }
-        }
+        }).start();
     }
 
     // 消息标识符
@@ -172,6 +177,7 @@ public class Transmit {
             FLAG_AND_CLASS.put(pair.first, pair.second);
             NAME_AND_CLASS.put(pair.second.getClass().getSimpleName(), pair.second);
         }
+        ((HMI)NAME_AND_CLASS.get("HMI")).setNAME_AND_CLASS(NAME_AND_CLASS);
     }
 
     // 处理收到的byte数组
