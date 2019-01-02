@@ -65,7 +65,7 @@ public class ESC3 extends BaseClass{
             case 6:
                 return viewBinary(bytes[index / 8 + offset], index % 8);
             case 15:
-                return countBits(bytes, offset, 15, 16) / 100;
+                return countBits(bytes, offset, 15, 16);
             default:
                 LogUtil.d(TAG, "数据下标错误");
                 break;
