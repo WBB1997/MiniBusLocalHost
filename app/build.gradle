@@ -45,4 +45,6 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
     implementation files('libs/fastjson-1.2.53.jar')
     implementation files('libs/BaiduLBS_Android.jar')
+    //
+    implementation 'com.android.support:design:28.0.0'
 }

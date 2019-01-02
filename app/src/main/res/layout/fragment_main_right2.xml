@@ -53,14 +53,14 @@
             android:layout_toRightOf="@id/meterPanel_img">
 
             <TextView
-                tools:ignore="MissingPrefix"
                 android:id="@+id/rightFragment2_batteryTemperature"
+                fontPath="fonts/font1.TTF"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="42℃"
-                fontPath="fonts/font1.TTF"
                 android:textColor="@color/main_battery_color"
-                android:textSize="@dimen/textSize_50px" />
+                android:textSize="@dimen/textSize_50px"
+                tools:ignore="MissingPrefix" />
 
             <TextView
                 android:id="@+id/rightFragment2_batteryTv"

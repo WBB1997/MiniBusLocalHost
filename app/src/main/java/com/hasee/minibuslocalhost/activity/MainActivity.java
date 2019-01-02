@@ -1,16 +1,20 @@
 package com.hasee.minibuslocalhost.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.view.MotionEvent;
+import android.view.View;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hasee.minibuslocalhost.R;
@@ -47,6 +51,7 @@ public class MainActivity extends BaseActivity {
     private MainCenterFragment centerFragment;//中间部分Fragment(地图)
     private MainRightFragment2 rightFragment2;//右边Fragment(车速、)
     private MainLowBatteryFragment lowBatteryFragment;//低电量报警
+    private FloatingActionButton floatBtn;//悬浮按钮
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +80,8 @@ public class MainActivity extends BaseActivity {
      * 初始化控件
      */
     private void viewInit() {
+        floatBtn = (FloatingActionButton)findViewById(R.id.floatBtn);
+        floatBtn.setOnClickListener(onClickListener);
         //初始化右边Fragment
         fragmentManager = getSupportFragmentManager();
         topFragment = (MainTopFragment) fragmentManager.findFragmentById(R.id.top_fragment);
@@ -164,6 +171,35 @@ public class MainActivity extends BaseActivity {
     }
 
     /**
+     *点击事件监听器
+     */
+    private View.OnClickListener onClickListener = new View.OnClickListener() {
+        @SuppressLint("RestrictedApi")
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.floatBtn:{//悬浮按钮
+                    replaceFragment(new MainRightFragment1());
+                    autoDriveModel = false;
+                    floatBtn.setVisibility(View.INVISIBLE);
+                    break;
+                }
+            }
+        }
+    };
+
+    /**
+     * 触摸事件
+     */
+    private View.OnTouchListener onTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+
+            return false;
+        }
+    };
+
+    /**
      * 返回键监听
      */
     @Override
@@ -188,17 +224,13 @@ public class MainActivity extends BaseActivity {
      *
      * @param flag 判断哪个按钮
      */
+    @SuppressLint("RestrictedApi")
     public void handleFragmentMsg(int flag) {
         switch (flag) {
             case DRIVE_MODEL_AUTO: {//自动驾驶
                 replaceFragment(new MainRightFragment2());
                 autoDriveModel = true;
-//                new Thread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        Transmit.getInstance().setHandler(handler);
-//                    }
-//                }).start();
+                floatBtn.setVisibility(View.VISIBLE);
                 break;
             }
         }
