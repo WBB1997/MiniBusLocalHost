@@ -44,7 +44,7 @@ public class MainTopFragment extends Fragment {
         topFragmentBatteryImg = (BatteryView)view.findViewById(R.id.topFragment_battery_img);
         topFragmentBatteryImg.setPower(100);//默认
         timeThread = new TimeThread(activity,topFragmentTime);
-//        timeThread.start();
+        timeThread.start();
         return view;
     }
 

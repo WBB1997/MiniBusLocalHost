@@ -123,9 +123,9 @@ public class MainActivity extends BaseActivity {
                     int screenId = whatFragment(object);
                     if (screenId == 0) {//上部Fragment
                         int battery = object.getIntValue("data");
-                        if(battery <= 20){//低电量报警
+                        if (battery <= 20) {//低电量报警
                             showLowBatteryFragment(true);
-                        }else{
+                        } else {
                             showLowBatteryFragment(false);
                         }
                         topFragment.refresh(object);
@@ -141,9 +141,9 @@ public class MainActivity extends BaseActivity {
                                 int speed = (int) object.getDoubleValue("data");
                                 if (speed <= 5) {//低速
                                     //发送低速报警消息
-                                    sendToCAN("HMI",HMI_Dig_Ord_Alarm,ON);
+                                    sendToCAN("HMI", HMI_Dig_Ord_Alarm, ON);
                                 } else {
-                                    sendToCAN("HMI",HMI_Dig_Ord_Alarm,OFF);
+                                    sendToCAN("HMI", HMI_Dig_Ord_Alarm, OFF);
                                 }
                             }
                             rightFragment2.refresh(object);
@@ -251,17 +251,16 @@ public class MainActivity extends BaseActivity {
     /**
      * 显示和隐藏低电量报警Fragment
      */
-    private void showLowBatteryFragment(boolean show){
+    private void showLowBatteryFragment(boolean show) {
         fragmentManager = getSupportFragmentManager();
         transaction = fragmentManager.beginTransaction();
-        if(show){
+        if (show) {
             transaction.show(lowBatteryFragment);
-        }else{
+        } else {
             transaction.hide(lowBatteryFragment);
         }
         transaction.commit();
     }
-
 
 
     /**
@@ -272,15 +271,16 @@ public class MainActivity extends BaseActivity {
      */
     private int whatFragment(JSONObject object) {
         int id = object.getIntValue("id");
-        if (id > 1) {//上部Fragment
-
-        }
-        if (id > 100) {//左边Fragment
-            return 3;
-        }
+//        if (id > 1) {//上部Fragment
+//            return 0;
+//        }
         if (id == 60) {//右边Fragment
             return 3;
-        }
-        return 1;
+        } else if (id < 84) {//左边Fragment
+            return 1;
+        } else if (id >= 84)
+            //右边Fragment
+            return 3;
+        return 2;
     }
 }

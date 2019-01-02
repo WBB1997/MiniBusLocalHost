@@ -42,8 +42,15 @@ public class HMI extends BaseClass {
     public static final int AIR_GRADE_FOURTH_GEAR = 4; // 4挡
     public static final int AIR_GRADE_FIVE_GEAR = 5; // 5挡
 
+    //
+    private Map<String, ? super BaseClass> NAME_AND_CLASS;
+
 
     public HMI() {
+    }
+
+    public void setNAME_AND_CLASS(Map<String, ? super BaseClass> NAME_AND_CLASS) {
+        this.NAME_AND_CLASS = NAME_AND_CLASS;
     }
 
     private byte[] bytes = {0x03, (byte) 0x83, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x02};
@@ -52,21 +59,30 @@ public class HMI extends BaseClass {
         switch (flag) {
             case HMI_leftFragmentHighBeam:
                 setBit(bytes, offset, flag, 1, status);
-                setBit(bytes, offset, HMI_leftFragmentLowBeam, 1, !((Boolean)status));
+                setBit(bytes, offset, HMI_leftFragmentLowBeam, 1, (Boolean) status ? false : false);
+                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 4, 1, status);
+                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 5, 1, (Boolean) status ? false : false);
                 break;
             case HMI_leftFragmentLowBeam:
                 setBit(bytes, offset, flag, 1, status);
-                setBit(bytes, offset, HMI_leftFragmentHighBeam, 1, !((Boolean)status));
+                setBit(bytes, offset, HMI_leftFragmentHighBeam, 1, (Boolean) status ? false : false);
+                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 5, 1, status);
+                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 4, 1, (Boolean) status ? false : false);
                 break;
             case HMI_leftFragmentLeftLight:
                 setBit(bytes, offset, flag, 1, status);
-                setBit(bytes, offset, HMI_leftFragmentRightLight, 1, !((Boolean)status));
+                setBit(bytes, offset, HMI_leftFragmentRightLight, 1, (Boolean) status ? false : false);
+                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 1, 1, status);
+                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 2, 1, (Boolean) status ? false : false);
                 break;
             case HMI_leftFragmentRightLight:
                 setBit(bytes, offset, flag, 1, status);
-                setBit(bytes, offset, HMI_leftFragmentLeftLight, 1, !((Boolean)status));
+                setBit(bytes, offset, HMI_leftFragmentLeftLight, 1, (Boolean) status ? false : false);
+                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 2, 1, status);
+                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 1, 1, (Boolean) status ? false : false);
                 break;
             case HMI_leftFragmentBackFogLight:
+                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 6, 1, status);
                 setBit(bytes, offset, flag, 1, status);
 //                setBit(bytes, offset, HMI_leftFragmentFrontFogLight, 1, !((Boolean)status));
                 break;
