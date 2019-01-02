@@ -71,7 +71,7 @@ public class MainCenterFragment extends Fragment {
         //
         MapStatus.Builder builder = new MapStatus.Builder();
         LatLng center = new LatLng(40.056865, 116.307766); // 默认
-        float zoom = 19.0f; // 默认 19级
+        float zoom = 17.0f; // 默认 17级
         //
         mMapView = (MapView)view.findViewById(R.id.mapView);
         mMapView.onCreate(activity,savedInstanceState);

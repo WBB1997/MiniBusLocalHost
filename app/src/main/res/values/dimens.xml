@@ -42,13 +42,17 @@
     <!--主界面中间高度-->
     <dimen name="main_layout_center_height">372px</dimen>
     <!--主界面右边宽度-->
-    <dimen name="main_layout_right1_width">370px</dimen>
+    <dimen name="main_layout_right1_width">360px</dimen>
     <!--主界面右边高度-->
     <dimen name="main_layout_right1_height">304px</dimen>
     <!--主界面右边宽度-->
     <dimen name="main_layout_right2_width">360px</dimen>
     <!--主界面右边高度-->
     <dimen name="main_layout_right2_height">448px</dimen>
+    <!--悬浮按钮布局宽度-->
+    <dimen name="main_layout_floatBtn_width">70px</dimen>
+    <!--悬浮按钮布局高度-->
+    <dimen name="main_layout_floatBtn_height">60px</dimen>
     <!--主界面低速报警宽度-->
     <dimen name="main_layout_lowSpeed_width">300px</dimen>
     <!--主界面低速报警高度-->

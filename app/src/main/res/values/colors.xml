@@ -10,4 +10,5 @@
     <color name="left_fragment_text_color">#9bf7f7</color>
     <color name="right_fragment1_text_color">#9bf7f9</color>
     <color name="lowSpeed_fragment_bg_color">#d22c2b</color>
+    <color name="floatbtn_bg">#272f83</color>
 </resources>
