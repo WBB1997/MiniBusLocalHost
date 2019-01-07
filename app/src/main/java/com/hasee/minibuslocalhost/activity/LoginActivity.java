@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -12,7 +14,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.hasee.minibuslocalhost.R;
+import com.hasee.minibuslocalhost.util.MyHandler;
+import com.hasee.minibuslocalhost.util.SendToScreenThread;
 import com.hasee.minibuslocalhost.util.ToastUtil;
 
 
@@ -58,6 +64,15 @@ public class LoginActivity extends BaseActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             userNameEt.setShowSoftInputOnFocus(false);
             passWordEt.setShowSoftInputOnFocus(false);
+        }
+        //取出本地密码
+        String userInfo = App.getInstance().getPreferences();
+        if(!TextUtils.isEmpty(userInfo)){
+            JSONObject object = JSON.parseObject(userInfo);
+            String userName = object.getString("userName");
+            String passWord = object.getString("passWord");
+            userNameEt.setText(userName);
+            passWordEt.setText(passWord);
         }
         passWordEt.setOnFocusChangeListener(onFocusChangeListener);
         number0Button = (RelativeLayout)findViewById(R.id.imageButton_0);
@@ -146,6 +161,11 @@ public class LoginActivity extends BaseActivity {
                         ToastUtil.getInstance(mContext).showShortToast(
                                 getResources().getString(R.string.et_empty));
                     }else{//登陆
+                        //保存密码至本地
+                        JSONObject object = new JSONObject();
+                        object.put("userName",userNameEt.getText().toString().trim());
+                        object.put("passWord",passWordEt.getText().toString().trim());
+                        App.getInstance().setPreferences(object.toJSONString());
                         Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                         startActivity(intent);
                     }
@@ -174,6 +194,18 @@ public class LoginActivity extends BaseActivity {
                     focuState = -1;
                 }
             }
+        }
+    };
+
+    /**
+     * 处理登陆信息
+     */
+    private MyHandler handler = new MyHandler(mContext){
+        @Override
+        public void handleMessage(Message msg) {
+//            switch (){
+//
+//            }
         }
     };
 

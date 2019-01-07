@@ -50,7 +50,7 @@
             android:value="MRvLhblbc6XcvoM9HHgCxQ2mGdrdXAr3" />
 
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".activity.LoginActivity"
             android:windowSoftInputMode="stateAlwaysHidden"
             android:screenOrientation="landscape">
             <intent-filter>
@@ -59,8 +59,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--<activity android:name=".activity.MainActivity"-->
-            <!--android:screenOrientation="landscape"/>-->
+        <activity android:name=".activity.MainActivity"
+            android:screenOrientation="landscape"/>
     </application>
 
 </manifest>
