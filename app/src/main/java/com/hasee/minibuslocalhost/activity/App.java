@@ -2,6 +2,7 @@ package com.hasee.minibuslocalhost.activity;
 
 import android.app.Application;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
 
 import com.baidu.mapapi.CoordType;
 import com.baidu.mapapi.SDKInitializer;
@@ -13,6 +14,7 @@ public class App extends Application {
     private static App instance;
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
+    private AudioManager audioManager;
 
     public static App getInstance() {
         return instance;
@@ -22,6 +24,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
+        audioManager = (AudioManager)this.getSystemService(AUDIO_SERVICE);
         preferences = getSharedPreferences("userInfo",MODE_PRIVATE);
         editor = getSharedPreferences("userInfo",MODE_PRIVATE).edit();
         // 在使用 SDK 各组间之前初始化 context 信息，传入 ApplicationContext
@@ -47,6 +50,15 @@ public class App extends Application {
     public void setPreferences(String s){
         editor.putString("userInfo",s);
         editor.apply();
+    }
+
+    /**
+     * 设置系统音量
+     */
+    public void setAudioVolume(int volume){
+        if(volume >= 0){//音量值大于等于零
+            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,volume,AudioManager.FLAG_PLAY_SOUND);
+        }
     }
 
 }
