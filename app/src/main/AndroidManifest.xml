@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.hasee.minibuslocalhost">
     <!--百度地图-->
     <uses-sdk android:targetSdkVersion="10" />
@@ -50,7 +51,7 @@
             android:value="MRvLhblbc6XcvoM9HHgCxQ2mGdrdXAr3" />
 
         <activity
-            android:name=".activity.LoginActivity"
+            android:name=".activity.MainActivity"
             android:windowSoftInputMode="stateAlwaysHidden"
             android:screenOrientation="landscape">
             <intent-filter>
@@ -59,8 +60,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.MainActivity"
-            android:screenOrientation="landscape"/>
+        <!--<activity android:name=".activity.MainActivity"-->
+            <!--android:screenOrientation="landscape"/>-->
     </application>
 
 </manifest>

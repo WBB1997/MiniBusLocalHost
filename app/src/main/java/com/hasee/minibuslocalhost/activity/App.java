@@ -53,11 +53,15 @@ public class App extends Application {
     }
 
     /**
-     * 设置系统音量
+     * 设置系统音量(来自485的信息)
      */
-    public void setAudioVolume(int volume){
-        if(volume >= 0){//音量值大于等于零
-            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,volume,AudioManager.FLAG_PLAY_SOUND);
+    public void setAudioVolume(String message){
+        String[] r485Msg = message.split("/");//分隔485的消息
+        if("音量命令".equals(r485Msg[0])){//如果是音量命令
+            int volume = Integer.parseInt(r485Msg[1]);//大小
+            if(volume >= 0){//音量值大于等于零
+                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,volume,AudioManager.FLAG_PLAY_SOUND);
+            }
         }
     }
 

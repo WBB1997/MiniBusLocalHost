@@ -18,6 +18,7 @@ import android.view.View;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hasee.minibuslocalhost.R;
+import android_serialport_api.SreialComm;
 import com.hasee.minibuslocalhost.fragment.MainCenterFragment;
 import com.hasee.minibuslocalhost.fragment.MainLeftFragment;
 import com.hasee.minibuslocalhost.fragment.MainLowBatteryFragment;
@@ -42,6 +43,11 @@ public class MainActivity extends BaseActivity {
     public final static int SEND_TO_RIGHTSCREEN = 1;//右车门
     public final static int SEND_TO_LEFTSCREEN = 2;//左车门
     public final static int SEND_TO_LOCALHOST = 3;//主控屏
+    public final static int LOCALHOST_SCREEN_TOP = 0;//主控屏上部分
+    public final static int LOCALHOST_SCREEN_LEFT = 1;//主控屏左边部分
+    public final static int LOCALHOST_SCREEN_CENTER = 2;//主控屏中间部分
+    public final static int LOCALHOST_SCREEN_RIGHT = 3;//主控屏右边部分
+    private final int MIN_BATTERY = 20;//低电量触发值
     private Context mContext;//上下文
     private FragmentManager fragmentManager;//Fragment管理器对象
     private FragmentTransaction transaction;//Fragment事务对象
@@ -52,19 +58,18 @@ public class MainActivity extends BaseActivity {
     private MainRightFragment2 rightFragment2;//右边Fragment(车速、)
     private MainLowBatteryFragment lowBatteryFragment;//低电量报警
     private FloatingActionButton floatBtn;//悬浮按钮
+    private Thread canThread;//处理CAN总线的子线程
+    private SreialComm sreialComm;//串口
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mContext = MainActivity.this;
+        //初始化布局
         viewInit();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Transmit.getInstance().setHandler(handler);
-            }
-        }).start();
+        //初始化相关类
+        classInit();
         //申请相关权限
         if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -74,6 +79,32 @@ public class MainActivity extends BaseActivity {
         } else {
             //有权限的话什么都不做
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //中断CAN总线的子线程
+        canThread.interrupt();
+        //关闭485串口
+        sreialComm.close();
+    }
+
+    /**
+     * 初始化相关类
+     */
+    private void classInit(){
+        //打开CAN监听
+        canThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Transmit.getInstance().setHandler(handler);
+            }
+        });
+        canThread.start();
+        //打开re485
+        sreialComm = new SreialComm(handler);
+        sreialComm.receive();
     }
 
     /**
@@ -121,19 +152,19 @@ public class MainActivity extends BaseActivity {
                 case SEND_TO_LOCALHOST: {//主控屏
                     //改变主控屏的控件状态
                     int screenId = whatFragment(object);
-                    if (screenId == 0) {//上部Fragment
+                    if (screenId == LOCALHOST_SCREEN_TOP) {//上部Fragment
                         int battery = object.getIntValue("data");
-                        if (battery <= 20) {//低电量报警
+                        if (battery <= MIN_BATTERY) {//低电量报警
                             showLowBatteryFragment(true);
                         } else {
                             showLowBatteryFragment(false);
                         }
                         topFragment.refresh(object);
-                    } else if (screenId == 1) {//左边Fragment
+                    } else if (screenId == LOCALHOST_SCREEN_LEFT) {//左边Fragment
                         leftFragment.refresh(object);
-                    } else if (screenId == 2) {//中间Fragment
+                    } else if (screenId == LOCALHOST_SCREEN_CENTER) {//中间Fragment
                         centerFragment.refresh(object);
-                    } else if (screenId == 3) {//右边Fragment
+                    } else if (screenId == LOCALHOST_SCREEN_RIGHT) {//右边Fragment
                         if (autoDriveModel) {//自动驾驶模式开启即处理数据
                             rightFragment2 = (MainRightFragment2) fragmentManager.findFragmentById(R.id.right_fragment);
                             int id = object.getIntValue("id");
@@ -194,7 +225,6 @@ public class MainActivity extends BaseActivity {
     private View.OnTouchListener onTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-
             return false;
         }
     };
@@ -271,16 +301,18 @@ public class MainActivity extends BaseActivity {
      */
     private int whatFragment(JSONObject object) {
         int id = object.getIntValue("id");
-//        if (id > 1) {//上部Fragment
-//            return 0;
-//        }
+        if (id > 1) {//上部Fragment
+            return LOCALHOST_SCREEN_TOP;
+        }
         if (id == 60) {//右边Fragment
-            return 3;
-        } else if (id < 84) {//左边Fragment
-            return 1;
-        } else if (id >= 84)
-            //右边Fragment
-            return 3;
-        return 2;
+            return LOCALHOST_SCREEN_RIGHT;
+        }
+        if (id < 84) {//左边Fragment
+            return LOCALHOST_SCREEN_LEFT;
+        }
+        if (id >= 84){//中间Fragment
+            return LOCALHOST_SCREEN_CENTER;
+        }
+        return -1;
     }
 }
