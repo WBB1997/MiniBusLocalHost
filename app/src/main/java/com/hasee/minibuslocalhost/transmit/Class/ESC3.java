@@ -10,7 +10,7 @@ import static com.hasee.minibuslocalhost.util.ByteUtil.countBits;
 import static com.hasee.minibuslocalhost.util.ByteUtil.viewBinary;
 
 public class ESC3 extends BaseClass{
-    private final static int offset = 0;
+    private final static int offset = 2;
     private final static String TAG = "ESC3";
 
     private MyPair<Integer> EBD_Fault = new MyPair<>(1, 53, MainActivity.SEND_TO_LOCALHOST); // EBD故障信号
@@ -71,6 +71,11 @@ public class ESC3 extends BaseClass{
                 break;
         }
         return null;
+    }
+
+    @Override
+    public int getOffset() {
+        return offset;
     }
 
     @Override

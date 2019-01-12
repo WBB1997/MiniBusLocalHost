@@ -1,5 +1,6 @@
 package com.hasee.minibuslocalhost.transmit.Class;
 
+import com.hasee.minibuslocalhost.bean.MsgCommand;
 import com.hasee.minibuslocalhost.util.LogUtil;
 
 import java.util.HashMap;
@@ -12,18 +13,6 @@ public class HMI extends BaseClass {
     private final static String TAG = "HMI";
     private final static int offset = 2;
 
-    //leftFragment
-    public static final int HMI_leftFragmentHighBeam = 0;//远光灯
-    public static final int HMI_leftFragmentLowBeam = 1;//近光灯
-    public static final int HMI_leftFragmentLeftLight = 2;//左转向灯
-    public static final int HMI_leftFragmentRightLight = 3;//右转向灯
-    public static final int HMI_leftFragmentBackFogLight = 4;//后雾灯
-    public static final int HMI_leftFragmentFrontFogLight = 5;//前雾灯
-    public static final int HMI_Dig_Ord_DoorLock = 6;
-    public static final int HMI_Dig_Ord_Alarm = 7;
-    public static final int HMI_Dig_Ord_drive_model = 8;
-    public static final int HMI_Dig_Ord_air_model = 10;
-    public static final int HMI_Dig_Ord_air_grade = 12;
     // status
     // 灯光和门
     public static final boolean OFF = false; // 开
@@ -53,61 +42,71 @@ public class HMI extends BaseClass {
         this.NAME_AND_CLASS = NAME_AND_CLASS;
     }
 
-    private byte[] bytes = {0x03, (byte) 0x83, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x02};
+    private byte[] bytes = {(byte) 0xFF, (byte) 0xAA, 0x03, (byte) 0x83, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x02};
 
     public void changeStatus(int flag, Object status) {
         switch (flag) {
-            case HMI_leftFragmentHighBeam:
-                setBit(bytes, offset, flag, 1, status);
-                setBit(bytes, offset, HMI_leftFragmentLowBeam, 1, (Boolean) status ? false : false);
+            case MsgCommand.HMI_Dig_Ord_HighBeam:
+                setBit(bytes, offset, 0, 1, status);
+                setBit(bytes, offset, 1, 1, (Boolean) status ? false : false);
                 ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 4, 1, status);
                 ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 5, 1, (Boolean) status ? false : false);
                 break;
-            case HMI_leftFragmentLowBeam:
-                setBit(bytes, offset, flag, 1, status);
-                setBit(bytes, offset, HMI_leftFragmentHighBeam, 1, (Boolean) status ? false : false);
+            case MsgCommand.HMI_Dig_Ord_LowBeam:
+                setBit(bytes, offset, 1, 1, status);
+                setBit(bytes, offset, 0, 1, (Boolean) status ? false : false);
                 ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 5, 1, status);
                 ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 4, 1, (Boolean) status ? false : false);
                 break;
-            case HMI_leftFragmentLeftLight:
-                setBit(bytes, offset, flag, 1, status);
-                setBit(bytes, offset, HMI_leftFragmentRightLight, 1, (Boolean) status ? false : false);
+            case MsgCommand.HMI_Dig_Ord_LeftTurningLamp:
+                setBit(bytes, offset, 2, 1, status);
+                setBit(bytes, offset, 3, 1, (Boolean) status ? false : false);
                 ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 1, 1, status);
                 ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 2, 1, (Boolean) status ? false : false);
                 break;
-            case HMI_leftFragmentRightLight:
-                setBit(bytes, offset, flag, 1, status);
-                setBit(bytes, offset, HMI_leftFragmentLeftLight, 1, (Boolean) status ? false : false);
+            case MsgCommand.HMI_Dig_Ord_RightTurningLamp:
+                setBit(bytes, offset, 3, 1, status);
+                setBit(bytes, offset, 2, 1, (Boolean) status ? false : false);
                 ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 2, 1, status);
                 ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 1, 1, (Boolean) status ? false : false);
                 break;
-            case HMI_leftFragmentBackFogLight:
+            case MsgCommand.HMI_Dig_Ord_RearFogLamp:
                 ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 6, 1, status);
-                setBit(bytes, offset, flag, 1, status);
+                setBit(bytes, offset, 4, 1, status);
 //                setBit(bytes, offset, HMI_leftFragmentFrontFogLight, 1, !((Boolean)status));
                 break;
-            case HMI_leftFragmentFrontFogLight:
-                setBit(bytes, offset, flag, 1, status);
-//                setBit(bytes, offset, HMI_leftFragmentBackFogLight, 1, !((Boolean)status));
+//            case MsgCommand.HMIF:
+//                setBit(bytes, offset, flag, 1, status);
+////                setBit(bytes, offset, HMI_leftFragmentBackFogLight, 1, !((Boolean)status));
+//                break;
+            case MsgCommand.HMI_Dig_Ord_DoorLock:
+                setBit(bytes, offset, 6, 1, status);
                 break;
-            case HMI_Dig_Ord_DoorLock:
-            case HMI_Dig_Ord_Alarm:
-                setBit(bytes, offset, flag, 1, status);
+            case MsgCommand.HMI_Dig_Ord_Alam:
+                setBit(bytes, offset, 7, 1, status);
                 break;
-            case HMI_Dig_Ord_drive_model:
-                setBit(bytes, offset, flag, 2, status);
+            case MsgCommand.HMI_Dig_Ord_Driver_model:
+                setBit(bytes, offset, 8, 2, status);
                 break;
-            case HMI_Dig_Ord_air_model:
-                setBit(bytes, offset, flag, 2, status);
+            case MsgCommand.HMI_Dig_Ord_air_model:
+                setBit(bytes, offset, 10, 2, status);
                 break;
-            case HMI_Dig_Ord_air_grade:
-                setBit(bytes, offset, flag, 3, status);
+            case MsgCommand.HMI_Dig_Ord_air_grade:
+                setBit(bytes, offset, 12, 3, status);
+                break;
+            case MsgCommand.HMI_Dig_Ord_eBooster_Warning:
+                setBit(bytes, offset, 15, 1, status);
                 break;
             default:
                 LogUtil.d(TAG, "消息转换错误");
                 break;
         }
         LogUtil.d(TAG, bytesToHex(bytes));
+    }
+
+    @Override
+    public int getOffset() {
+        return offset;
     }
 
     @Override
