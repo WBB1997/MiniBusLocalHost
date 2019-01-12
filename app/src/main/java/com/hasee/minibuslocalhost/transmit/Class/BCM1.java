@@ -117,9 +117,9 @@ public class BCM1 extends BaseClass {
             case 21:
                 return viewBinary(bytes[index / 8 + offset], index % 8);
             case 22:
-                return countBits(bytes, offset, index, 8);
+                return countBits(bytes, offset, index, 8) * 0.5 - 20;
             case 30:
-                return countBits(bytes, offset, index, 8);
+                return countBits(bytes, offset, index, 8) * 0.5 - 20;
             default:
                 LogUtil.d(TAG, "数据下标错误");
                 break;
