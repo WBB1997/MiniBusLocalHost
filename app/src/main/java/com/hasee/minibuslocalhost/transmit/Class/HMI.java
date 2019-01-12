@@ -49,29 +49,29 @@ public class HMI extends BaseClass {
             case MsgCommand.HMI_Dig_Ord_HighBeam:
                 setBit(bytes, offset, 0, 1, status);
                 setBit(bytes, offset, 1, 1, (Boolean) status ? false : false);
-                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(offset, 4, 1, status);
-                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(offset, 5, 1, (Boolean) status ? false : false);
+                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 4, 1, status);
+                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 5, 1, (Boolean) status ? false : false);
                 break;
             case MsgCommand.HMI_Dig_Ord_LowBeam:
                 setBit(bytes, offset, 1, 1, status);
                 setBit(bytes, offset, 0, 1, (Boolean) status ? false : false);
-                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(offset, 5, 1, status);
-                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(offset, 4, 1, (Boolean) status ? false : false);
+                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 5, 1, status);
+                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 4, 1, (Boolean) status ? false : false);
                 break;
             case MsgCommand.HMI_Dig_Ord_LeftTurningLamp:
                 setBit(bytes, offset, 2, 1, status);
                 setBit(bytes, offset, 3, 1, (Boolean) status ? false : false);
-                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(offset, 1, 1, status);
-                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(offset, 2, 1, (Boolean) status ? false : false);
+                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 1, 1, status);
+                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 2, 1, (Boolean) status ? false : false);
                 break;
             case MsgCommand.HMI_Dig_Ord_RightTurningLamp:
                 setBit(bytes, offset, 3, 1, status);
                 setBit(bytes, offset, 2, 1, (Boolean) status ? false : false);
-                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(offset, 2, 1, status);
-                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(offset, 1, 1, (Boolean) status ? false : false);
+                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 2, 1, status);
+                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 1, 1, (Boolean) status ? false : false);
                 break;
             case MsgCommand.HMI_Dig_Ord_RearFogLamp:
-                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(offset, 6, 1, status);
+                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 6, 1, status);
                 setBit(bytes, offset, 4, 1, status);
 //                setBit(bytes, offset, HMI_leftFragmentFrontFogLight, 1, !((Boolean)status));
                 break;
@@ -102,11 +102,6 @@ public class HMI extends BaseClass {
                 break;
         }
         LogUtil.d(TAG, bytesToHex(bytes));
-    }
-
-    @Override
-    public int getOffset() {
-        return offset;
     }
 
     @Override
