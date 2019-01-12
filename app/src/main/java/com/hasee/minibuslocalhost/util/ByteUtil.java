@@ -54,19 +54,19 @@ public class ByteUtil {
         int j = bit_index % 8;
         if (changed instanceof Boolean) {
             if ((Boolean) changed)
-                bytes[i] |= (0b10000000 >> j);
+                bytes[i] |= (0b00000001 << j);
             else
-                bytes[i] &= ~(0b10000000 >> j);
+                bytes[i] &= ~(0b00000001 << j);
         } else if (changed instanceof Integer) {
             byte b = (byte) (int) changed;
-            for (int k = 8 - changeLength; k < 8; k++)
+            for (int k = 0; k < changeLength; k++)
                 setBit(bytes, Byte_offset, bit_index++, 1, viewBinary(b, k));
         }
     }
 
     // 查看一个Byte的某位是否为1
     public static boolean viewBinary(byte Byte, int position) {
-        return (Byte & 0b10000000 >> position) != 0;
+        return (Byte & 0b00000001 << position) != 0;
     }
 
     // 计算值
@@ -74,15 +74,15 @@ public class ByteUtil {
         double count = 0;
         for(int i = bit_index; i < bit_index + bitLength; i++){
             if(viewBinary(bytes[Byte_offset + i / 8], i % 8)){
-                count += Math.pow(2, bit_index + bitLength - i - 1);
+                count += Math.pow(2, i - bit_index);
             }
         }
         return count;
     }
 
-    public static void setBits(byte[] TargetBytes, int SrcNum, int SrcNumLength, int Byte_offset, int start_bit_index, int bitLength) {
-        byte[] SrcBytes = new byte[SrcNumLength];
-        for (int i = SrcBytes.length * 8 - 1; i >= 0; i--) {
+    public static void setBits(byte[] TargetBytes, int SrcNum, int Byte_offset, int start_bit_index, int bitLength) {
+        byte[] SrcBytes = new byte[SrcNum / 255 + 1];
+        for (int i = 0; i < SrcBytes.length * 8; i++) {
             if (SrcNum / 2 > 0) {
                 setBit(SrcBytes, i / 8, i % 8, 1, SrcNum % 2);
                 SrcNum /= 2;
@@ -91,7 +91,6 @@ public class ByteUtil {
                 break;
             }
         }
-        System.out.println(bytesToHex(SrcBytes));
         for (int i = start_bit_index; i < start_bit_index + bitLength; i++) {
             boolean flag = viewBinary(SrcBytes[(i - start_bit_index) / 8], (i - start_bit_index) % 8);
             setBit(TargetBytes, Byte_offset, i, 1, flag);

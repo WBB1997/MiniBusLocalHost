@@ -11,7 +11,7 @@ import static com.hasee.minibuslocalhost.util.ByteUtil.setBit;
 
 public class HMI extends BaseClass {
     private final static String TAG = "HMI";
-    private final static int offset = 2;
+    private final static int offset = 4;
 
     // status
     // 灯光和门
