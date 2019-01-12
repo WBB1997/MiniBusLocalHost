@@ -39,6 +39,8 @@ public class BCM1 extends BaseClass {
     private MyPair<Integer> BCM_Flg_Stat_BeltsSensor4 = new MyPair<>(1, MsgCommand.BCM_Flg_Stat_BeltsSensor4, MainActivity.SEND_TO_LOCALHOST); // 安全带传感器4
     private MyPair<Integer> BCM_Flg_Stat_BeltsSensor5 = new MyPair<>(1, MsgCommand.BCM_Flg_Stat_BeltsSensor5, MainActivity.SEND_TO_LOCALHOST); // 安全带传感器5
     private MyPair<Integer> BCM_Flg_Stat_BeltsSensor6 = new MyPair<>(1, MsgCommand.BCM_Flg_Stat_BeltsSensor6, MainActivity.SEND_TO_LOCALHOST); // 安全带传感器6
+    private MyPair<Integer> BCM_OutsideTemp = new MyPair<>(8, MsgCommand.BCM_OutsideTemp, MainActivity.SEND_TO_LOCALHOST); // 车外温度
+    private MyPair<Integer> BCM_InsideTemp = new MyPair<>(8, MsgCommand.BCM_InsideTemp, MainActivity.SEND_TO_LOCALHOST); // 车内温度
 
     // 属性
     private HashMap<Integer, MyPair<Integer>> fields = new HashMap<Integer, MyPair<Integer>>() {{
@@ -64,8 +66,10 @@ public class BCM1 extends BaseClass {
         put(19, BCM_Flg_Stat_BeltsSensor4);
         put(20, BCM_Flg_Stat_BeltsSensor5);
         put(21, BCM_Flg_Stat_BeltsSensor6);
+        put(22, BCM_OutsideTemp);
+        put(30, BCM_InsideTemp);
     }};
-    private byte[] bytes = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    private byte[] bytes = {(byte) 0xAA, (byte) 0xBB, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x61};
 
     public BCM1() {
     }
@@ -112,6 +116,10 @@ public class BCM1 extends BaseClass {
             case 20:
             case 21:
                 return viewBinary(bytes[index / 8 + offset], index % 8);
+            case 22:
+                return countBits(bytes, offset, index, 8);
+            case 30:
+                return countBits(bytes, offset, index, 8);
             default:
                 LogUtil.d(TAG, "数据下标错误");
                 break;
