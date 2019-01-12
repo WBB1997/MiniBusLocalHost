@@ -26,8 +26,7 @@ import static com.hasee.minibuslocalhost.util.ByteUtil.subBytes;
 
 public class Transmit {
     private final static String TAG = "Transmit";
-    private final static int MESSAGELENGTH = 12;
-    private final static int MAX_LENGTH = 100; // 最大接收字节长度
+    private final static int MESSAGELENGTH = 14;
     private final int PORT = 4001;   // port号
     private final static String IP = "192.168.1.3"; // 总线ip地址
     private final static Transmit instance = new Transmit();
@@ -103,7 +102,7 @@ public class Transmit {
 
     // 接收CAN总线
     private void UDP_receive() {
-        byte[] receMsgs = new byte[MAX_LENGTH];
+        byte[] receMsgs = new byte[MESSAGELENGTH];
         DatagramSocket datagramSocket = null;
         DatagramPacket datagramPacket;
         try {
