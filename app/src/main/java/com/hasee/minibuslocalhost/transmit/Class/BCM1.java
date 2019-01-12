@@ -66,8 +66,8 @@ public class BCM1 extends BaseClass {
         put(19, BCM_Flg_Stat_BeltsSensor4);
         put(20, BCM_Flg_Stat_BeltsSensor5);
         put(21, BCM_Flg_Stat_BeltsSensor6);
-        put(22, BCM_OutsideTemp);
-        put(30, BCM_InsideTemp);
+        put(24, BCM_OutsideTemp);
+        put(32, BCM_InsideTemp);
     }};
     private byte[] bytes = {(byte) 0xAA, (byte) 0xBB, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x61};
 
@@ -116,9 +116,9 @@ public class BCM1 extends BaseClass {
             case 20:
             case 21:
                 return viewBinary(bytes[index / 8 + offset], index % 8);
-            case 22:
+            case 24:
                 return countBits(bytes, offset, index, 8) * 0.5 - 20;
-            case 30:
+            case 32:
                 return countBits(bytes, offset, index, 8) * 0.5 - 20;
             default:
                 LogUtil.d(TAG, "数据下标错误");
