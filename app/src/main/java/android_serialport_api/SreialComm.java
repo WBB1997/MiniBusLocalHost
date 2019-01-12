@@ -1,15 +1,22 @@
 package android_serialport_api;
 
+
+import android.util.Log;
+
+import com.alibaba.fastjson.JSONObject;
 import com.hasee.minibuslocalhost.activity.App;
 import com.hasee.minibuslocalhost.util.LogUtil;
 import com.hasee.minibuslocalhost.util.MyHandler;
 
 public class SreialComm {
     private static final String TAG = "SreialComm";
+    public static final int AUDIO_VOLUME = 1;
+    public static final int LIGHT_NUM = 2;
     private SerialPortUtil serialPortUtil = null;
     private int m = 0;
-    int n = 0;
+    private int ptr[] = new int[3];
     private byte bt[] = new byte[3];
+    JSONObject object;//发送的数据
     private MyHandler handler;//主线程
 
     public SreialComm(MyHandler handler) {
@@ -19,67 +26,64 @@ public class SreialComm {
     }
 
     public void receive() {
-        //打开串口
         serialPortUtil.openSerialPort();
         serialPortUtil.setSCMDataReceiveListener(new SCMDataReceiveListener() {
-
             @Override
             public void dataRecevie(byte[] data, int size) {
-                n = n + 1;
                 m++;
                 StringBuffer tString = new StringBuffer();
-
                 for (int i = 0; i < size; i++) {
                     String s = Integer.toBinaryString((data[i] & 0xFF) + 0x100).substring(1);
                     tString.append(s);
                 }
-                LogUtil.d(TAG, "接受的数据:" + tString.toString());
-                bt[m - 1] = data[0];
+                if (m == 1) {
+                    object = new JSONObject();
+                    if (data[0] == 1) {
+                        object.put("id",AUDIO_VOLUME);
+                        ptr[0] = 1;
+                    } else if (data[0] == 2) {
+                        object.put("id",LIGHT_NUM);
+                        ptr[0] = 2;
+                    } else {
+                        m = 0;
+                    }
+                }
+                if (m == 2) {
+                    if (data[0] >= 0 && data[0] <= 26) {
+                        object.put("data",data[0]);
+                        ptr[1] = data[0];
+                    } else {
+                        m = 0;
+                    }
+                }
                 if (m == 3) {
-                    m = 0;
-                    String message = "";
-
-                    int ptr[] = {bt[0], bt[1], bt[2]};
+                    ptr[2] = data[0];
                     int c = Crc.xCal_crc(ptr, 2);
                     if (c == ptr[2]) {
-                        if (ptr[0] == 1) {
-                            message += "音量命令";
-                            message += "/";
-                        } else if (ptr[1] == 2) {
-                            message += "灯光命令";
-                            message += "/";
-                        } else {
-                            LogUtil.d(TAG, "命令错误！");
-                            return;
-                        }
-                        int i = ptr[1];
-                        if (i >= 0 && i <= 26) {
-                            message += i;
-                            message += "/";
-                            LogUtil.d(TAG, "接收成功！");
-                            serialPortUtil.sendDataToSerialPort(bt);
-                        } else {
-                            LogUtil.d(TAG, "数据错误！");
-                            return;
-                        }
-                        LogUtil.d(TAG, "数据正确:" + message);
-                        final String finalMessage = message;
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                App.getInstance().setAudioVolume(finalMessage);
-                            }
-                        });
+                        LogUtil.d(TAG,"校验正确！");
+                        m = 0;
+                        handler.post(runnable);//发送给主线程
+                        serialPortUtil.sendDataToSerialPort(bt);
                     } else {
-                        LogUtil.d(TAG, "校验结果:" + "数据错误！");
+                        m = 0;
+                        LogUtil.d(TAG,"校验错误！");
                     }
                 }
             }
-
         });
+
     }
 
     public void close() {
         serialPortUtil.closeSerialPort();
     }
+
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            App.getInstance().setAudioVolume(object);
+        }
+    };
+
 }
+

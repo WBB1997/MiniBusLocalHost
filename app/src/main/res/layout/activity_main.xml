@@ -33,15 +33,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/top_layout">
-        <!--左部分-->
-        <fragment
-            android:id="@+id/left_fragment"
-            android:name="com.hasee.minibuslocalhost.fragment.MainLeftFragment"
-            android:layout_width="@dimen/main_layout_left_width"
-            android:layout_height="@dimen/main_layout_left_height"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/center_fragment"
-            tools:layout="@layout/fragment_main_left" />
+
+        <RelativeLayout
+            android:layout_width="500px"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/center_fragment">
+            <!--左部分-->
+            <fragment
+                android:id="@+id/left_fragment"
+                android:name="com.hasee.minibuslocalhost.fragment.MainLeftFragment"
+                android:layout_width="@dimen/main_layout_left_width"
+                android:layout_height="@dimen/main_layout_left_height"
+                android:layout_centerInParent="true"
+                tools:layout="@layout/fragment_main_left" />
+        </RelativeLayout>
         <!--中间部分-->
         <fragment
             android:id="@+id/center_fragment"
@@ -49,9 +54,9 @@
             android:layout_width="@dimen/main_layout_center_width"
             android:layout_height="@dimen/main_layout_center_height"
             android:layout_centerHorizontal="true"
-            android:layout_marginLeft="@dimen/margin_50px"
+            android:layout_marginLeft="@dimen/margin_20px"
             android:layout_marginTop="@dimen/margin_60px"
-            android:layout_marginRight="@dimen/margin_50px"
+            android:layout_marginRight="@dimen/margin_100px"
             tools:layout="@layout/fragment_main_center" />
         <!--右部分-->
         <FrameLayout

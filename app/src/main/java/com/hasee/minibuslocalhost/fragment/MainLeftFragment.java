@@ -206,8 +206,8 @@ public class MainLeftFragment extends Fragment {
                 }
                 case R.id.leftFragment_front_fogLight: {//前雾灯
                     leftFragmentFrontFogLight.setActivated(!leftFragmentFrontFogLight.isActivated());
-                    field = HMI.HMI_leftFragmentFrontFogLight;
-                    o = leftFragmentFrontFogLight.isActivated();
+//                    field = HMI.HMI_leftFragmentFrontFogLight;
+//                    o = leftFragmentFrontFogLight.isActivated();
                     break;
                 }
                 case R.id.leftFragment_back_fogLight: {//后雾灯
@@ -318,7 +318,9 @@ public class MainLeftFragment extends Fragment {
      */
     public void refresh(JSONObject object) {
         boolean data = object.getBoolean("data");
-        switch (object.getIntValue("id")) {
+        int id= object.getIntValue("id");
+        LogUtil.d(TAG,"id:"+id);
+        switch (id) {
             case BCM_Flg_Stat_LeftTurningLamp: {// 左转
                 leftFragmentLeftLight.setActivated(data);
                 if (data) {//要求左转开

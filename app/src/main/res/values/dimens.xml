@@ -73,8 +73,13 @@
     <dimen name="margin_10px">10px</dimen>
     <dimen name="margin_20px">20px</dimen>
     <dimen name="margin_24px">24px</dimen>
+    <dimen name="margin_30px">30px</dimen>
     <dimen name="margin_40px">40px</dimen>
     <dimen name="margin_50px">50px</dimen>
     <dimen name="margin_60px">60px</dimen>
     <dimen name="margin_80px">80px</dimen>
+    <dimen name="margin_100px">100px</dimen>
+    <!--左边Fragment空调按钮大小-->
+    <dimen name="button_width">90px</dimen>
+    <dimen name="button_height">36px</dimen>
 </resources>

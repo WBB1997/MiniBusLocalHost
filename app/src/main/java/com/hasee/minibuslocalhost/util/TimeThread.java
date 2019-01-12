@@ -58,11 +58,12 @@ public class TimeThread extends Thread {
     public void run() {
         while (flag){
             try {
-                if(NetWorkUtil.getInstance(mContext).isAvailable()){//获取网络时间
-                    sendText(TIME_FLAG_NET);
-                }else{
-                    sendText(TIME_FLAG_LOCAL);
-                }
+//                if(NetWorkUtil.getInstance(mContext).isAvailable()){//获取网络时间
+//                    sendText(TIME_FLAG_NET);
+//                }else{
+//                    sendText(TIME_FLAG_LOCAL);
+//                }
+                sendText(TIME_FLAG_LOCAL);
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();

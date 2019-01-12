@@ -18,7 +18,6 @@ import android.view.View;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hasee.minibuslocalhost.R;
-import android_serialport_api.SreialComm;
 
 import com.hasee.minibuslocalhost.fragment.MainCenterFragment;
 import com.hasee.minibuslocalhost.fragment.MainLeftFragment;
@@ -32,6 +31,8 @@ import com.hasee.minibuslocalhost.util.LogUtil;
 import com.hasee.minibuslocalhost.util.MyHandler;
 import com.hasee.minibuslocalhost.util.SendToScreenThread;
 import com.hasee.minibuslocalhost.util.ToastUtil;
+
+import android_serialport_api.SreialComm;
 
 import static com.hasee.minibuslocalhost.bean.MsgCommand.*;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.DRIVE_MODEL_AUTO;
@@ -304,6 +305,7 @@ public class MainActivity extends BaseActivity {
      */
     private int whatFragment(JSONObject object) {
         int id = object.getIntValue("id");
+        LogUtil.d(TAG,"id:"+id);
         switch (id){
             //上部Fragment
             case OBU_LocalTime://本地时间

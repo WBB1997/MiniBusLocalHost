@@ -73,7 +73,8 @@ public class MainRightFragment2 extends Fragment {
 //            rightFragment2Pingjunss.setText(String.valueOf(avgSpeed));
 //        }
         if(id == BCM_InsideTemp){//车内温度
-
+            int data = object.getIntValue("data");
+            rightFragment2BatteryTemperature.setText(data);
         }
         if(id == can_RemainKm){//剩余里程数
 

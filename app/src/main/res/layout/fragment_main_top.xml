@@ -67,6 +67,7 @@
             android:id="@+id/topFragment_battery_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
             android:includeFontPadding="false"
             android:text="100%"
             android:textColor="@color/main_battery_color" />

@@ -7,14 +7,15 @@
     <!--汽车背景-->
     <RelativeLayout
         android:id="@+id/car_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true">
         <!--车门关-->
         <ImageView
             android:id="@+id/leftFragment_car_close_door"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_20px"
+            android:layout_centerInParent="true"
             android:background="@drawable/ic_car_door_close"
             android:visibility="visible" />
         <!--车门开-->
@@ -22,7 +23,7 @@
             android:id="@+id/leftFragment_car_open_door"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_20px"
+            android:layout_centerInParent="true"
             android:background="@drawable/ic_car_door_open"
             android:visibility="invisible" />
         <!--雾灯-->
@@ -30,7 +31,7 @@
             android:id="@+id/leftFragment_car_foglight_open"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_20px"
+            android:layout_centerInParent="true"
             android:background="@drawable/ic_car_foglight_true"
             android:visibility="invisible" />
         <!--转向灯-->
@@ -38,7 +39,7 @@
             android:id="@+id/leftFragment_car_leftlight_open"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_20px"
+            android:layout_centerInParent="true"
             android:background="@drawable/ic_car_left_light_true"
             android:visibility="invisible" />
         <!--近光灯-->
@@ -46,7 +47,7 @@
             android:id="@+id/leftFragment_car_lowbeam_open"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_20px"
+            android:layout_centerInParent="true"
             android:background="@drawable/ic_car_lowbeam_true"
             android:visibility="invisible" />
         <!--远光灯-->
@@ -54,16 +55,17 @@
             android:id="@+id/leftFragment_car_highbeam_open"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_20px"
+            android:layout_centerInParent="true"
             android:background="@drawable/ic_car_highbeam_true"
             android:visibility="invisible" />
     </RelativeLayout>
     <!--车外灯光部分-->
     <RelativeLayout
         android:id="@+id/left_light_layout"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/car_layout"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="30px">
         <!--头背景-->
         <LinearLayout
@@ -81,7 +83,7 @@
                 android:textSize="@dimen/main_left_fragment_textSize" />
 
             <ImageView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/ic_line" />
         </LinearLayout>
@@ -97,7 +99,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginRight="30px"
+                android:layout_marginRight="@dimen/margin_10px"
                 android:gravity="center"
                 android:orientation="vertical">
                 <!--上部-->
@@ -111,7 +113,7 @@
                         android:id="@+id/leftFragment_lowBeam"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/margin_24px"
+                        android:layout_marginRight="@dimen/margin_50px"
                         android:layout_weight="1"
                         android:background="@drawable/lowbeam_change" />
                     <!--远光灯-->
@@ -119,7 +121,7 @@
                         android:id="@+id/leftFragment_highBeam"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/margin_24px"
+                        android:layout_marginRight="@dimen/margin_50px"
                         android:layout_weight="1"
                         android:background="@drawable/highbeam_change" />
                     <!--前雾灯-->
@@ -127,7 +129,7 @@
                         android:id="@+id/leftFragment_front_fogLight"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/margin_24px"
+                        android:layout_marginRight="@dimen/margin_50px"
                         android:layout_weight="1"
                         android:background="@drawable/front_foglight_change" />
                     <!--后雾灯-->
@@ -140,7 +142,7 @@
                 </LinearLayout>
                 <!--下部-->
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:orientation="horizontal">
@@ -197,7 +199,7 @@
     <!--空调部分-->
     <RelativeLayout
         android:id="@+id/left_condition_layout"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/left_light_layout">
         <!--头背景-->
@@ -216,7 +218,7 @@
                 android:textSize="@dimen/main_left_fragment_textSize" />
 
             <ImageView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/ic_line" />
         </LinearLayout>
@@ -231,10 +233,10 @@
             <!--冷气-->
             <LinearLayout
                 android:id="@+id/leftFragment_coolAir"
-                android:layout_width="90px"
-                android:layout_height="36px"
+                android:layout_width="@dimen/button_width"
+                android:layout_height="@dimen/button_height"
                 android:layout_alignParentLeft="true"
-                android:layout_marginRight="@dimen/margin_40px"
+                android:layout_marginRight="@dimen/margin_24px"
                 android:background="@drawable/rectangle_border"
                 android:gravity="center">
 
@@ -247,10 +249,9 @@
             <!--暖气-->
             <LinearLayout
                 android:id="@+id/leftFragment_hotAir"
-                android:layout_width="90px"
-                android:layout_height="36px"
-                android:layout_marginRight="@dimen/margin_40px"
-                android:layout_toRightOf="@id/leftFragment_coolAir"
+                android:layout_width="@dimen/button_width"
+                android:layout_height="@dimen/button_height"
+                android:layout_centerInParent="true"
                 android:background="@drawable/rectangle_border"
                 android:gravity="center">
 
@@ -263,9 +264,9 @@
             <!--除雾-->
             <LinearLayout
                 android:id="@+id/leftFragment_deFog"
-                android:layout_width="90px"
-                android:layout_height="36px"
-                android:layout_toRightOf="@id/leftFragment_hotAir"
+                android:layout_width="@dimen/button_width"
+                android:layout_height="@dimen/button_height"
+                android:layout_alignParentRight="true"
                 android:background="@drawable/rectangle_border"
                 android:gravity="center">
 
@@ -278,7 +279,7 @@
         </RelativeLayout>
         <!--滑动条-->
         <RelativeLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/left_condition_button_layout"
             android:layout_marginLeft="@dimen/margin_20px">

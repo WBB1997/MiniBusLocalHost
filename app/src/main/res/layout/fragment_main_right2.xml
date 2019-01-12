@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fontPath="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="@dimen/main_layout_right2_width"
     android:layout_height="@dimen/main_layout_right2_height"
-    xmlns:fontPath="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.MainRightFragment2">
     <!--仪表盘-->
     <RelativeLayout
         android:id="@+id/meterPanel_layout"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <!--左边-->
         <RelativeLayout
@@ -33,216 +33,262 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="60px"
                 android:text="0"
+                android:includeFontPadding="false"
                 android:textColor="@color/right_fragment1_text_color"
                 android:textSize="@dimen/textSize_50px" />
             <!--Km/h-->
             <TextView
-                android:layout_below="@id/rightFragment2_speed"
-                android:layout_centerHorizontal="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/rightFragment2_speed"
+                android:layout_centerHorizontal="true"
                 android:text="Km/h"
                 android:textColor="@color/right_fragment1_text_color" />
         </RelativeLayout>
         <!--右边-->
         <RelativeLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30px"
             android:layout_alignBottom="@id/meterPanel_img"
             android:layout_toRightOf="@id/meterPanel_img">
 
-            <TextView
-                android:id="@+id/rightFragment2_batteryTemperature"
-                fontPath="fonts/font1.TTF"
+            <LinearLayout
+                android:id="@+id/rightFragment2_batteryTemperature_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="42℃"
-                android:textColor="@color/main_battery_color"
-                android:textSize="@dimen/textSize_50px"
-                tools:ignore="MissingPrefix" />
+                android:layout_centerHorizontal="true">
 
-            <TextView
-                android:id="@+id/rightFragment2_batteryTv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/rightFragment2_batteryTemperature"
-                android:layout_centerInParent="true"
-                android:text="电池温度"
-                android:textColor="@color/right_fragment1_text_color"
-                android:textSize="@dimen/textSize_20px" />
+                <TextView
+                    android:id="@+id/rightFragment2_batteryTemperature"
+                    fontPath="fonts/font1.TTF"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="42℃"
+                    android:textColor="@color/main_battery_color"
+                    android:textSize="@dimen/textSize_50px"
+                    tools:ignore="MissingPrefix" />
+            </LinearLayout>
 
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/rightFragment2_batteryTv"
-                android:layout_centerInParent="true"
-                android:text="BATTERY TEMP"
-                android:textColor="@color/right_fragment1_text_color"
-                android:textSize="@dimen/textSize_10px" />
+                android:layout_below="@id/rightFragment2_batteryTemperature_layout"
+                android:layout_centerHorizontal="true"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/rightFragment2_batteryTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="电池温度"
+                    android:textColor="@color/right_fragment1_text_color"
+                    android:textSize="@dimen/textSize_20px" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/rightFragment2_batteryTv"
+                    android:layout_gravity="center"
+                    android:text="BATTERY TEMP"
+                    android:textColor="@color/right_fragment1_text_color"
+                    android:textSize="@dimen/textSize_10px" />
+            </LinearLayout>
         </RelativeLayout>
     </RelativeLayout>
-    <!--里程进度-->
+
     <RelativeLayout
-        android:id="@+id/carLic_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/meterPanel_layout"
-        android:layout_marginTop="30px">
-        <!--总里程-->
+        android:layout_below="@id/meterPanel_layout">
+
+        <View
+            android:id="@+id/rightFragment_line"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="30px"
+            android:layout_marginRight="12px"
+            android:background="#9bf7f9" />
+        <!--里程进度-->
         <RelativeLayout
-            android:id="@+id/rightFragment2_zonlic_layout"
+            android:id="@+id/carLic_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:orientation="vertical">
-
+            android:layout_marginTop="30px"
+            android:layout_toRightOf="@+id/rightFragment_line">
+            <!--总里程-->
             <RelativeLayout
-                android:id="@+id/zonlic_up"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerInParent="true"
-                    android:text="@string/right_fragment_tv_zonlic"
-                    android:textColor="@color/right_fragment1_text_color"
-                    android:textSize="@dimen/textSize_16px" />
-            </RelativeLayout>
-
-            <RelativeLayout
+                android:id="@+id/rightFragment2_zonlic_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/zonlic_up">
+                android:layout_alignParentLeft="true"
+                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/rightFragment2_zonlic"
+                <RelativeLayout
+                    android:id="@+id/zonlic_up"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerInParent="true"
+                        android:text="@string/right_fragment_tv_zonlic"
+                        android:textColor="@color/right_fragment1_text_color"
+                        android:textSize="@dimen/textSize_16px" />
+                </RelativeLayout>
+
+                <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="654"
-                    android:textColor="@color/right_fragment1_text_color"
-                    android:textSize="@dimen/textSize_40px" />
+                    android:layout_below="@id/zonlic_up">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@id/rightFragment2_zonlic"
-                    android:layout_toRightOf="@id/rightFragment2_zonlic"
-                    android:text="km"
-                    android:textColor="@color/right_fragment1_text_color" />
-            </RelativeLayout>
-        </RelativeLayout>
-        <!--任务进度-->
-        <RelativeLayout
-            android:id="@+id/rightFragment2_renwujd_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/rightFragment2_zonlic"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="654"
+                        android:textColor="@color/right_fragment1_text_color"
+                        android:textSize="@dimen/textSize_40px" />
 
-            <RelativeLayout
-                android:id="@+id/renwujd_up"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerInParent="true"
-                    android:text="@string/right_fragment_tv_renwujd"
-                    android:textColor="@color/right_fragment1_text_color"
-                    android:textSize="@dimen/textSize_16px" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/renwujd_up">
-
-                <TextView
-                    android:id="@+id/rightFragment2_renwujd"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="80"
-                    android:textColor="@color/right_fragment1_text_color"
-                    android:textSize="@dimen/textSize_40px" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@id/rightFragment2_renwujd"
-                    android:layout_toRightOf="@id/rightFragment2_renwujd"
-                    android:text="%"
-                    android:textColor="@color/right_fragment1_text_color" />
-            </RelativeLayout>
-        </RelativeLayout>
-        <!--平均时速-->
-        <RelativeLayout
-            android:id="@+id/rightFragment2_pingjunss_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:orientation="vertical">
-
-            <RelativeLayout
-                android:id="@+id/pingjunss_up"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerInParent="true"
-                    android:text="@string/right_fragment_tv_pingjunss"
-                    android:textColor="@color/right_fragment1_text_color"
-                    android:textSize="@dimen/textSize_16px" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@id/rightFragment2_zonlic"
+                        android:layout_toRightOf="@id/rightFragment2_zonlic"
+                        android:text="km"
+                        android:textColor="@color/right_fragment1_text_color" />
+                </RelativeLayout>
             </RelativeLayout>
 
+            <View
+                android:layout_width="1dp"
+                android:layout_height="70px"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/margin_40px"
+                android:layout_toRightOf="@id/rightFragment2_zonlic_layout"
+                android:background="#9bf7f9" />
+            <!--任务进度-->
             <RelativeLayout
+                android:id="@+id/rightFragment2_renwujd_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/pingjunss_up">
+                android:layout_centerInParent="true"
+                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/rightFragment2_pingjunss"
+                <RelativeLayout
+                    android:id="@+id/renwujd_up"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerInParent="true"
+                        android:text="@string/right_fragment_tv_renwujd"
+                        android:textColor="@color/right_fragment1_text_color"
+                        android:textSize="@dimen/textSize_16px" />
+                </RelativeLayout>
+
+                <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0"
-                    android:textColor="@color/right_fragment1_text_color"
-                    android:textSize="@dimen/textSize_40px" />
+                    android:layout_below="@id/renwujd_up">
 
-                <TextView
+                    <TextView
+                        android:id="@+id/rightFragment2_renwujd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="80"
+                        android:textColor="@color/right_fragment1_text_color"
+                        android:textSize="@dimen/textSize_40px" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@id/rightFragment2_renwujd"
+                        android:layout_toRightOf="@id/rightFragment2_renwujd"
+                        android:text="%"
+                        android:textColor="@color/right_fragment1_text_color" />
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="70px"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="66px"
+                android:layout_toRightOf="@id/rightFragment2_renwujd_layout"
+                android:background="#9bf7f9" />
+            <!--平均时速-->
+            <RelativeLayout
+                android:id="@+id/rightFragment2_pingjunss_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:id="@+id/pingjunss_up"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerInParent="true"
+                        android:text="@string/right_fragment_tv_pingjunss"
+                        android:textColor="@color/right_fragment1_text_color"
+                        android:textSize="@dimen/textSize_16px" />
+                </RelativeLayout>
+
+                <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@id/rightFragment2_pingjunss"
-                    android:layout_toRightOf="@id/rightFragment2_pingjunss"
-                    android:text="km/h"
-                    android:textColor="@color/right_fragment1_text_color" />
+                    android:layout_below="@id/pingjunss_up">
+
+                    <TextView
+                        android:id="@+id/rightFragment2_pingjunss"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textColor="@color/right_fragment1_text_color"
+                        android:textSize="@dimen/textSize_40px" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@id/rightFragment2_pingjunss"
+                        android:layout_toRightOf="@id/rightFragment2_pingjunss"
+                        android:text="km/h"
+                        android:textColor="@color/right_fragment1_text_color" />
+                </RelativeLayout>
             </RelativeLayout>
         </RelativeLayout>
-    </RelativeLayout>
-    <!--行驶参数-->
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/carLic_layout">
+        <!--行驶参数-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/carLic_layout"
+            android:layout_toRightOf="@+id/rightFragment_line">
 
-        <TextView
-            android:id="@+id/driveInfo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="行驶参数"
-            android:textColor="@color/right_fragment1_text_color"
-            android:textSize="@dimen/textSize_40px" />
-        <TextView
-            android:layout_below="@id/driveInfo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="12345678"
-            android:textColor="@color/right_fragment1_text_color"/>
+            <TextView
+                android:id="@+id/driveInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="行驶参数"
+                android:textColor="@color/right_fragment1_text_color"
+                android:textSize="@dimen/textSize_40px" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/driveInfo"
+                android:text="12345678"
+                android:textColor="@color/right_fragment1_text_color" />
+        </RelativeLayout>
     </RelativeLayout>
 </RelativeLayout>
