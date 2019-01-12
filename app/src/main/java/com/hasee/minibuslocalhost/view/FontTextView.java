@@ -17,7 +17,7 @@ public class FontTextView extends TextView {
     public FontTextView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
- 
+
     public FontTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);

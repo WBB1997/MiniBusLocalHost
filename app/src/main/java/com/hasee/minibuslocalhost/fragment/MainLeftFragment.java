@@ -30,6 +30,7 @@ import com.hasee.minibuslocalhost.util.VideoSeparateUtil;
 import java.io.File;
 import java.io.IOException;
 
+import static com.hasee.minibuslocalhost.bean.MsgCommand.*;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_GRADE_FIRST_GEAR;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_GRADE_FIVE_GEAR;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_GRADE_FOURTH_GEAR;
@@ -39,10 +40,6 @@ import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_GRADE_THIRD_GEAR
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_MODEL_COOL;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_MODEL_DEMIST;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_MODEL_HEAT;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.HMI_Dig_Ord_air_grade;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.HMI_Dig_Ord_air_model;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.HMI_Dig_Ord_drive_model;
-
 
 /**
  * 左边Fragment
@@ -188,7 +185,7 @@ public class MainLeftFragment extends Fragment {
                     } else {
                         leftFragmentCarLowbeamOpen.setVisibility(View.INVISIBLE);
                     }
-                    field = HMI.HMI_leftFragmentLowBeam;
+                    field = HMI_Dig_Ord_LowBeam;
                     o = leftFragmentLowBeam.isActivated();
                     break;
                 }
@@ -203,7 +200,7 @@ public class MainLeftFragment extends Fragment {
                     } else {
                         leftFragmentCarHighbeamOpen.setVisibility(View.INVISIBLE);
                     }
-                    field = HMI.HMI_leftFragmentHighBeam;
+                    field = HMI_Dig_Ord_HighBeam;
                     o = leftFragmentHighBeam.isActivated();
                     break;
                 }
@@ -220,7 +217,7 @@ public class MainLeftFragment extends Fragment {
                     } else {
                         leftFragmentCarFoglightOpen.setVisibility(View.INVISIBLE);
                     }
-                    field = HMI.HMI_leftFragmentBackFogLight;
+                    field = HMI_Dig_Ord_RearFogLamp;
                     o = leftFragmentBackFogLight.isActivated();
                     break;
                 }
@@ -238,7 +235,7 @@ public class MainLeftFragment extends Fragment {
 //                        leftFragmentErrorLight.setActivated(false);
 //                        leftFragmentLeftLight.setActivated(true);
 //                    }
-                    field = HMI.HMI_leftFragmentLeftLight;
+                    field = HMI_Dig_Ord_LeftTurningLamp;
                     o = leftFragmentLeftLight.isActivated();
                     break;
                 }
@@ -254,7 +251,7 @@ public class MainLeftFragment extends Fragment {
 //                    if(leftFragmentErrorLight.isActivated()){//如果警示灯是开的关闭它
 //                        leftFragmentErrorLight.setActivated(false);
 //                    }
-                    field = HMI.HMI_leftFragmentRightLight;
+                    field = HMI_Dig_Ord_RightTurningLamp;
                     o = leftFragmentRightLight.isActivated();
                     break;
                 }
@@ -322,7 +319,7 @@ public class MainLeftFragment extends Fragment {
     public void refresh(JSONObject object) {
         boolean data = object.getBoolean("data");
         switch (object.getIntValue("id")) {
-            case 63: {// 左转
+            case BCM_Flg_Stat_LeftTurningLamp: {// 左转
                 leftFragmentLeftLight.setActivated(data);
                 if (data) {//要求左转开
                     leftFragmentRightLight.setActivated(false);//右转向灯关
@@ -333,7 +330,7 @@ public class MainLeftFragment extends Fragment {
                 }
                 break;
             }
-            case 64: {// 右转
+            case BCM_Flg_Stat_RightTurningLamp: {// 右转
                 leftFragmentRightLight.setActivated(data);
                 if (data) {
                     leftFragmentLeftLight.setActivated(false);//左转向灯关
@@ -343,7 +340,7 @@ public class MainLeftFragment extends Fragment {
                 }
                 break;
             }
-            case 66: {// 远光灯
+            case BCM_Flg_Stat_HighBeam: {// 远光灯
                 leftFragmentHighBeam.setActivated(data);
                 if (data) {
                     leftFragmentLowBeam.setActivated(false);//近光灯关
@@ -354,7 +351,7 @@ public class MainLeftFragment extends Fragment {
                 }
                 break;
             }
-            case 67: {// 近光灯
+            case BCM_Flg_Stat_LowBeam: {// 近光灯
                 leftFragmentLowBeam.setActivated(data);
                 if (data) {
                     leftFragmentHighBeam.setActivated(false);//远光灯关
@@ -365,7 +362,7 @@ public class MainLeftFragment extends Fragment {
                 }
                 break;
             }
-            case 68: {// 后雾灯
+            case BCM_Flg_Stat_RearFogLamp: {// 后雾灯
                 leftFragmentBackFogLight.setActivated(data);
                 if (data) {
                     leftFragmentCarFoglightOpen.setVisibility(View.VISIBLE);
@@ -374,7 +371,7 @@ public class MainLeftFragment extends Fragment {
                 }
                 break;
             }
-            case 69: {// 双闪
+            case BCM_Flg_Stat_DangerAlarmLamp: {// 双闪
                 leftFragmentErrorLight.setActivated(data);
 //                if (data) {//要求双闪开
 //                    leftFragmentLeftLight.setActivated(true);

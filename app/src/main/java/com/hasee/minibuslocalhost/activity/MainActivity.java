@@ -18,6 +18,8 @@ import android.view.View;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hasee.minibuslocalhost.R;
+import android_serialport_api.SreialComm;
+
 import com.hasee.minibuslocalhost.fragment.MainCenterFragment;
 import com.hasee.minibuslocalhost.fragment.MainLeftFragment;
 import com.hasee.minibuslocalhost.fragment.MainLowBatteryFragment;
@@ -31,17 +33,23 @@ import com.hasee.minibuslocalhost.util.MyHandler;
 import com.hasee.minibuslocalhost.util.SendToScreenThread;
 import com.hasee.minibuslocalhost.util.ToastUtil;
 
+import static com.hasee.minibuslocalhost.bean.MsgCommand.*;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.DRIVE_MODEL_AUTO;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.HMI_Dig_Ord_Alarm;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.OFF;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.ON;
 
 
 public class MainActivity extends BaseActivity {
+    private static final String TAG = "MainActivity";
     public final static int SEND_TO_FRONTSCREEN = 0;//前风挡
     public final static int SEND_TO_RIGHTSCREEN = 1;//右车门
     public final static int SEND_TO_LEFTSCREEN = 2;//左车门
     public final static int SEND_TO_LOCALHOST = 3;//主控屏
+    public final static int LOCALHOST_SCREEN_TOP = 0;//主控屏上部分
+    public final static int LOCALHOST_SCREEN_LEFT = 1;//主控屏左边部分
+    public final static int LOCALHOST_SCREEN_CENTER = 2;//主控屏中间部分
+    public final static int LOCALHOST_SCREEN_RIGHT = 3;//主控屏右边部分
+    private final int MIN_BATTERY = 20;//低电量触发值
     private Context mContext;//上下文
     private FragmentManager fragmentManager;//Fragment管理器对象
     private FragmentTransaction transaction;//Fragment事务对象
@@ -52,19 +60,18 @@ public class MainActivity extends BaseActivity {
     private MainRightFragment2 rightFragment2;//右边Fragment(车速、)
     private MainLowBatteryFragment lowBatteryFragment;//低电量报警
     private FloatingActionButton floatBtn;//悬浮按钮
+    private Thread canThread;//处理CAN总线的子线程
+    private SreialComm sreialComm;//串口
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mContext = MainActivity.this;
+        //初始化布局
         viewInit();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Transmit.getInstance().setHandler(handler);
-            }
-        }).start();
+        //初始化相关类
+        classInit();
         //申请相关权限
         if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -74,6 +81,33 @@ public class MainActivity extends BaseActivity {
         } else {
             //有权限的话什么都不做
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //中断CAN总线的子线程
+        canThread.interrupt();
+        //关闭485串口
+        sreialComm.close();
+        LogUtil.d(TAG,"onDestroy");
+    }
+
+    /**
+     * 初始化相关类
+     */
+    private void classInit(){
+        //打开CAN监听
+        canThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Transmit.getInstance().setHandler(handler);
+            }
+        });
+        canThread.start();
+        //打开re485
+        sreialComm = new SreialComm(handler);
+        sreialComm.receive();
     }
 
     /**
@@ -121,19 +155,19 @@ public class MainActivity extends BaseActivity {
                 case SEND_TO_LOCALHOST: {//主控屏
                     //改变主控屏的控件状态
                     int screenId = whatFragment(object);
-                    if (screenId == 0) {//上部Fragment
+                    if (screenId == LOCALHOST_SCREEN_TOP) {//上部Fragment
                         int battery = object.getIntValue("data");
-                        if (battery <= 20) {//低电量报警
+                        if (battery <= MIN_BATTERY) {//低电量报警
                             showLowBatteryFragment(true);
                         } else {
                             showLowBatteryFragment(false);
                         }
                         topFragment.refresh(object);
-                    } else if (screenId == 1) {//左边Fragment
+                    } else if (screenId == LOCALHOST_SCREEN_LEFT) {//左边Fragment
                         leftFragment.refresh(object);
-                    } else if (screenId == 2) {//中间Fragment
+                    } else if (screenId == LOCALHOST_SCREEN_CENTER) {//中间Fragment
                         centerFragment.refresh(object);
-                    } else if (screenId == 3) {//右边Fragment
+                    } else if (screenId == LOCALHOST_SCREEN_RIGHT) {//右边Fragment
                         if (autoDriveModel) {//自动驾驶模式开启即处理数据
                             rightFragment2 = (MainRightFragment2) fragmentManager.findFragmentById(R.id.right_fragment);
                             int id = object.getIntValue("id");
@@ -141,9 +175,9 @@ public class MainActivity extends BaseActivity {
                                 int speed = (int) object.getDoubleValue("data");
                                 if (speed <= 5) {//低速
                                     //发送低速报警消息
-                                    sendToCAN("HMI", HMI_Dig_Ord_Alarm, ON);
+                                    sendToCAN("HMI", HMI_Dig_Ord_Alam, ON);
                                 } else {
-                                    sendToCAN("HMI", HMI_Dig_Ord_Alarm, OFF);
+                                    sendToCAN("HMI", HMI_Dig_Ord_Alam, OFF);
                                 }
                             }
                             rightFragment2.refresh(object);
@@ -194,7 +228,6 @@ public class MainActivity extends BaseActivity {
     private View.OnTouchListener onTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-
             return false;
         }
     };
@@ -271,16 +304,29 @@ public class MainActivity extends BaseActivity {
      */
     private int whatFragment(JSONObject object) {
         int id = object.getIntValue("id");
-//        if (id > 1) {//上部Fragment
-//            return 0;
-//        }
-        if (id == 60) {//右边Fragment
-            return 3;
-        } else if (id < 84) {//左边Fragment
-            return 1;
-        } else if (id >= 84)
+        switch (id){
+            //上部Fragment
+            case OBU_LocalTime://本地时间
+            case BMS_SOC://动力电池剩余电量SOC
+            case HAD_GPSPositioningStatus://GPS状态
+                return LOCALHOST_SCREEN_TOP;
+            //左边Fragment
+            case BCM_Flg_Stat_LeftTurningLamp://左转向状态信号
+            case BCM_Flg_Stat_RightTurningLamp://右转向状态信号
+            case BCM_Flg_Stat_HighBeam://远光灯状态信号
+            case BCM_Flg_Stat_LowBeam://近光灯状态信号
+            case BCM_Flg_Stat_RearFogLamp://后雾灯状态信号
+            case BCM_Flg_Stat_DangerAlarmLamp://危险报警灯控制（双闪）状态信号
+                return LOCALHOST_SCREEN_LEFT;
             //右边Fragment
-            return 3;
-        return 2;
+            case BCM_InsideTemp://车内温度
+            case can_RemainKm://剩余里程数
+                return LOCALHOST_SCREEN_RIGHT;
+            //中间Fragment
+            case HAD_GPSLongitude://经度
+                return LOCALHOST_SCREEN_CENTER;
+            default:
+                return -1;
+        }
     }
 }

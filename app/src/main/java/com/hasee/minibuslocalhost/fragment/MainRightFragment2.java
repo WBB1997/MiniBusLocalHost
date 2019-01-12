@@ -17,6 +17,9 @@ import com.hasee.minibuslocalhost.R;
 import com.hasee.minibuslocalhost.activity.MainActivity;
 import com.hasee.minibuslocalhost.util.LogUtil;
 
+import static com.hasee.minibuslocalhost.bean.MsgCommand.BCM_InsideTemp;
+import static com.hasee.minibuslocalhost.bean.MsgCommand.can_RemainKm;
+
 
 /**
  * 右边Fragment（仪表盘）
@@ -61,14 +64,19 @@ public class MainRightFragment2 extends Fragment {
      */
     public void refresh(JSONObject object){
         int id = object.getIntValue("id");
-        int speed = (int) object.getDoubleValue("data");
-        if(id == 60){//车速
-            speedCount++;
-            LogUtil.d(TAG,String.valueOf(speedCount));
-            avgSpeed = (int)calculate(speed,speedCount);
+//        int speed = (int) object.getDoubleValue("data");
+//        if(id == 60){//车速
+//            speedCount++;
+//            LogUtil.d(TAG,String.valueOf(speedCount));
+//            avgSpeed = (int)calculate(speed,speedCount);
+//            rightFragment2Speed.setText(String.valueOf(speed));
+//            rightFragment2Pingjunss.setText(String.valueOf(avgSpeed));
+//        }
+        if(id == BCM_InsideTemp){//车内温度
 
-            rightFragment2Speed.setText(String.valueOf(speed));
-            rightFragment2Pingjunss.setText(String.valueOf(avgSpeed));
+        }
+        if(id == can_RemainKm){//剩余里程数
+
         }
     }
 
