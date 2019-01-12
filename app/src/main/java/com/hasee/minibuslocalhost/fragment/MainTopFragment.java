@@ -15,6 +15,10 @@ import com.hasee.minibuslocalhost.activity.MainActivity;
 import com.hasee.minibuslocalhost.util.TimeThread;
 import com.hasee.minibuslocalhost.view.BatteryView;
 
+import static com.hasee.minibuslocalhost.bean.MsgCommand.BMS_SOC;
+import static com.hasee.minibuslocalhost.bean.MsgCommand.HAD_GPSPositioningStatus;
+import static com.hasee.minibuslocalhost.bean.MsgCommand.OBU_LocalTime;
+
 
 /**
  * 上部分Fragment
@@ -44,7 +48,7 @@ public class MainTopFragment extends Fragment {
         topFragmentBatteryImg = (BatteryView)view.findViewById(R.id.topFragment_battery_img);
         topFragmentBatteryImg.setPower(100);//默认
         timeThread = new TimeThread(activity,topFragmentTime);
-        timeThread.start();
+//        timeThread.start();
         return view;
     }
 
@@ -58,9 +62,18 @@ public class MainTopFragment extends Fragment {
      * 更新界面
      */
     public void refresh(JSONObject object){
-        //电量显示
-        int battryNum = object.getIntValue("data");
-        topFragmentBatteryTv.setText(String.valueOf(battryNum)+"%");
-        topFragmentBatteryImg.setPower(battryNum);
+        int id = object.getIntValue("id");
+        if(id == OBU_LocalTime){//本地时间
+
+        }
+        if(id == BMS_SOC){//动力电池剩余电量SOC
+            //电量显示
+            int battryNum = object.getIntValue("data");
+            topFragmentBatteryTv.setText(String.valueOf(battryNum)+"%");
+            topFragmentBatteryImg.setPower(battryNum);
+        }
+        if(id == HAD_GPSPositioningStatus){//GPS状态
+
+        }
     }
 }

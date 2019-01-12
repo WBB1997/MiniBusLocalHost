@@ -6,11 +6,15 @@ import android.media.AudioManager;
 
 import com.baidu.mapapi.CoordType;
 import com.baidu.mapapi.SDKInitializer;
+import com.hasee.minibuslocalhost.util.LogUtil;
+
+import static android.support.constraint.Constraints.TAG;
 
 /**
  * Created by fangju on 2018/12/28
  */
 public class App extends Application {
+    private static final String TAG = "App";
     private static App instance;
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
@@ -60,6 +64,7 @@ public class App extends Application {
         if("音量命令".equals(r485Msg[0])){//如果是音量命令
             int volume = Integer.parseInt(r485Msg[1]);//大小
             if(volume >= 0){//音量值大于等于零
+                LogUtil.d(TAG,r485Msg[1]);
                 audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,volume,AudioManager.FLAG_PLAY_SOUND);
             }
         }

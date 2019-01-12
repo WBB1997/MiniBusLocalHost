@@ -19,6 +19,7 @@ import android.view.View;
 import com.alibaba.fastjson.JSONObject;
 import com.hasee.minibuslocalhost.R;
 import android_serialport_api.SreialComm;
+
 import com.hasee.minibuslocalhost.fragment.MainCenterFragment;
 import com.hasee.minibuslocalhost.fragment.MainLeftFragment;
 import com.hasee.minibuslocalhost.fragment.MainLowBatteryFragment;
@@ -32,13 +33,14 @@ import com.hasee.minibuslocalhost.util.MyHandler;
 import com.hasee.minibuslocalhost.util.SendToScreenThread;
 import com.hasee.minibuslocalhost.util.ToastUtil;
 
+import static com.hasee.minibuslocalhost.bean.MsgCommand.*;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.DRIVE_MODEL_AUTO;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.HMI_Dig_Ord_Alarm;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.OFF;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.ON;
 
 
 public class MainActivity extends BaseActivity {
+    private static final String TAG = "MainActivity";
     public final static int SEND_TO_FRONTSCREEN = 0;//前风挡
     public final static int SEND_TO_RIGHTSCREEN = 1;//右车门
     public final static int SEND_TO_LEFTSCREEN = 2;//左车门
@@ -88,6 +90,7 @@ public class MainActivity extends BaseActivity {
         canThread.interrupt();
         //关闭485串口
         sreialComm.close();
+        LogUtil.d(TAG,"onDestroy");
     }
 
     /**
@@ -172,9 +175,9 @@ public class MainActivity extends BaseActivity {
                                 int speed = (int) object.getDoubleValue("data");
                                 if (speed <= 5) {//低速
                                     //发送低速报警消息
-                                    sendToCAN("HMI", HMI_Dig_Ord_Alarm, ON);
+                                    sendToCAN("HMI", HMI_Dig_Ord_Alam, ON);
                                 } else {
-                                    sendToCAN("HMI", HMI_Dig_Ord_Alarm, OFF);
+                                    sendToCAN("HMI", HMI_Dig_Ord_Alam, OFF);
                                 }
                             }
                             rightFragment2.refresh(object);
@@ -301,18 +304,29 @@ public class MainActivity extends BaseActivity {
      */
     private int whatFragment(JSONObject object) {
         int id = object.getIntValue("id");
-        if (id > 1) {//上部Fragment
-            return LOCALHOST_SCREEN_TOP;
+        switch (id){
+            //上部Fragment
+            case OBU_LocalTime://本地时间
+            case BMS_SOC://动力电池剩余电量SOC
+            case HAD_GPSPositioningStatus://GPS状态
+                return LOCALHOST_SCREEN_TOP;
+            //左边Fragment
+            case BCM_Flg_Stat_LeftTurningLamp://左转向状态信号
+            case BCM_Flg_Stat_RightTurningLamp://右转向状态信号
+            case BCM_Flg_Stat_HighBeam://远光灯状态信号
+            case BCM_Flg_Stat_LowBeam://近光灯状态信号
+            case BCM_Flg_Stat_RearFogLamp://后雾灯状态信号
+            case BCM_Flg_Stat_DangerAlarmLamp://危险报警灯控制（双闪）状态信号
+                return LOCALHOST_SCREEN_LEFT;
+            //右边Fragment
+            case BCM_InsideTemp://车内温度
+            case can_RemainKm://剩余里程数
+                return LOCALHOST_SCREEN_RIGHT;
+            //中间Fragment
+            case HAD_GPSLongitude://经度
+                return LOCALHOST_SCREEN_CENTER;
+            default:
+                return -1;
         }
-        if (id == 60) {//右边Fragment
-            return LOCALHOST_SCREEN_RIGHT;
-        }
-        if (id < 84) {//左边Fragment
-            return LOCALHOST_SCREEN_LEFT;
-        }
-        if (id >= 84){//中间Fragment
-            return LOCALHOST_SCREEN_CENTER;
-        }
-        return -1;
     }
 }
