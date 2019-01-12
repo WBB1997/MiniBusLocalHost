@@ -16,7 +16,7 @@ public abstract class BaseClass {
     public abstract byte[] getBytes();
     public abstract String getTAG();
     public void setBytes(byte[] bytes){
-        int offset = 0;
+        int offset = getOffset();
         String TAG = getTAG();
         byte[] Local_bytes = getBytes();
 
@@ -57,6 +57,7 @@ public abstract class BaseClass {
     }
     public abstract Object getValue(Map.Entry<Integer, MyPair<Integer>> entry, byte[] bytes);
     public abstract HashMap<Integer, MyPair<Integer>> getFields();
+    public abstract int getOffset();
     public void setBytes(int Byte_offset, int bit_index, int changeLength, Object changed){
         ByteUtil.setBit(getBytes(), Byte_offset, bit_index, changeLength, changed);
     }
