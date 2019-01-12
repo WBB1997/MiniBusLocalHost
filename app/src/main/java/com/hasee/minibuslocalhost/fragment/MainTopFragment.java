@@ -13,6 +13,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.hasee.minibuslocalhost.R;
 import com.hasee.minibuslocalhost.activity.MainActivity;
 import com.hasee.minibuslocalhost.util.TimeThread;
+import com.hasee.minibuslocalhost.view.BatteryView;
 
 
 /**
@@ -22,6 +23,7 @@ public class MainTopFragment extends Fragment {
     private MainActivity activity;
     private TextView topFragmentTime;//时间
     private TextView topFragmentBatteryTv;//电池文字信息
+    private BatteryView topFragmentBatteryImg;//
     private TimeThread timeThread;//时间线程
 
     public MainTopFragment() {
@@ -38,8 +40,11 @@ public class MainTopFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main_top,container,false);
         topFragmentTime = (TextView)view.findViewById(R.id.topFragment_time);
+        topFragmentBatteryTv = (TextView)view.findViewById(R.id.topFragment_battery_tv);
+        topFragmentBatteryImg = (BatteryView)view.findViewById(R.id.topFragment_battery_img);
+        topFragmentBatteryImg.setPower(100);//默认
         timeThread = new TimeThread(activity,topFragmentTime);
-//        timeThread.start();
+        timeThread.start();
         return view;
     }
 
@@ -53,6 +58,9 @@ public class MainTopFragment extends Fragment {
      * 更新界面
      */
     public void refresh(JSONObject object){
-
+        //电量显示
+        int battryNum = object.getIntValue("data");
+        topFragmentBatteryTv.setText(String.valueOf(battryNum)+"%");
+        topFragmentBatteryImg.setPower(battryNum);
     }
 }

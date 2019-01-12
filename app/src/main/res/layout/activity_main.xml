@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,16 +16,17 @@
             android:name="com.hasee.minibuslocalhost.fragment.MainTopFragment"
             android:layout_width="@dimen/main_layout_top_width"
             android:layout_height="@dimen/main_layout_top_height"
-            android:layout_centerInParent="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
             tools:layout="@layout/fragment_main_top" />
-
-        <fragment
-            android:name="com.hasee.minibuslocalhost.fragment.lowSpeedFragment"
+        <!--低电量报警部分-->
+        <FrameLayout
+            android:id="@+id/lowBattery_fragment"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/margin_80px"
-            android:layout_toRightOf="@id/top_fragment"
-            tools:layout="@layout/fragment_low_speed" />
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="68dp"
+            android:layout_toRightOf="@id/top_fragment" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -54,9 +56,26 @@
         <!--右部分-->
         <FrameLayout
             android:id="@+id/right_fragment"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/main_layout_right2_width"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_toRightOf="@id/center_fragment" />
+        <!--悬浮按钮-->
+        <FrameLayout
+            android:layout_toRightOf="@id/right_fragment"
+            android:layout_width="@dimen/main_layout_floatBtn_width"
+            android:layout_height="@dimen/main_layout_floatBtn_width"
+            android:foregroundGravity="center">
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/floatBtn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:visibility="invisible"
+                android:src="@drawable/floatbtn"
+                app:backgroundTint="@color/floatbtn_bg"
+                app:fabSize="normal" />
+        </FrameLayout>
     </RelativeLayout>
 </RelativeLayout>

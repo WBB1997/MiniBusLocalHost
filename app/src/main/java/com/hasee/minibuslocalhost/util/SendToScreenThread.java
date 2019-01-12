@@ -11,7 +11,8 @@ import java.net.InetAddress;
  * Created by fangju on 2018/12/8
  */
 public class SendToScreenThread extends Thread {
-    private String[] hostNames = new String[]{"10.13.234.108","10.13.236.215","10.13.236.215"};
+    private static final String TAG = "SendToScreenThread";
+    private String[] hostNames = new String[]{"192.168.1.50","192.168.1.50","192.168.1.50"};
     private int port = 5556;
     private DatagramSocket dSocket = null;
     private DatagramPacket dPacket = null;
@@ -35,9 +36,9 @@ public class SendToScreenThread extends Thread {
             dSocket = new DatagramSocket();
             dPacket = new DatagramPacket(buffer,buffer.length,address,port);
             dSocket.send(dPacket);
-            LogUtil.d("SendToScreenThread",message);
-            LogUtil.d("SendToScreenThread",address.getHostAddress());
-            LogUtil.d("SendToScreenThread","发送成功");
+            LogUtil.d(TAG,message);
+            LogUtil.d(TAG,address.getHostAddress());
+            LogUtil.d(TAG,"发送成功");
         } catch (Exception e) {
             e.printStackTrace();
         }finally {

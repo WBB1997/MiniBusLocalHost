@@ -2,6 +2,7 @@ package com.hasee.minibuslocalhost.transmit.Class;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hasee.minibuslocalhost.transmit.Transmit;
+import com.hasee.minibuslocalhost.util.ByteUtil;
 import com.hasee.minibuslocalhost.util.LogUtil;
 
 import java.util.Arrays;
@@ -56,4 +57,7 @@ public abstract class BaseClass {
     }
     public abstract Object getValue(Map.Entry<Integer, MyPair<Integer>> entry, byte[] bytes);
     public abstract HashMap<Integer, MyPair<Integer>> getFields();
+    public void setBytes(int Byte_offset, int bit_index, int changeLength, Object changed){
+        ByteUtil.setBit(getBytes(), Byte_offset, bit_index, changeLength, changed);
+    }
 }

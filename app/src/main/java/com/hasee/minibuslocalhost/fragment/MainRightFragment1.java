@@ -12,6 +12,8 @@ import android.widget.Button;
 import com.hasee.minibuslocalhost.R;
 import com.hasee.minibuslocalhost.activity.MainActivity;
 
+import static com.hasee.minibuslocalhost.transmit.Class.HMI.DRIVE_MODEL_AUTO;
+
 
 /**
  * 右边Fragment（按钮）
@@ -52,7 +54,7 @@ public class MainRightFragment1 extends Fragment {
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.rightFragment1_autoDrive:{//自动驾驶
-                    activity.handleFragmentMsg(1);
+                    activity.handleFragmentMsg(DRIVE_MODEL_AUTO);//自动
                     break;
                 }
             }

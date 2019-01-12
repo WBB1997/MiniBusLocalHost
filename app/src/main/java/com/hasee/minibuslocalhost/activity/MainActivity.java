@@ -1,21 +1,26 @@
 package com.hasee.minibuslocalhost.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.view.MotionEvent;
+import android.view.View;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hasee.minibuslocalhost.R;
 import com.hasee.minibuslocalhost.fragment.MainCenterFragment;
 import com.hasee.minibuslocalhost.fragment.MainLeftFragment;
+import com.hasee.minibuslocalhost.fragment.MainLowBatteryFragment;
 import com.hasee.minibuslocalhost.fragment.MainRightFragment1;
 import com.hasee.minibuslocalhost.fragment.MainRightFragment2;
 import com.hasee.minibuslocalhost.fragment.MainTopFragment;
@@ -26,6 +31,11 @@ import com.hasee.minibuslocalhost.util.MyHandler;
 import com.hasee.minibuslocalhost.util.SendToScreenThread;
 import com.hasee.minibuslocalhost.util.ToastUtil;
 
+import static com.hasee.minibuslocalhost.transmit.Class.HMI.DRIVE_MODEL_AUTO;
+import static com.hasee.minibuslocalhost.transmit.Class.HMI.HMI_Dig_Ord_Alarm;
+import static com.hasee.minibuslocalhost.transmit.Class.HMI.OFF;
+import static com.hasee.minibuslocalhost.transmit.Class.HMI.ON;
+
 
 public class MainActivity extends BaseActivity {
     public final static int SEND_TO_FRONTSCREEN = 0;//前风挡
@@ -35,6 +45,13 @@ public class MainActivity extends BaseActivity {
     private Context mContext;//上下文
     private FragmentManager fragmentManager;//Fragment管理器对象
     private FragmentTransaction transaction;//Fragment事务对象
+    private boolean autoDriveModel = false;//默认关闭自动驾驶模式
+    private MainTopFragment topFragment;//上部Fragment(时间、电量)
+    private MainLeftFragment leftFragment;//左部Fragment（灯光、）
+    private MainCenterFragment centerFragment;//中间部分Fragment(地图)
+    private MainRightFragment2 rightFragment2;//右边Fragment(车速、)
+    private MainLowBatteryFragment lowBatteryFragment;//低电量报警
+    private FloatingActionButton floatBtn;//悬浮按钮
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +59,12 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         mContext = MainActivity.this;
         viewInit();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Transmit.getInstance().setHandler(handler);
+            }
+        }).start();
         //申请相关权限
         if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -57,10 +80,19 @@ public class MainActivity extends BaseActivity {
      * 初始化控件
      */
     private void viewInit() {
+        floatBtn = (FloatingActionButton)findViewById(R.id.floatBtn);
+        floatBtn.setOnClickListener(onClickListener);
         //初始化右边Fragment
         fragmentManager = getSupportFragmentManager();
+        topFragment = (MainTopFragment) fragmentManager.findFragmentById(R.id.top_fragment);
+        leftFragment = (MainLeftFragment) fragmentManager.findFragmentById(R.id.left_fragment);
+        centerFragment = (MainCenterFragment) fragmentManager.findFragmentById(R.id.center_fragment);
+//        rightFragment2 = (MainRightFragment2) fragmentManager.findFragmentById(R.id.right_fragment);
+        lowBatteryFragment = new MainLowBatteryFragment();
+        //
         transaction = fragmentManager.beginTransaction();
-        transaction.add(R.id.right_fragment, new MainRightFragment1());
+        transaction.add(R.id.right_fragment, new MainRightFragment1());//右边
+        transaction.add(R.id.lowBattery_fragment, lowBatteryFragment).hide(lowBatteryFragment);//加入低速报警并隐藏
         transaction.commit();
     }
 
@@ -88,18 +120,34 @@ public class MainActivity extends BaseActivity {
                 }
                 case SEND_TO_LOCALHOST: {//主控屏
                     //改变主控屏的控件状态
-                    int id = whatFragment(object);
-                    if (id == 0) {//上部Fragment
-                        MainTopFragment topFragment = (MainTopFragment) getSupportFragmentManager().findFragmentById(R.id.top_fragment);
+                    int screenId = whatFragment(object);
+                    if (screenId == 0) {//上部Fragment
+                        int battery = object.getIntValue("data");
+                        if (battery <= 20) {//低电量报警
+                            showLowBatteryFragment(true);
+                        } else {
+                            showLowBatteryFragment(false);
+                        }
                         topFragment.refresh(object);
-                    } else if (id == 1) {//左边Fragment
-                        MainLeftFragment leftFragment = (MainLeftFragment) getSupportFragmentManager().findFragmentById(R.id.left_fragment);
+                    } else if (screenId == 1) {//左边Fragment
                         leftFragment.refresh(object);
-                    } else if (id == 2) {//中间Fragment
-                        MainCenterFragment centerFragment = (MainCenterFragment) getSupportFragmentManager().findFragmentById(R.id.center_fragment);
-                    } else if (id == 3) {//右边Fragment
-                        MainRightFragment2 rightFragment2 = (MainRightFragment2) getSupportFragmentManager().findFragmentById(R.id.right_fragment);
-                        rightFragment2.refresh(object);
+                    } else if (screenId == 2) {//中间Fragment
+                        centerFragment.refresh(object);
+                    } else if (screenId == 3) {//右边Fragment
+                        if (autoDriveModel) {//自动驾驶模式开启即处理数据
+                            rightFragment2 = (MainRightFragment2) fragmentManager.findFragmentById(R.id.right_fragment);
+                            int id = object.getIntValue("id");
+                            if (id == 60) {//速度
+                                int speed = (int) object.getDoubleValue("data");
+                                if (speed <= 5) {//低速
+                                    //发送低速报警消息
+                                    sendToCAN("HMI", HMI_Dig_Ord_Alarm, ON);
+                                } else {
+                                    sendToCAN("HMI", HMI_Dig_Ord_Alarm, OFF);
+                                }
+                            }
+                            rightFragment2.refresh(object);
+                        }
                     }
                     break;
                 }
@@ -121,6 +169,35 @@ public class MainActivity extends BaseActivity {
             }
         }
     }
+
+    /**
+     *点击事件监听器
+     */
+    private View.OnClickListener onClickListener = new View.OnClickListener() {
+        @SuppressLint("RestrictedApi")
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.floatBtn:{//悬浮按钮
+                    replaceFragment(new MainRightFragment1());
+                    autoDriveModel = false;
+                    floatBtn.setVisibility(View.INVISIBLE);
+                    break;
+                }
+            }
+        }
+    };
+
+    /**
+     * 触摸事件
+     */
+    private View.OnTouchListener onTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+
+            return false;
+        }
+    };
 
     /**
      * 返回键监听
@@ -147,16 +224,13 @@ public class MainActivity extends BaseActivity {
      *
      * @param flag 判断哪个按钮
      */
+    @SuppressLint("RestrictedApi")
     public void handleFragmentMsg(int flag) {
         switch (flag) {
-            case 1: {//自动驾驶
+            case DRIVE_MODEL_AUTO: {//自动驾驶
                 replaceFragment(new MainRightFragment2());
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Transmit.getInstance().setHandler(handler);
-                    }
-                }).start();
+                autoDriveModel = true;
+                floatBtn.setVisibility(View.VISIBLE);
                 break;
             }
         }
@@ -167,12 +241,27 @@ public class MainActivity extends BaseActivity {
      *
      * @param fragment
      */
-    public void replaceFragment(Fragment fragment) {
+    private void replaceFragment(Fragment fragment) {
         fragmentManager = getSupportFragmentManager();
         transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.right_fragment, fragment);
         transaction.commit();
     }
+
+    /**
+     * 显示和隐藏低电量报警Fragment
+     */
+    private void showLowBatteryFragment(boolean show) {
+        fragmentManager = getSupportFragmentManager();
+        transaction = fragmentManager.beginTransaction();
+        if (show) {
+            transaction.show(lowBatteryFragment);
+        } else {
+            transaction.hide(lowBatteryFragment);
+        }
+        transaction.commit();
+    }
+
 
     /**
      * 判断CAN总线的消息显示在哪个部分
@@ -182,15 +271,16 @@ public class MainActivity extends BaseActivity {
      */
     private int whatFragment(JSONObject object) {
         int id = object.getIntValue("id");
-        if (id > 1) {//上部Fragment
-
-        }
-        if (id > 100) {//左边Fragment
-            return 3;
-        }
+//        if (id > 1) {//上部Fragment
+//            return 0;
+//        }
         if (id == 60) {//右边Fragment
             return 3;
-        }
-        return 1;
+        } else if (id < 84) {//左边Fragment
+            return 1;
+        } else if (id >= 84)
+            //右边Fragment
+            return 3;
+        return 2;
     }
 }

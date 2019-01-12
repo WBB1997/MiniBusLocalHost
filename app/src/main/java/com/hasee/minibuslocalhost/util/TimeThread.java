@@ -19,7 +19,7 @@ public class TimeThread extends Thread {
     private static final String TAG = "TimeThread";
     private final int TIME_FLAG_LOCAL = 1;//本地时间
     private final int TIME_FLAG_NET = 2;//网络时间
-    private boolean flag = true;
+    private boolean flag = true;//默认开启线程
     private Context mContext;//上下文
     private TextView timeTextView;//时间文本
 
@@ -44,9 +44,11 @@ public class TimeThread extends Thread {
             switch (msg.what){
                 case TIME_FLAG_NET:{//更新UI
                     timeTextView.setText(getNetTime());
+                    break;
                 }
                 case TIME_FLAG_LOCAL:{//更新UI
                     timeTextView.setText(getLocalTime());
+                    break;
                 }
             }
         }
@@ -95,17 +97,17 @@ public class TimeThread extends Thread {
     private String getNetTime(){
         URL url = null;
         try {
-            url = new URL("http://www.ntsc.ac.cn");
+            url = new URL("http://www.bjtime.cn");
             URLConnection connection = url.openConnection();
             connection.connect();//建立连接
             long time = connection.getDate();//取得网站日期时间
             Date date = new Date(time);
             SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+//            LogUtil.d(TAG,format.format(date));
             return format.format(date);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
-
 }

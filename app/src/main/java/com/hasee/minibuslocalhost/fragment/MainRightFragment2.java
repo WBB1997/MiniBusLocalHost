@@ -15,19 +15,22 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSONObject;
 import com.hasee.minibuslocalhost.R;
 import com.hasee.minibuslocalhost.activity.MainActivity;
+import com.hasee.minibuslocalhost.util.LogUtil;
 
 
 /**
  * 右边Fragment（仪表盘）
  */
 public class MainRightFragment2 extends Fragment {
+    private static final String TAG = "MainRightFragment2";
     private MainActivity activity;
     private TextView rightFragment2BatteryTemperature;//温度
     private TextView rightFragment2Zonlic;//总里程
     private TextView rightFragment2Renwujd;//任务进度
     private TextView rightFragment2Pingjunss;//平均时速
     private TextView rightFragment2Speed;//速度
-
+    private double avgSpeed = 0;//平均速度
+    private int speedCount = 0;//统计速度次数
     public MainRightFragment2(){
 
     }
@@ -58,8 +61,27 @@ public class MainRightFragment2 extends Fragment {
      */
     public void refresh(JSONObject object){
         int id = object.getIntValue("id");
+        int speed = (int) object.getDoubleValue("data");
         if(id == 60){//车速
-            rightFragment2Speed.setText(String.valueOf(object.getDoubleValue("data")));
+            speedCount++;
+            LogUtil.d(TAG,String.valueOf(speedCount));
+            avgSpeed = (int)calculate(speed,speedCount);
+
+            rightFragment2Speed.setText(String.valueOf(speed));
+            rightFragment2Pingjunss.setText(String.valueOf(avgSpeed));
         }
+    }
+
+
+    /**
+     * 计算平均速度
+     * @param speed
+     * @param count
+     * @return
+     */
+    private double calculate(int speed,int count){
+        double newAvgSpeed = (avgSpeed*(count-1)+speed)/count;
+//        LogUtil.d(TAG,String.valueOf(newAvgSpeed));
+        return newAvgSpeed;
     }
 }
