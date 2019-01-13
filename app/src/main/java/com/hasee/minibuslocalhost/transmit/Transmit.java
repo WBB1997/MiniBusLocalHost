@@ -4,10 +4,27 @@ import android.os.Message;
 import android.util.Pair;
 
 import com.alibaba.fastjson.JSONObject;
+import com.hasee.minibuslocalhost.transmit.Class.AD1;
+import com.hasee.minibuslocalhost.transmit.Class.AD4;
 import com.hasee.minibuslocalhost.transmit.Class.BCM1;
+import com.hasee.minibuslocalhost.transmit.Class.BMS1;
+import com.hasee.minibuslocalhost.transmit.Class.BMS7;
 import com.hasee.minibuslocalhost.transmit.Class.BaseClass;
-import com.hasee.minibuslocalhost.transmit.Class.ESC3;
+import com.hasee.minibuslocalhost.transmit.Class.EPB1;
+import com.hasee.minibuslocalhost.transmit.Class.EPS1;
+import com.hasee.minibuslocalhost.transmit.Class.ESC2;
+import com.hasee.minibuslocalhost.transmit.Class.HAD5;
+import com.hasee.minibuslocalhost.transmit.Class.HAD6;
 import com.hasee.minibuslocalhost.transmit.Class.HMI;
+import com.hasee.minibuslocalhost.transmit.Class.MCU1;
+import com.hasee.minibuslocalhost.transmit.Class.OBU2;
+import com.hasee.minibuslocalhost.transmit.Class.OBU5;
+import com.hasee.minibuslocalhost.transmit.Class.PCGL1;
+import com.hasee.minibuslocalhost.transmit.Class.PCGR1;
+import com.hasee.minibuslocalhost.transmit.Class.RCU1;
+import com.hasee.minibuslocalhost.transmit.Class.VCU2;
+import com.hasee.minibuslocalhost.transmit.Class.VCU3;
+import com.hasee.minibuslocalhost.transmit.Class.VCU4;
 import com.hasee.minibuslocalhost.util.LogUtil;
 import com.hasee.minibuslocalhost.util.MyHandler;
 
@@ -20,6 +37,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.*;
 import static com.hasee.minibuslocalhost.util.ByteUtil.bytesToHex;
 import static com.hasee.minibuslocalhost.util.ByteUtil.subBytes;
 
@@ -69,29 +87,28 @@ public class Transmit {
     public void callback(JSONObject jsonObject, int target) {
         //发给hmi
         int id = jsonObject.getIntValue("id");
-//        switch (id) {
-//            case IntegerCommand.BCM_Flg_Stat_HighBeam:
-//                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(IntegerCommand.BCM_Flg_Stat_HighBeam, jsonObject.getBoolean("data"));
+        switch (id) {
+            case BCM_Flg_Stat_HighBeam:
+                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI_Dig_Ord_HighBeam, jsonObject.getBoolean("data"));
+                break;
+            case BCM_Flg_Stat_LowBeam:
+                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI_Dig_Ord_LowBeam, jsonObject.getBoolean("data"));
+                break;
+            case BCM_Flg_Stat_LeftTurningLamp:
+                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI_Dig_Ord_LeftTurningLamp, jsonObject.getBoolean("data"));
+                break;
+            case BCM_Flg_Stat_RightTurningLamp:
+                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI_Dig_Ord_RightTurningLamp, jsonObject.getBoolean("data"));
+                break;
+            case BCM_Flg_Stat_RearFogLamp:
+                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI_Dig_Ord_RearFogLamp, jsonObject.getBoolean("data"));
+                break;
+//            case 107:
+//                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_Dig_Ord_DoorLock, jsonObject.getJSONArray("data").getBoolean(0));
 //                break;
-//            case IntegerCommand.BCM_Flg_Stat_LowBeam:
-//                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_leftFragmentLowBeam, jsonObject.getBoolean("data"));
-//                break;
-//            case IntegerCommand.BCM_Flg_Stat_LeftTurningLamp:
-//                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_leftFragmentLeftLight, jsonObject.getBoolean("data"));
-//                break;
-//            case IntegerCommand.BCM_Flg_Stat_RightTurningLamp:
-//                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_leftFragmentRightLight, jsonObject.getBoolean("data"));
-//                break;
-//            case IntegerCommand.BCM_Flg_Stat_RearFogLamp:
-//                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_leftFragmentBackFogLight, jsonObject.getBoolean("data"));
-//                break;
-////            case 107:
-////                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_Dig_Ord_DoorLock, jsonObject.getJSONArray("data").getBoolean(0));
-////                break;
-//            default:
-//                break;
-//        }
-        ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(id, jsonObject.getBoolean("data"));
+            default:
+                break;
+        }
         //通过message 发给ui
         Message msg = handler.obtainMessage();
         msg.what = target;
@@ -146,9 +163,26 @@ public class Transmit {
 
     // 消息标识符
     private ArrayList<Pair<String, ? extends BaseClass>> list = new ArrayList<>(Arrays.asList(
+            new Pair<>("00000200", new VCU2()),
+            new Pair<>("000003e1", new EPB1()),
+            new Pair<>("00000300", new MCU1()),
+            new Pair<>("00000373", new EPS1()),
             new Pair<>("00000361", new BCM1()),
-            new Pair<>("000004c0", new ESC3()),
-            new Pair<>("00000383", new HMI())
+            new Pair<>("00000219", new AD1()),
+            new Pair<>("000004cf", new AD4()),
+            new Pair<>("00000227", new ESC2()),
+            new Pair<>("00000331", new PCGL1()),
+            new Pair<>("00000333", new PCGR1()),
+            new Pair<>("00000383", new HMI()),
+            new Pair<>("00000219", new RCU1()),
+            new Pair<>("00000234", new OBU2()),
+            new Pair<>("00000234", new OBU5()),
+            new Pair<>("00000236", new HAD5()),
+            new Pair<>("00000237", new HAD6()),
+            new Pair<>("00000260", new BMS1()),
+            new Pair<>("00000420", new VCU3()),
+            new Pair<>("00000421", new VCU4()),
+            new Pair<>("00000465", new BMS7())
     ));
     // 消息标识符键值对，方便查找
     private Map<String, ? super BaseClass> FLAG_AND_CLASS = new HashMap<>();
@@ -160,7 +194,7 @@ public class Transmit {
             FLAG_AND_CLASS.put(pair.first, pair.second);
             NAME_AND_CLASS.put(pair.second.getClass().getSimpleName(), pair.second);
         }
-        ((HMI)NAME_AND_CLASS.get("HMI")).setNAME_AND_CLASS(NAME_AND_CLASS);
+        ((HMI) NAME_AND_CLASS.get("HMI")).setNAME_AND_CLASS(NAME_AND_CLASS);
     }
 
     // 处理收到的byte数组

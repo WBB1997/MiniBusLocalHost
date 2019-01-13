@@ -14,7 +14,7 @@ public class EPB1 extends BaseClass {
     private static final String TAG = "EPB1";
     private HashMap<Integer, MyPair<Integer>> fields = new HashMap<Integer, MyPair<Integer>>() {{
         put(8, new MyPair<>(2, IntegerCommand.EPB_Dig_Sata_Status, MainActivity.SEND_TO_LOCALHOST)); // EPB状态
-        put(14, new MyPair<>(2, IntegerCommand.EPB_Dig_Sata_Status, MainActivity.SEND_TO_LOCALHOST)); // EPB状态灯显示
+        put(14, new MyPair<>(2, IntegerCommand.EPB_Dig_Sata_Indication, MainActivity.SEND_TO_LOCALHOST)); // EPB状态灯显示
     }};
     private byte[] bytes = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
