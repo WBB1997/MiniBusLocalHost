@@ -1,7 +1,7 @@
 package com.hasee.minibuslocalhost.transmit.Class;
 
 import com.hasee.minibuslocalhost.activity.MainActivity;
-import com.hasee.minibuslocalhost.transmit.MsgCommand;
+import com.hasee.minibuslocalhost.bean.IntegerCommand;
 import com.hasee.minibuslocalhost.util.ByteUtil;
 import com.hasee.minibuslocalhost.util.LogUtil;
 
@@ -13,7 +13,7 @@ import static com.hasee.minibuslocalhost.util.ByteUtil.countBits;
 public class MCU1 extends BaseClass {
     private static final String TAG = "MCU1";
     private HashMap<Integer, MyPair<Integer>> fields = new HashMap<Integer, MyPair<Integer>>() {{
-        put(48, new MyPair<>(16, MsgCommand.Can_num_MotSpeed, MainActivity.SEND_TO_LOCALHOST)); // 电机当前转速
+        put(48, new MyPair<>(16, IntegerCommand.can_num_MotSpeed, MainActivity.SEND_TO_LOCALHOST)); // 电机当前转速
     }};
     private byte[] bytes = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 

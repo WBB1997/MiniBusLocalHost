@@ -1,7 +1,7 @@
 package com.hasee.minibuslocalhost.transmit.Class;
 
 import com.hasee.minibuslocalhost.activity.MainActivity;
-import com.hasee.minibuslocalhost.transmit.MsgCommand;
+import com.hasee.minibuslocalhost.bean.IntegerCommand;
 import com.hasee.minibuslocalhost.util.ByteUtil;
 import com.hasee.minibuslocalhost.util.LogUtil;
 
@@ -13,8 +13,8 @@ import static com.hasee.minibuslocalhost.util.ByteUtil.*;
 public class EPB1 extends BaseClass {
     private static final String TAG = "EPB1";
     private HashMap<Integer, MyPair<Integer>> fields = new HashMap<Integer, MyPair<Integer>>() {{
-        put(8, new MyPair<>(2, MsgCommand.EPB_Dig_Sata_Status, MainActivity.SEND_TO_LOCALHOST)); // EPB状态
-        put(14, new MyPair<>(2, MsgCommand.EPB_Dig_Sata_Status, MainActivity.SEND_TO_LOCALHOST)); // EPB状态灯显示
+        put(8, new MyPair<>(2, IntegerCommand.EPB_Dig_Sata_Status, MainActivity.SEND_TO_LOCALHOST)); // EPB状态
+        put(14, new MyPair<>(2, IntegerCommand.EPB_Dig_Sata_Status, MainActivity.SEND_TO_LOCALHOST)); // EPB状态灯显示
     }};
     private byte[] bytes = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 

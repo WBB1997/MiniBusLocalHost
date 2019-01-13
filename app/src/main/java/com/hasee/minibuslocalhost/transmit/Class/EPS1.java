@@ -1,7 +1,7 @@
 package com.hasee.minibuslocalhost.transmit.Class;
 
 import com.hasee.minibuslocalhost.activity.MainActivity;
-import com.hasee.minibuslocalhost.transmit.MsgCommand;
+import com.hasee.minibuslocalhost.bean.IntegerCommand;
 import com.hasee.minibuslocalhost.util.ByteUtil;
 import com.hasee.minibuslocalhost.util.LogUtil;
 
@@ -13,7 +13,7 @@ import static com.hasee.minibuslocalhost.util.ByteUtil.countBits;
 public class EPS1 extends BaseClass {
     private static final String TAG = "EPS1";
     private HashMap<Integer, MyPair<Integer>> fields = new HashMap<Integer, MyPair<Integer>>() {{
-        put(0, new MyPair<>(2, MsgCommand.EPS_Dig_Alm_EPSWarning, MainActivity.SEND_TO_LOCALHOST)); // EPS警告灯
+        put(0, new MyPair<>(2, IntegerCommand.EPS_Dig_Alm_EPSWarning, MainActivity.SEND_TO_LOCALHOST)); // EPS警告灯
     }};
     private byte[] bytes = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 

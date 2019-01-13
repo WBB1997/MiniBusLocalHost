@@ -1,7 +1,7 @@
 package com.hasee.minibuslocalhost.transmit.Class;
 
 import com.hasee.minibuslocalhost.activity.MainActivity;
-import com.hasee.minibuslocalhost.transmit.MsgCommand;
+import com.hasee.minibuslocalhost.bean.IntegerCommand;
 import com.hasee.minibuslocalhost.util.ByteUtil;
 import com.hasee.minibuslocalhost.util.LogUtil;
 
@@ -14,17 +14,17 @@ import static com.hasee.minibuslocalhost.util.ByteUtil.viewBinary;
 public class AD4 extends BaseClass {
     private static final String TAG = "EPB1";
     private HashMap<Integer, MyPair<Integer>> fields = new HashMap<Integer, MyPair<Integer>>() {{
-        put(0, new MyPair<>(1, MsgCommand.HAD_GPSLongitud, MainActivity.SEND_TO_LOCALHOST)); // 东西经标识
-        put(1, new MyPair<>(6, MsgCommand.HAD_GPSLongitud, MainActivity.SEND_TO_LOCALHOST)); // 经度_分
-        put(8, new MyPair<>(8, MsgCommand.HAD_GPSLongitud, MainActivity.SEND_TO_LOCALHOST)); // 经度_度
-        put(18, new MyPair<>(6, MsgCommand.HAD_GPSLongitud, MainActivity.SEND_TO_LOCALHOST)); // 经度_秒
-        put(24, new MyPair<>(10, MsgCommand.HAD_GPSLongitud, MainActivity.SEND_TO_LOCALHOST)); // 经度_秒小数
-        put(32, new MyPair<>(1, MsgCommand.HAD_GPSLatitude, MainActivity.SEND_TO_LOCALHOST)); // 南北纬标识
-        put(33, new MyPair<>(7, MsgCommand.HAD_GPSLatitude, MainActivity.SEND_TO_LOCALHOST)); // 纬度_度
-        put(40, new MyPair<>(6, MsgCommand.HAD_GPSLatitude, MainActivity.SEND_TO_LOCALHOST)); // 纬度_分
-        put(46, new MyPair<>(1, MsgCommand.HAD_GPSPositioningStatus, MainActivity.SEND_TO_LOCALHOST)); // GPS状态
-        put(50, new MyPair<>(6, MsgCommand.HAD_GPSLatitude, MainActivity.SEND_TO_LOCALHOST)); // 纬度_秒
-        put(56, new MyPair<>(10, MsgCommand.HAD_GPSLatitude, MainActivity.SEND_TO_LOCALHOST)); // 纬度_秒小数
+        put(0, new MyPair<>(1, IntegerCommand.HAD_GPSLongitude, MainActivity.SEND_TO_LOCALHOST)); // 东西经标识
+        put(1, new MyPair<>(6, IntegerCommand.HAD_GPSLongitude, MainActivity.SEND_TO_LOCALHOST)); // 经度_分
+        put(8, new MyPair<>(8, IntegerCommand.HAD_GPSLongitude, MainActivity.SEND_TO_LOCALHOST)); // 经度_度
+        put(18, new MyPair<>(6, IntegerCommand.HAD_GPSLongitude, MainActivity.SEND_TO_LOCALHOST)); // 经度_秒
+        put(24, new MyPair<>(10, IntegerCommand.HAD_GPSLongitude, MainActivity.SEND_TO_LOCALHOST)); // 经度_秒小数
+        put(32, new MyPair<>(1, IntegerCommand.HAD_GPSLatitude, MainActivity.SEND_TO_LOCALHOST)); // 南北纬标识
+        put(33, new MyPair<>(7, IntegerCommand.HAD_GPSLatitude, MainActivity.SEND_TO_LOCALHOST)); // 纬度_度
+        put(40, new MyPair<>(6, IntegerCommand.HAD_GPSLatitude, MainActivity.SEND_TO_LOCALHOST)); // 纬度_分
+        put(46, new MyPair<>(1, IntegerCommand.HAD_GPSPositioningStatus, MainActivity.SEND_TO_LOCALHOST)); // GPS状态
+        put(50, new MyPair<>(6, IntegerCommand.HAD_GPSLatitude, MainActivity.SEND_TO_LOCALHOST)); // 纬度_秒
+        put(56, new MyPair<>(10, IntegerCommand.HAD_GPSLatitude, MainActivity.SEND_TO_LOCALHOST)); // 纬度_秒小数
     }};
     private byte[] bytes = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 

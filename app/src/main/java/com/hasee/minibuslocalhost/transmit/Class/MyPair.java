@@ -5,15 +5,13 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.util.Pair;
 
-import com.hasee.minibuslocalhost.transmit.MsgCommand;
-
 import java.util.Objects;
 
 public class MyPair <F> {
     private F length;
-    private Pair<MsgCommand, Integer> second;
+    private Pair<Integer, Integer> second;
 
-    public MyPair(F length, MsgCommand id, Integer target) {
+    public MyPair(F length, Integer id, Integer target) {
         this.length = length;
         this.second = new Pair<>(id, target);
     }
@@ -22,7 +20,7 @@ public class MyPair <F> {
         return length;
     }
 
-    public Pair<MsgCommand, Integer> getSecond() {
+    public Pair<Integer, Integer> getSecond() {
         return second;
     }
 
@@ -30,7 +28,7 @@ public class MyPair <F> {
         this.length = length;
     }
 
-    public void setSecond(Pair<MsgCommand, Integer> second) {
+    public void setSecond(Pair<Integer, Integer> second) {
         this.second = second;
     }
 

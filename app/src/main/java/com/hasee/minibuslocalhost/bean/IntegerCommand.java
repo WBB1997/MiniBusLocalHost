@@ -72,8 +72,16 @@ public class IntegerCommand {
     public static final int HMI_Dig_Ord_eBooster_Warning = 52;//制动液面报警
     public static final int HMI_Dig_Ord_FANPWM_Control = 53; // 风扇PWM占比控制信号
     //
-    public static final int OBU_CurrentDrivingRoadIDNum = 54;//当前行驶线路ID
-    public static final int OBU_NextStationIDNumb = 55;//下一个站点ID
-    public static final int OBU_DistanceForNextStation = 56;//距离下一个站点的距离
-    public static final int OBU_TimeForArrivingNextStation = 57;//预计到达下一个站点所需时间
+    public static final int HAD_CurrentDrivingRoadIDNum = 54;//当前行驶线路ID
+    public static final int HAD_NextStationIDNumb = 55;//下一个站点ID
+    public static final int HAD_DistanceForNextStation = 56;//距离下一个站点的距离
+    public static final int HAD_TimeForArrivingNextStation = 57;//预计到达下一个站点所需时间
+    public static final int HAD_Dig_Ord_SystemStatus = 58; // HAD行驶状态
+    public static final int RCU_Dig_Ord_SystemStatus = 59;
+    public static final int OBU_Dig_Ord_SystemStatus = 60;
+    public static final int HAD_StartingSiteNum = 61;
+    public static final int HAD_EndingSiteNum = 62;
+    public static final int HAD_PassingBySiteNum  = 63;
+    public static final int HAD_PedestrianAvoidanceRemind  = 64;
+    public static final int HAD_EmergencyParkingRemind   = 65;
 }
