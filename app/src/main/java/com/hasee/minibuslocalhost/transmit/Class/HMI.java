@@ -1,13 +1,26 @@
 package com.hasee.minibuslocalhost.transmit.Class;
 
-import com.hasee.minibuslocalhost.bean.IntegerCommand;
+import com.hasee.minibuslocalhost.util.ByteUtil;
 import com.hasee.minibuslocalhost.util.LogUtil;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_Alam;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_DoorLock;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_Driver_model;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_FANPWM_Control;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_HighBeam;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_LeftTurningLamp;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_LowBeam;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_RearFogLamp;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_RightTurningLamp;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_air_grade;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_air_model;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_eBooster_Warning;
 import static com.hasee.minibuslocalhost.util.ByteUtil.bytesToHex;
 import static com.hasee.minibuslocalhost.util.ByteUtil.setBit;
+import static com.hasee.minibuslocalhost.util.ByteUtil.setBits;
 
 public class HMI extends BaseClass {
     private final static String TAG = "HMI";
@@ -15,8 +28,8 @@ public class HMI extends BaseClass {
 
     // status
     // 灯光和门
-    public static final boolean OFF = false; // 开
-    public static final boolean ON = true; // 关
+    public static final int OFF = 1; // 开
+    public static final int ON = 2; // 关
     // 驾驶控制
     public static final int DRIVE_MODEL_AUTO = 0; // 自动
     public static final int DRIVE_MODEL_REMOTE = 1; // 远程
@@ -44,58 +57,56 @@ public class HMI extends BaseClass {
 
     private byte[] bytes = {(byte) 0xFF, (byte) 0xAA, 0x03, (byte) 0x83, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x02};
 
-    public void changeStatus(int flag, Object status) {
-        switch (flag) {
-            case IntegerCommand.HMI_Dig_Ord_HighBeam:
-                setBit(bytes, offset, 0, 1, status);
-                setBit(bytes, offset, 1, 1, (Boolean) status ? false : false);
-                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 4, 1, status);
-                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 5, 1, (Boolean) status ? false : false);
+    public void changeStatus(int command, Object status) {
+        switch (command) {
+            case HMI_Dig_Ord_HighBeam:
+                setBits(bytes, ((boolean) status) ? 2 : 1, offset, 0, 2, ByteUtil.Motorola);
+                setBits(bytes, 1, offset, 2, 2, ByteUtil.Motorola);
+                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(4, 1, (boolean) status);
+                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(5, 1,  false);
                 break;
-            case IntegerCommand.HMI_Dig_Ord_LowBeam:
-                setBit(bytes, offset, 1, 1, status);
-                setBit(bytes, offset, 0, 1, (Boolean) status ? false : false);
-                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 5, 1, status);
-                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 4, 1, (Boolean) status ? false : false);
+            case HMI_Dig_Ord_LowBeam:
+                setBits(bytes,((boolean) status) ? 2 : 1, offset, 2, 2, ByteUtil.Motorola);
+                setBits(bytes, 1, offset, 0, 2, ByteUtil.Motorola);
+                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(5, 1, (boolean) status);
+                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(4, 1, false);
                 break;
-            case IntegerCommand.HMI_Dig_Ord_LeftTurningLamp:
-                setBit(bytes, offset, 2, 1, status);
-                setBit(bytes, offset, 3, 1, (Boolean) status ? false : false);
-                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 1, 1, status);
-                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 2, 1, (Boolean) status ? false : false);
+            case HMI_Dig_Ord_LeftTurningLamp:
+                setBits(bytes, ((boolean) status) ? 2 : 1, offset, 4, 2, ByteUtil.Motorola);
+                setBits(bytes, 1, offset, 6, 2, ByteUtil.Motorola);
+                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(1, 1, (boolean) status);
+                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(2, 1, false);
                 break;
-            case IntegerCommand.HMI_Dig_Ord_RightTurningLamp:
-                setBit(bytes, offset, 3, 1, status);
-                setBit(bytes, offset, 2, 1, (Boolean) status ? false : false);
-                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 2, 1, status);
-                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 1, 1, (Boolean) status ? false : false);
+            case HMI_Dig_Ord_RightTurningLamp:
+                setBits(bytes, ((boolean) status) ? 2 : 1, offset, 6, 2, ByteUtil.Motorola);
+                setBits(bytes, 1, offset, 4, 2, ByteUtil.Motorola);
+                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(2, 1, (boolean) status);
+                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(1, 1, false);
                 break;
-            case IntegerCommand.HMI_Dig_Ord_RearFogLamp:
-                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 6, 1, status);
-                setBit(bytes, offset, 4, 1, status);
-//                setBit(bytes, offset, HMI_leftFragmentFrontFogLight, 1, !((Boolean)status));
+            case HMI_Dig_Ord_RearFogLamp:
+                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(6, 1, (boolean) status);
+                setBits(bytes, ((boolean) status) ? 2 : 1, offset, 8, 2, ByteUtil.Motorola);
                 break;
-//            case IntegerCommand.HMIF:
-//                setBit(bytes, offset, flag, 1, status);
-////                setBit(bytes, offset, HMI_leftFragmentBackFogLight, 1, !((Boolean)status));
-//                break;
-            case IntegerCommand.HMI_Dig_Ord_DoorLock:
-                setBit(bytes, offset, 6, 1, status);
+            case HMI_Dig_Ord_DoorLock:
+                setBits(bytes, (int) status, offset, 10, 2, ByteUtil.Motorola);
                 break;
-            case IntegerCommand.HMI_Dig_Ord_Alam:
-                setBit(bytes, offset, 7, 1, status);
+            case HMI_Dig_Ord_Alam:
+                setBits(bytes, (int) status, offset, 12, 2, ByteUtil.Motorola);
                 break;
-            case IntegerCommand.HMI_Dig_Ord_Driver_model:
-                setBit(bytes, offset, 8, 2, status);
+            case HMI_Dig_Ord_Driver_model:
+                setBits(bytes, (int) status, offset, 14, 2, ByteUtil.Motorola);
                 break;
-            case IntegerCommand.HMI_Dig_Ord_air_model:
-                setBit(bytes, offset, 10, 2, status);
+            case HMI_Dig_Ord_air_model:
+                setBits(bytes, (int) status, offset, 16, 2, ByteUtil.Motorola);
                 break;
-            case IntegerCommand.HMI_Dig_Ord_air_grade:
-                setBit(bytes, offset, 12, 3, status);
+            case HMI_Dig_Ord_air_grade:
+                setBits(bytes, (int) status, offset, 18, 3, ByteUtil.Motorola);
                 break;
-            case IntegerCommand.HMI_Dig_Ord_eBooster_Warning:
-                setBit(bytes, offset, 15, 1, status);
+            case HMI_Dig_Ord_eBooster_Warning:
+                setBit(bytes, offset, 21, ((int) status) == 1);
+                break;
+            case HMI_Dig_Ord_FANPWM_Control:
+                setBits(bytes, (int) status, offset, 24, 8, ByteUtil.Motorola);
                 break;
             default:
                 LogUtil.d(TAG, "消息转换错误");

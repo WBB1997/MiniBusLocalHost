@@ -31,7 +31,7 @@ public abstract class BaseClass {
         boolean flag;
         for (Map.Entry<Integer, MyPair<Integer>> entry : getFields().entrySet()) {
             index = entry.getKey();
-            length = entry.getValue().getFirst();
+            length = entry.getValue().getLength();
             flag = false;
             for(int i = index; i < index + length; i++) {
                 if (viewBinary(Local_bytes[i / 8], i % 8) != viewBinary(bytes[i / 8], i % 8))
@@ -56,7 +56,7 @@ public abstract class BaseClass {
     }
     public abstract Object getValue(Map.Entry<Integer, MyPair<Integer>> entry, byte[] bytes);
     public abstract HashMap<Integer, MyPair<Integer>> getFields();
-    public void setBytes(int Byte_offset, int bit_index, int changeLength, Object changed){
-        ByteUtil.setBit(getBytes(), Byte_offset, bit_index, changeLength, changed);
+    void setBytes(int Byte_offset, int bit_index, boolean changed){
+        ByteUtil.setBit(getBytes(), Byte_offset, bit_index, changed);
     }
 }

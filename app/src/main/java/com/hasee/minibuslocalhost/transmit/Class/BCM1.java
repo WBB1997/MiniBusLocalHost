@@ -3,6 +3,7 @@ package com.hasee.minibuslocalhost.transmit.Class;
 
 import com.hasee.minibuslocalhost.activity.MainActivity;
 import com.hasee.minibuslocalhost.bean.IntegerCommand;
+import com.hasee.minibuslocalhost.util.ByteUtil;
 import com.hasee.minibuslocalhost.util.LogUtil;
 
 import java.util.HashMap;
@@ -13,7 +14,6 @@ import static com.hasee.minibuslocalhost.util.ByteUtil.viewBinary;
 
 public class BCM1 extends BaseClass {
     private final String TAG = "BCM1";
-
     // 属性
     private HashMap<Integer, MyPair<Integer>> fields = new HashMap<Integer, MyPair<Integer>>() {{
         put(0, new MyPair<>(1, IntegerCommand.BCM_Dig_Ord_HandLightCtr, MainActivity.SEND_TO_LOCALHOST));// 手势灯光控制信号
@@ -41,7 +41,7 @@ public class BCM1 extends BaseClass {
         put(24, new MyPair<>(8, IntegerCommand.BCM_OutsideTemp, MainActivity.SEND_TO_LOCALHOST)); // 车外温度
         put(32, new MyPair<>(8, IntegerCommand.BCM_InsideTemp, MainActivity.SEND_TO_LOCALHOST)); // 车内温度
     }};
-    private byte[] bytes = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    private byte[] bytes = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     public BCM1() {
     }
@@ -89,9 +89,8 @@ public class BCM1 extends BaseClass {
             case 21:
                 return viewBinary(bytes[index / 8], index % 8);
             case 24:
-                return countBits(bytes, 0, index, 8) * 0.5 - 20;
             case 32:
-                return countBits(bytes, 0, index, 8) * 0.5 - 20;
+                return countBits(bytes,0,index,8, ByteUtil.Motorola) * 0.5 - 20;
             default:
                 LogUtil.d(TAG, "数据下标错误");
                 break;

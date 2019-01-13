@@ -107,8 +107,8 @@ public class MainActivity extends BaseActivity {
         });
         canThread.start();
         //打开re485
-        sreialComm = new SreialComm(handler);
-        sreialComm.receive();
+//        sreialComm = new SreialComm(handler);
+//        sreialComm.receive();
     }
 
     /**

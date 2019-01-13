@@ -8,24 +8,24 @@ import android.util.Pair;
 import java.util.Objects;
 
 public class MyPair <F> {
-    private F first;
+    private F length;
     private Pair<Integer, Integer> second;
 
-    public MyPair(F first, Integer id, Integer target) {
-        this.first = first;
+    public MyPair(F length, Integer id, Integer target) {
+        this.length = length;
         this.second = new Pair<>(id, target);
     }
 
-    public F getFirst() {
-        return first;
+    public F getLength() {
+        return length;
     }
 
     public Pair<Integer, Integer> getSecond() {
         return second;
     }
 
-    public void setFirst(F first) {
-        this.first = first;
+    public void setLength(F length) {
+        this.length = length;
     }
 
     public void setSecond(Pair<Integer, Integer> second) {
@@ -38,20 +38,20 @@ public class MyPair <F> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MyPair<?> myPair = (MyPair<?>) o;
-        return Objects.equals(first, myPair.first) &&
+        return Objects.equals(length, myPair.length) &&
                 Objects.equals(second, myPair.second);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public int hashCode() {
-        return Objects.hash(first, second);
+        return Objects.hash(length, second);
     }
 
     @NonNull
     @Override
     public String toString() {
-        return "Pair{" + String.valueOf(first) + " " + String.valueOf(second) + "}";
+        return "Pair{" + String.valueOf(length) + " " + String.valueOf(second) + "}";
     }
 
 }
