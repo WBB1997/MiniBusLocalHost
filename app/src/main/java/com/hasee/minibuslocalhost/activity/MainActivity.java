@@ -34,7 +34,7 @@ import com.hasee.minibuslocalhost.util.ToastUtil;
 
 import android_serialport_api.SreialComm;
 
-import static com.hasee.minibuslocalhost.bean.MsgCommand.*;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.*;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.DRIVE_MODEL_AUTO;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.OFF;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.ON;

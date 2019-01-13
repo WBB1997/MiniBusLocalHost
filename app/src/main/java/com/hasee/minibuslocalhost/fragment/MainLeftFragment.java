@@ -4,7 +4,6 @@ package com.hasee.minibuslocalhost.fragment;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,18 +18,16 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.hasee.minibuslocalhost.R;
 import com.hasee.minibuslocalhost.activity.MainActivity;
-import com.hasee.minibuslocalhost.transmit.Class.HMI;
 import com.hasee.minibuslocalhost.util.LogUtil;
 import com.hasee.minibuslocalhost.util.VideoSeparateUtil;
 
 import java.io.File;
 import java.io.IOException;
 
-import static com.hasee.minibuslocalhost.bean.MsgCommand.*;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.*;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_GRADE_FIRST_GEAR;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_GRADE_FIVE_GEAR;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_GRADE_FOURTH_GEAR;

@@ -3,7 +3,7 @@ package com.hasee.minibuslocalhost.bean;
 /**
  * 消息命令
  */
-public class MsgCommand {
+public class IntegerCommand {
     //CAN发给主控屏的命令号
     public static final int can_state_GearPos = 1;//档位信息
     public static final int EPB_Dig_Sata_Status = 2;//EPB状态

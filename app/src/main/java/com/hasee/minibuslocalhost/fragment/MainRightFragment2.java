@@ -1,12 +1,10 @@
 package com.hasee.minibuslocalhost.fragment;
 
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.res.ResourcesCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +13,9 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSONObject;
 import com.hasee.minibuslocalhost.R;
 import com.hasee.minibuslocalhost.activity.MainActivity;
-import com.hasee.minibuslocalhost.util.LogUtil;
 
-import static com.hasee.minibuslocalhost.bean.MsgCommand.BCM_InsideTemp;
-import static com.hasee.minibuslocalhost.bean.MsgCommand.can_RemainKm;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_InsideTemp;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.can_RemainKm;
 
 
 /**

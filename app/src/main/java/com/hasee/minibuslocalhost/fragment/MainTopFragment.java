@@ -15,9 +15,9 @@ import com.hasee.minibuslocalhost.activity.MainActivity;
 import com.hasee.minibuslocalhost.util.TimeThread;
 import com.hasee.minibuslocalhost.view.BatteryView;
 
-import static com.hasee.minibuslocalhost.bean.MsgCommand.BMS_SOC;
-import static com.hasee.minibuslocalhost.bean.MsgCommand.HAD_GPSPositioningStatus;
-import static com.hasee.minibuslocalhost.bean.MsgCommand.OBU_LocalTime;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.BMS_SOC;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HAD_GPSPositioningStatus;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.OBU_LocalTime;
 
 
 /**

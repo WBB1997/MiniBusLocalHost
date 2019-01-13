@@ -4,7 +4,6 @@ import android.os.Message;
 import android.util.Pair;
 
 import com.alibaba.fastjson.JSONObject;
-import com.hasee.minibuslocalhost.bean.MsgCommand;
 import com.hasee.minibuslocalhost.transmit.Class.BCM1;
 import com.hasee.minibuslocalhost.transmit.Class.BaseClass;
 import com.hasee.minibuslocalhost.transmit.Class.ESC3;
@@ -71,19 +70,19 @@ public class Transmit {
         //发给hmi
         int id = jsonObject.getIntValue("id");
 //        switch (id) {
-//            case MsgCommand.BCM_Flg_Stat_HighBeam:
-//                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(MsgCommand.BCM_Flg_Stat_HighBeam, jsonObject.getBoolean("data"));
+//            case IntegerCommand.BCM_Flg_Stat_HighBeam:
+//                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(IntegerCommand.BCM_Flg_Stat_HighBeam, jsonObject.getBoolean("data"));
 //                break;
-//            case MsgCommand.BCM_Flg_Stat_LowBeam:
+//            case IntegerCommand.BCM_Flg_Stat_LowBeam:
 //                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_leftFragmentLowBeam, jsonObject.getBoolean("data"));
 //                break;
-//            case MsgCommand.BCM_Flg_Stat_LeftTurningLamp:
+//            case IntegerCommand.BCM_Flg_Stat_LeftTurningLamp:
 //                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_leftFragmentLeftLight, jsonObject.getBoolean("data"));
 //                break;
-//            case MsgCommand.BCM_Flg_Stat_RightTurningLamp:
+//            case IntegerCommand.BCM_Flg_Stat_RightTurningLamp:
 //                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_leftFragmentRightLight, jsonObject.getBoolean("data"));
 //                break;
-//            case MsgCommand.BCM_Flg_Stat_RearFogLamp:
+//            case IntegerCommand.BCM_Flg_Stat_RearFogLamp:
 //                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_leftFragmentBackFogLight, jsonObject.getBoolean("data"));
 //                break;
 ////            case 107:
