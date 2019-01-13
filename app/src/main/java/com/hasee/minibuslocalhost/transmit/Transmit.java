@@ -207,7 +207,6 @@ public class Transmit {
         LogUtil.d(TAG, "key:" + key);
         LogUtil.d(TAG, "check:" + check);
         if(!check.equals("aabb")){
-            LogUtil.d(TAG, "校验错误");
             return;
         }
         if (FLAG_AND_CLASS.containsKey(key))
