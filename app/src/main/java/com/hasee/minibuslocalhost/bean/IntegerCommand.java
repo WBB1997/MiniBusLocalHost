@@ -70,6 +70,7 @@ public class IntegerCommand {
     public static final int HMI_Dig_Ord_air_model = 50;//空调模式
     public static final int HMI_Dig_Ord_air_grade = 51;//空调档位
     public static final int HMI_Dig_Ord_eBooster_Warning = 52;//制动液面报警
+    public static final int HMI_Dig_Ord_FANPWM_Control = 53; // 风扇PWM占比控制信号
     //
     public static final int OBU_CurrentDrivingRoadIDNum = 54;//当前行驶线路ID
     public static final int OBU_NextStationIDNumb = 55;//下一个站点ID
