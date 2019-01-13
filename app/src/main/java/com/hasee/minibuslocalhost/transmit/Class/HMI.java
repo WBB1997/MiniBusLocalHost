@@ -62,30 +62,30 @@ public class HMI extends BaseClass {
             case HMI_Dig_Ord_HighBeam:
                 setBits(bytes, ((boolean) status) ? 2 : 1, offset, 0, 2, ByteUtil.Motorola);
                 setBits(bytes, 1, offset, 2, 2, ByteUtil.Motorola);
-                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(4, 1, (boolean) status);
-                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(5, 1,  false);
+                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 4, (boolean) status);
+                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(5, 5,  false);
                 break;
             case HMI_Dig_Ord_LowBeam:
                 setBits(bytes,((boolean) status) ? 2 : 1, offset, 2, 2, ByteUtil.Motorola);
                 setBits(bytes, 1, offset, 0, 2, ByteUtil.Motorola);
-                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(5, 1, (boolean) status);
-                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(4, 1, false);
+                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 5, (boolean) status);
+                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 4, false);
                 break;
             case HMI_Dig_Ord_LeftTurningLamp:
                 setBits(bytes, ((boolean) status) ? 2 : 1, offset, 4, 2, ByteUtil.Motorola);
                 setBits(bytes, 1, offset, 6, 2, ByteUtil.Motorola);
-                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(1, 1, (boolean) status);
-                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(2, 1, false);
+                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 1, (boolean) status);
+                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 2, false);
                 break;
             case HMI_Dig_Ord_RightTurningLamp:
                 setBits(bytes, ((boolean) status) ? 2 : 1, offset, 6, 2, ByteUtil.Motorola);
                 setBits(bytes, 1, offset, 4, 2, ByteUtil.Motorola);
-                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(2, 1, (boolean) status);
-                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(1, 1, false);
+                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 2, (boolean) status);
+                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 1, false);
                 break;
             case HMI_Dig_Ord_RearFogLamp:
-                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(6, 1, (boolean) status);
                 setBits(bytes, ((boolean) status) ? 2 : 1, offset, 8, 2, ByteUtil.Motorola);
+                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 6, (boolean) status);
                 break;
             case HMI_Dig_Ord_DoorLock:
                 setBits(bytes, (int) status, offset, 10, 2, ByteUtil.Motorola);
