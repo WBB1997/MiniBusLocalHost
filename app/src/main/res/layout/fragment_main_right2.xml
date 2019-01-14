@@ -31,11 +31,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="60px"
-                android:text="0"
+                android:layout_marginTop="120px"
                 android:includeFontPadding="false"
+                android:text="0"
                 android:textColor="@color/right_fragment1_text_color"
-                android:textSize="@dimen/textSize_50px" />
+                android:textScaleX="0.5"
+                android:textSize="100px" />
             <!--Km/h-->
             <TextView
                 android:layout_width="wrap_content"
@@ -43,7 +44,9 @@
                 android:layout_below="@id/rightFragment2_speed"
                 android:layout_centerHorizontal="true"
                 android:text="Km/h"
-                android:textColor="@color/right_fragment1_text_color" />
+                android:textSize="30px"
+                android:textColor="@color/right_fragment1_text_color"
+                android:textScaleX="0.5" />
         </RelativeLayout>
         <!--右边-->
         <RelativeLayout
@@ -65,7 +68,8 @@
                     android:layout_height="wrap_content"
                     android:text="42℃"
                     android:textColor="@color/main_battery_color"
-                    android:textSize="@dimen/textSize_50px"
+                    android:textScaleX="0.5"
+                    android:textSize="100px"
                     tools:ignore="MissingPrefix" />
             </LinearLayout>
 
@@ -83,7 +87,8 @@
                     android:gravity="center"
                     android:text="电池温度"
                     android:textColor="@color/right_fragment1_text_color"
-                    android:textSize="@dimen/textSize_20px" />
+                    android:textScaleX="0.5"
+                    android:textSize="40px" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -92,7 +97,8 @@
                     android:layout_gravity="center"
                     android:text="BATTERY TEMP"
                     android:textColor="@color/right_fragment1_text_color"
-                    android:textSize="@dimen/textSize_10px" />
+                    android:textScaleX="0.5"
+                    android:textSize="20px" />
             </LinearLayout>
         </RelativeLayout>
     </RelativeLayout>
@@ -106,7 +112,7 @@
             android:id="@+id/rightFragment_line"
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:layout_marginTop="30px"
+            android:layout_marginTop="60px"
             android:layout_marginRight="12px"
             android:background="#9bf7f9" />
         <!--里程进度-->
@@ -114,7 +120,7 @@
             android:id="@+id/carLic_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30px"
+            android:layout_marginTop="60px"
             android:layout_toRightOf="@+id/rightFragment_line">
             <!--总里程-->
             <RelativeLayout
@@ -136,7 +142,8 @@
                         android:layout_centerInParent="true"
                         android:text="@string/right_fragment_tv_zonlic"
                         android:textColor="@color/right_fragment1_text_color"
-                        android:textSize="@dimen/textSize_16px" />
+                        android:textScaleX="0.5"
+                        android:textSize="32px" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -150,7 +157,8 @@
                         android:layout_height="wrap_content"
                         android:text="654"
                         android:textColor="@color/right_fragment1_text_color"
-                        android:textSize="@dimen/textSize_40px" />
+                        android:textScaleX="0.5"
+                        android:textSize="80px" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -158,13 +166,15 @@
                         android:layout_alignBottom="@id/rightFragment2_zonlic"
                         android:layout_toRightOf="@id/rightFragment2_zonlic"
                         android:text="km"
-                        android:textColor="@color/right_fragment1_text_color" />
+                        android:textSize="30px"
+                        android:textColor="@color/right_fragment1_text_color"
+                        android:textScaleX="0.5" />
                 </RelativeLayout>
             </RelativeLayout>
 
             <View
                 android:layout_width="1dp"
-                android:layout_height="70px"
+                android:layout_height="140px"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/margin_40px"
                 android:layout_toRightOf="@id/rightFragment2_zonlic_layout"
@@ -189,7 +199,8 @@
                         android:layout_centerInParent="true"
                         android:text="@string/right_fragment_tv_renwujd"
                         android:textColor="@color/right_fragment1_text_color"
-                        android:textSize="@dimen/textSize_16px" />
+                        android:textSize="32px"
+                        android:textScaleX="0.5"/>
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -203,7 +214,8 @@
                         android:layout_height="wrap_content"
                         android:text="80"
                         android:textColor="@color/right_fragment1_text_color"
-                        android:textSize="@dimen/textSize_40px" />
+                        android:textScaleX="0.5"
+                        android:textSize="80px" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -211,13 +223,15 @@
                         android:layout_alignBottom="@id/rightFragment2_renwujd"
                         android:layout_toRightOf="@id/rightFragment2_renwujd"
                         android:text="%"
-                        android:textColor="@color/right_fragment1_text_color" />
+                        android:textSize="30px"
+                        android:textColor="@color/right_fragment1_text_color"
+                        android:textScaleX="0.5" />
                 </RelativeLayout>
             </RelativeLayout>
 
             <View
                 android:layout_width="1dp"
-                android:layout_height="70px"
+                android:layout_height="140px"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="66px"
                 android:layout_toRightOf="@id/rightFragment2_renwujd_layout"
@@ -242,7 +256,8 @@
                         android:layout_centerInParent="true"
                         android:text="@string/right_fragment_tv_pingjunss"
                         android:textColor="@color/right_fragment1_text_color"
-                        android:textSize="@dimen/textSize_16px" />
+                        android:textScaleX="0.5"
+                        android:textSize="32px" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -256,7 +271,8 @@
                         android:layout_height="wrap_content"
                         android:text="0"
                         android:textColor="@color/right_fragment1_text_color"
-                        android:textSize="@dimen/textSize_40px" />
+                        android:textScaleX="0.5"
+                        android:textSize="80px" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -264,7 +280,9 @@
                         android:layout_alignBottom="@id/rightFragment2_pingjunss"
                         android:layout_toRightOf="@id/rightFragment2_pingjunss"
                         android:text="km/h"
-                        android:textColor="@color/right_fragment1_text_color" />
+                        android:textSize="30px"
+                        android:textColor="@color/right_fragment1_text_color"
+                        android:textScaleX="0.5" />
                 </RelativeLayout>
             </RelativeLayout>
         </RelativeLayout>
@@ -279,9 +297,10 @@
                 android:id="@+id/driveInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="行驶参数"
+                android:text="行驶参数/STATISTICS"
                 android:textColor="@color/right_fragment1_text_color"
-                android:textSize="@dimen/textSize_40px" />
+                android:textScaleX="0.5"
+                android:textSize="32px" />
 
             <TextView
                 android:id="@+id/driveInfo_tv"
@@ -289,7 +308,10 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/driveInfo"
                 android:text=""
-                android:textColor="@color/right_fragment1_text_color" />
+
+                android:textSize="30px"
+                android:textColor="@color/right_fragment1_text_color"
+                android:textScaleX="0.5" />
         </RelativeLayout>
     </RelativeLayout>
 </RelativeLayout>

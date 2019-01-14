@@ -66,12 +66,12 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/car_layout"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="30px">
+        android:layout_marginBottom="60px">
         <!--头背景-->
         <LinearLayout
             android:id="@+id/left_light_img_layout"
             android:layout_width="match_parent"
-            android:layout_height="50px"
+            android:layout_height="100px"
             android:orientation="vertical">
 
             <TextView
@@ -80,7 +80,8 @@
                 android:layout_marginLeft="@dimen/margin_20px"
                 android:text="车外灯光/Exterior Lights"
                 android:textColor="@color/left_fragment_text_color"
-                android:textSize="@dimen/main_left_fragment_textSize" />
+                android:textSize="@dimen/main_left_fragment_textSize"
+                android:textScaleX="0.5"/>
 
             <ImageView
                 android:layout_width="match_parent"
@@ -177,7 +178,9 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="6px"
                             android:layout_marginRight="6px"
+                            android:textSize="40px"
                             android:text="AUTO"
+                            android:textScaleX="0.5"
                             android:textColor="#34ff00" />
                     </LinearLayout>
                 </LinearLayout>
@@ -206,7 +209,7 @@
         <LinearLayout
             android:id="@+id/left_condition_img_layout"
             android:layout_width="match_parent"
-            android:layout_height="50px"
+            android:layout_height="100px"
             android:orientation="vertical">
 
             <TextView
@@ -215,7 +218,8 @@
                 android:layout_marginLeft="@dimen/margin_20px"
                 android:text="空调/AC"
                 android:textColor="@color/left_fragment_text_color"
-                android:textSize="@dimen/main_left_fragment_textSize" />
+                android:textSize="@dimen/main_left_fragment_textSize"
+                android:textScaleX="0.5"/>
 
             <ImageView
                 android:layout_width="match_parent"
@@ -229,7 +233,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/left_condition_img_layout"
             android:layout_marginLeft="@dimen/margin_20px"
-            android:layout_marginBottom="25px">
+            android:layout_marginBottom="50px">
             <!--冷气-->
             <LinearLayout
                 android:id="@+id/leftFragment_coolAir"
@@ -301,6 +305,7 @@
                 android:layout_marginRight="20px"
                 android:layout_toRightOf="@id/left_fragment_condition_img"
                 android:text="0"
+                android:textScaleX="0.5"
                 android:textColor="@color/left_fragment_text_color"/>
 
             <SeekBar
@@ -308,8 +313,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:minHeight="4dip"
-                android:maxHeight="4dip"
+                android:minHeight="8dip"
+                android:maxHeight="8dip"
+                android:scaleY="2"
                 android:progressDrawable="@drawable/ic_seekbar"
                 android:layout_toRightOf="@id/leftFragment_condition_size" />
         </RelativeLayout>
