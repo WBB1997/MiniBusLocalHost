@@ -13,6 +13,7 @@ import com.hasee.minibuslocalhost.R;
 import com.hasee.minibuslocalhost.activity.MainActivity;
 
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.DRIVE_MODEL_AUTO;
+import static com.hasee.minibuslocalhost.transmit.Class.HMI.DRIVE_MODEL_REMOTE;
 
 
 /**
@@ -42,7 +43,9 @@ public class MainRightFragment1 extends Fragment {
         rightFragment1AutoDrive = (Button) view.findViewById(R.id.rightFragment1_autoDrive);
         rightFragment1AutoDrive.setOnClickListener(onClickListener);
         rightFragment1LongDrive = (Button) view.findViewById(R.id.rightFragment1_longDrive);
+        rightFragment1LongDrive.setOnClickListener(onClickListener);
         rightFragment1Await = (Button) view.findViewById(R.id.rightFragment1_await);
+        rightFragment1Await.setOnClickListener(onClickListener);
         return view;
     }
 
@@ -55,6 +58,13 @@ public class MainRightFragment1 extends Fragment {
             switch (v.getId()){
                 case R.id.rightFragment1_autoDrive:{//自动驾驶
                     activity.handleFragmentMsg(DRIVE_MODEL_AUTO);//自动
+                    break;
+                }
+                case R.id.rightFragment1_longDrive:{//远程驾驶
+                    activity.handleFragmentMsg(DRIVE_MODEL_REMOTE);
+                    break;
+                }
+                case R.id.rightFragment1_await:{//待机
                     break;
                 }
             }
