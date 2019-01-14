@@ -209,9 +209,13 @@ public class Transmit {
         if(!check.equals("aabb")){
             return;
         }
-        if (FLAG_AND_CLASS.containsKey(key))
-            ((BaseClass) FLAG_AND_CLASS.get(key)).setBytes(subBytes(receMsgs, 2, 8));
-        else
-            LogUtil.d(TAG, "消息标识符错误");
+        try {
+            if (FLAG_AND_CLASS.containsKey(key))
+                ((BaseClass) FLAG_AND_CLASS.get(key)).setBytes(subBytes(receMsgs, 2, 8));
+            else
+                LogUtil.d(TAG, "未找到消息表示符");
+        }catch (NullPointerException e){
+            LogUtil.d(TAG, "消息流方向错误");
+        }
     }
 }
