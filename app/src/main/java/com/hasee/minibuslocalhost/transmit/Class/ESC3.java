@@ -8,17 +8,15 @@ import com.hasee.minibuslocalhost.util.LogUtil;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.hasee.minibuslocalhost.util.ByteUtil.*;
+import static com.hasee.minibuslocalhost.util.ByteUtil.countBits;
 
-public class HAD6 extends BaseClass {
-    private static final String TAG = "HAD6";
-    private HashMap<Integer, MyPair<Integer>> fields = new HashMap<Integer, MyPair<Integer>>(){{
-        put(0,new MyPair<>(2, IntegerCommand.HAD_PedestrianAvoidanceRemind, MainActivity.SEND_TO_FRONTSCREEN));
-        put(2,new MyPair<>(2, IntegerCommand.HAD_EmergencyParkingRemind, MainActivity.SEND_TO_FRONTSCREEN));
-        put(4,new MyPair<>(2, IntegerCommand.HAD_StartingSitedepartureRemind, MainActivity.SEND_TO_FRONTSCREEN));
-        put(6,new MyPair<>(2, IntegerCommand.HAD_ArrivingSiteRemind, MainActivity.SEND_TO_FRONTSCREEN));
+public class ESC3 extends BaseClass {
+    private static final String TAG = "ESC3";
+    private HashMap<Integer, MyPair<Integer>> fields = new HashMap<Integer, MyPair<Integer>>() {{
+        put(8, new MyPair<>(16, IntegerCommand.Wheel_Speed_ABS, MainActivity.SEND_TO_LOCALHOST)); // 速度信号
     }};
     private byte[] bytes = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+
 
     @Override
     public byte[] getBytes() {
@@ -39,13 +37,11 @@ public class HAD6 extends BaseClass {
     public Object getValue(Map.Entry<Integer, MyPair<Integer>> entry, byte[] bytes) {
         int index = entry.getKey();
         switch (index) {
-            case 0:
-            case 2:
-            case 4:
-            case 6:
-                return (int) countBits(bytes, 0, index, 2,ByteUtil.Motorola);
+            case 8:
+                return countBits(bytes, 0, index, 16, ByteUtil.Motorola) * 0.125;
             default:
                 LogUtil.d(TAG, "数据下标错误");
+                break;
         }
         return null;
     }
