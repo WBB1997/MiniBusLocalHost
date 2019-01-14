@@ -86,4 +86,5 @@ public class IntegerCommand {
     public static final int HAD_EmergencyParkingRemind = 74;//紧急停车提醒
     public static final int HAD_StartingSitedepartureRemind = 75;//起始站出发提醒
     public static final int HAD_ArrivingSiteRemind = 76;//到站提醒
+    public static final int Wheel_Speed_ABS = 77;//车速信号
 }
