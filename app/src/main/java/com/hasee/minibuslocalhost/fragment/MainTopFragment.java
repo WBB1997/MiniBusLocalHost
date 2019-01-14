@@ -68,7 +68,7 @@ public class MainTopFragment extends Fragment {
         }
         if(id == BMS_SOC){//动力电池剩余电量SOC
             //电量显示
-            int battryNum = object.getIntValue("data");
+            int battryNum = (int) object.getDoubleValue("data");
             topFragmentBatteryTv.setText(String.valueOf(battryNum)+"%");
             topFragmentBatteryImg.setPower(battryNum);
         }

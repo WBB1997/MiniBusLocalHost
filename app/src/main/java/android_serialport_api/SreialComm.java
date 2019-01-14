@@ -23,6 +23,7 @@ public class SreialComm {
         this.handler = handler;
         //实例化串口
         serialPortUtil = SerialPortUtil.getInstance();
+        LogUtil.d(TAG,"485监听打开");
     }
 
     public void receive() {
@@ -63,6 +64,10 @@ public class SreialComm {
                         LogUtil.d(TAG,"校验正确！");
                         m = 0;
                         handler.post(runnable);//发送给主线程
+
+                        bt[0] = (byte)ptr[0];
+                        bt[1]=(byte)ptr[1];
+                        bt[2]=(byte)ptr[2];
                         serialPortUtil.sendDataToSerialPort(bt);
                     } else {
                         m = 0;
@@ -75,7 +80,9 @@ public class SreialComm {
     }
 
     public void close() {
-        serialPortUtil.closeSerialPort();
+        if(serialPortUtil != null){
+            serialPortUtil.closeSerialPort();
+        }
     }
 
     Runnable runnable = new Runnable() {
@@ -86,4 +93,3 @@ public class SreialComm {
     };
 
 }
-

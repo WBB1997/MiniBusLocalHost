@@ -62,6 +62,7 @@ public class MainActivity extends BaseActivity {
     private MainLowBatteryFragment lowBatteryFragment;//低电量报警
     private FloatingActionButton floatBtn;//悬浮按钮
     private Thread canThread;//处理CAN总线的子线程
+    private Thread sreialThread;//处理485的子线程
     private SreialComm sreialComm;//串口
 
     @Override
@@ -91,6 +92,8 @@ public class MainActivity extends BaseActivity {
         canThread.interrupt();
         //关闭485串口
         sreialComm.close();
+        //中断485线程
+        sreialThread.interrupt();
         LogUtil.d(TAG,"onDestroy");
     }
 
@@ -107,8 +110,14 @@ public class MainActivity extends BaseActivity {
         });
         canThread.start();
         //打开re485
-//        sreialComm = new SreialComm(handler);
-//        sreialComm.receive();
+        sreialThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                sreialComm = new SreialComm(handler);
+                sreialComm.receive();
+            }
+        });
+        sreialThread.start();
     }
 
     /**
@@ -322,6 +331,7 @@ public class MainActivity extends BaseActivity {
                 return LOCALHOST_SCREEN_LEFT;
             //右边Fragment
             case BCM_InsideTemp://车内温度
+            case BCM_OutsideTemp://车外温度
             case can_RemainKm://剩余里程数
                 return LOCALHOST_SCREEN_RIGHT;
             //中间Fragment

@@ -15,6 +15,7 @@ import com.hasee.minibuslocalhost.R;
 import com.hasee.minibuslocalhost.activity.MainActivity;
 
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_InsideTemp;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_OutsideTemp;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.can_RemainKm;
 
 
@@ -73,7 +74,11 @@ public class MainRightFragment2 extends Fragment {
             int data = object.getIntValue("data");
             rightFragment2BatteryTemperature.setText(data);
         }
+        if(id == BCM_OutsideTemp){//车外温度
+
+        }
         if(id == can_RemainKm){//剩余里程数
+//            int data = (int) object.getDoubleValue("data");
 
         }
     }
