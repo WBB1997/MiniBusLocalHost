@@ -13,6 +13,7 @@ import com.hasee.minibuslocalhost.transmit.Class.BaseClass;
 import com.hasee.minibuslocalhost.transmit.Class.EPB1;
 import com.hasee.minibuslocalhost.transmit.Class.EPS1;
 import com.hasee.minibuslocalhost.transmit.Class.ESC2;
+import com.hasee.minibuslocalhost.transmit.Class.ESC3;
 import com.hasee.minibuslocalhost.transmit.Class.HAD5;
 import com.hasee.minibuslocalhost.transmit.Class.HAD6;
 import com.hasee.minibuslocalhost.transmit.Class.HMI;
@@ -171,6 +172,7 @@ public class Transmit {
             new Pair<>("00000219", new AD1()),
             new Pair<>("000004cf", new AD4()),
             new Pair<>("00000227", new ESC2()),
+            new Pair<>("000004c0", new ESC3()),
             new Pair<>("00000331", new PCGL1()),
             new Pair<>("00000333", new PCGR1()),
             new Pair<>("00000383", new HMI()),
