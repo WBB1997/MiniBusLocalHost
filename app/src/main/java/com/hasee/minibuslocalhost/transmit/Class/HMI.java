@@ -116,6 +116,11 @@ public class HMI extends BaseClass {
     }
 
     @Override
+    public int getState() {
+        return ByteUtil.Motorola;
+    }
+
+    @Override
     public byte[] getBytes() {
         return bytes;
     }

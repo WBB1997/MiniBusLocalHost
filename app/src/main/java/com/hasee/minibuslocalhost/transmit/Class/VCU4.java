@@ -45,6 +45,11 @@ public class VCU4 extends BaseClass {
     }
 
     @Override
+    public int getState() {
+        return ByteUtil.Intel;
+    }
+
+    @Override
     public HashMap<Integer, MyPair<Integer>> getFields() {
         return fields;
     }
