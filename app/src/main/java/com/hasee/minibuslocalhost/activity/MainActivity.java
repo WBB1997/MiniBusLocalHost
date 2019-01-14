@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageButton;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hasee.minibuslocalhost.R;
@@ -36,6 +37,7 @@ import android_serialport_api.SreialComm;
 
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.*;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.DRIVE_MODEL_AUTO;
+import static com.hasee.minibuslocalhost.transmit.Class.HMI.DRIVE_MODEL_REMOTE;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.OFF;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.ON;
 
@@ -60,7 +62,7 @@ public class MainActivity extends BaseActivity {
     private MainCenterFragment centerFragment;//中间部分Fragment(地图)
     private MainRightFragment2 rightFragment2;//右边Fragment(车速、)
     private MainLowBatteryFragment lowBatteryFragment;//低电量报警
-    private FloatingActionButton floatBtn;//悬浮按钮
+    private ImageButton floatBtn;//悬浮按钮
     private Thread canThread;//处理CAN总线的子线程
     private Thread sreialThread;//处理485的子线程
     private SreialComm sreialComm;//串口
@@ -124,7 +126,7 @@ public class MainActivity extends BaseActivity {
      * 初始化控件
      */
     private void viewInit() {
-        floatBtn = (FloatingActionButton)findViewById(R.id.floatBtn);
+        floatBtn = (ImageButton)findViewById(R.id.floatBtn);
         floatBtn.setOnClickListener(onClickListener);
         //初始化右边Fragment
         fragmentManager = getSupportFragmentManager();
@@ -181,7 +183,7 @@ public class MainActivity extends BaseActivity {
                         if (autoDriveModel) {//自动驾驶模式开启即处理数据
                             rightFragment2 = (MainRightFragment2) fragmentManager.findFragmentById(R.id.right_fragment);
                             int id = object.getIntValue("id");
-                            if (id == 60) {//速度
+                            if (id == Wheel_Speed_ABS) {//速度
                                 int speed = (int) object.getDoubleValue("data");
                                 if (speed <= 5) {//低速
                                     //发送低速报警消息
@@ -191,6 +193,10 @@ public class MainActivity extends BaseActivity {
                                 }
                             }
                             rightFragment2.refresh(object);
+                        }
+                    }else{//发给主控的其他消息
+                        if(msg.what == HAD_CurrentDrivingRoadIDNum){//当前行驶线路ID
+                            new SendToScreenThread(object, SEND_TO_FRONTSCREEN).start();
                         }
                     }
                     break;
@@ -221,11 +227,14 @@ public class MainActivity extends BaseActivity {
         @SuppressLint("RestrictedApi")
         @Override
         public void onClick(View v) {
+            String clazz = "HMI";
+            int field = HMI_Dig_Ord_Driver_model;
             switch (v.getId()){
-                case R.id.floatBtn:{//悬浮按钮
+                case R.id.floatBtn:{//悬浮按钮(退出各种模式)
                     replaceFragment(new MainRightFragment1());
                     autoDriveModel = false;
                     floatBtn.setVisibility(View.INVISIBLE);
+//                    sendToCAN(clazz,field,);
                     break;
                 }
             }
@@ -269,14 +278,12 @@ public class MainActivity extends BaseActivity {
      */
     @SuppressLint("RestrictedApi")
     public void handleFragmentMsg(int flag) {
-        switch (flag) {
-            case DRIVE_MODEL_AUTO: {//自动驾驶
-                replaceFragment(new MainRightFragment2());
-                autoDriveModel = true;
-                floatBtn.setVisibility(View.VISIBLE);
-                break;
-            }
-        }
+        String clazz = "HMI";
+        int field = HMI_Dig_Ord_Driver_model;
+        replaceFragment(new MainRightFragment2());//切换界面
+        floatBtn.setVisibility(View.VISIBLE);//按钮显示
+        autoDriveModel = true;//驾驶模式打开
+        sendToCAN(clazz,field,flag);//发送数据
     }
 
     /**
@@ -305,7 +312,6 @@ public class MainActivity extends BaseActivity {
         transaction.commit();
     }
 
-
     /**
      * 判断CAN总线的消息显示在哪个部分
      *
@@ -333,10 +339,11 @@ public class MainActivity extends BaseActivity {
             case BCM_InsideTemp://车内温度
             case BCM_OutsideTemp://车外温度
             case can_RemainKm://剩余里程数
+            case Wheel_Speed_ABS://车速信号
                 return LOCALHOST_SCREEN_RIGHT;
-            //中间Fragment
-            case HAD_GPSLongitude://经度
-                return LOCALHOST_SCREEN_CENTER;
+//            //中间Fragment
+//            case HAD_GPSLongitude://经度
+//                return LOCALHOST_SCREEN_CENTER;
             default:
                 return -1;
         }

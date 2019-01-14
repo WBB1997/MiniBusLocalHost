@@ -72,6 +72,7 @@ public class MainLeftFragment extends Fragment {
     private Object o = null;//状态
     private double singleIndexNum = 100 / 5;//每一档对应的大小
     private int seekBarIndex = 0;
+    private boolean typeFlag = false;//判断是否改变状态
 
     public MainLeftFragment() {
     }
@@ -182,6 +183,7 @@ public class MainLeftFragment extends Fragment {
                     } else {
                         leftFragmentCarLowbeamOpen.setVisibility(View.INVISIBLE);
                     }
+                    typeFlag = true;
                     field = HMI_Dig_Ord_LowBeam;
                     o = leftFragmentLowBeam.isActivated();
                     break;
@@ -197,6 +199,7 @@ public class MainLeftFragment extends Fragment {
                     } else {
                         leftFragmentCarHighbeamOpen.setVisibility(View.INVISIBLE);
                     }
+                    typeFlag = true;
                     field = HMI_Dig_Ord_HighBeam;
                     o = leftFragmentHighBeam.isActivated();
                     break;
@@ -214,6 +217,7 @@ public class MainLeftFragment extends Fragment {
                     } else {
                         leftFragmentCarFoglightOpen.setVisibility(View.INVISIBLE);
                     }
+                    typeFlag = true;
                     field = HMI_Dig_Ord_RearFogLamp;
                     o = leftFragmentBackFogLight.isActivated();
                     break;
@@ -232,6 +236,7 @@ public class MainLeftFragment extends Fragment {
 //                        leftFragmentErrorLight.setActivated(false);
 //                        leftFragmentLeftLight.setActivated(true);
 //                    }
+                    typeFlag = true;
                     field = HMI_Dig_Ord_LeftTurningLamp;
                     o = leftFragmentLeftLight.isActivated();
                     break;
@@ -248,6 +253,7 @@ public class MainLeftFragment extends Fragment {
 //                    if(leftFragmentErrorLight.isActivated()){//如果警示灯是开的关闭它
 //                        leftFragmentErrorLight.setActivated(false);
 //                    }
+                    typeFlag = true;
                     field = HMI_Dig_Ord_RightTurningLamp;
                     o = leftFragmentRightLight.isActivated();
                     break;
@@ -273,6 +279,7 @@ public class MainLeftFragment extends Fragment {
                     } else {
                         leftFragmentCoolAirImg.setActivated(false);
                     }
+                    typeFlag = true;
                     field = HMI_Dig_Ord_air_model;//空调模式
                     o = AIR_MODEL_COOL;//制冷模式
                     break;
@@ -287,6 +294,7 @@ public class MainLeftFragment extends Fragment {
                     } else {
                         leftFragmentHotAirImg.setActivated(false);
                     }
+                    typeFlag = true;
                     field = HMI_Dig_Ord_air_model;//空调模式
                     o = AIR_MODEL_HEAT;//制热模式
                     break;
@@ -298,14 +306,18 @@ public class MainLeftFragment extends Fragment {
                     } else {
                         leftFragmentDeFogImg.setActivated(false);
                     }
+                    typeFlag = true;
                     field = HMI_Dig_Ord_air_model;//空调模式
                     o = AIR_MODEL_DEMIST;//除雾模式
                     break;
                 }
             }
-            activity.sendToCAN(clazz, field, o);
-            if(field == HMI_Dig_Ord_air_model){//如果当前是空调模式
-                activity.sendToCAN(clazz, HMI_Dig_Ord_air_grade, seekBarIndex);//档位
+            if(typeFlag){
+                activity.sendToCAN(clazz, field, o);
+                if(field == HMI_Dig_Ord_air_model){//如果当前是空调模式
+                    activity.sendToCAN(clazz, HMI_Dig_Ord_air_grade, seekBarIndex);//档位
+                }
+                typeFlag = false;
             }
         }
     };

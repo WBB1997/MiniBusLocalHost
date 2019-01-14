@@ -284,10 +284,11 @@
                 android:textSize="@dimen/textSize_40px" />
 
             <TextView
+                android:id="@+id/driveInfo_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/driveInfo"
-                android:text="12345678"
+                android:text=""
                 android:textColor="@color/right_fragment1_text_color" />
         </RelativeLayout>
     </RelativeLayout>

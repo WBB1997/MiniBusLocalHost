@@ -72,15 +72,15 @@
             android:layout_height="@dimen/main_layout_floatBtn_width"
             android:foregroundGravity="center">
 
-            <android.support.design.widget.FloatingActionButton
+            <ImageButton
                 android:id="@+id/floatBtn"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:visibility="invisible"
-                android:src="@drawable/floatbtn"
-                app:backgroundTint="@color/floatbtn_bg"
-                app:fabSize="normal" />
+                android:visibility="visible"
+                android:scaleY="0.5"
+                android:scaleX="0.5"
+                android:background="@drawable/floatbtn" />
         </FrameLayout>
     </RelativeLayout>
 </RelativeLayout>
