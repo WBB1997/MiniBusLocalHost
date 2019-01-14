@@ -75,7 +75,7 @@ public class SerialPortUtil {
         try {
 
             int dataLength = data.length;
-            LogUtil.d(TAG, "DATASIZE:" + String.valueOf(dataLength));
+//            LogUtil.d(TAG, "DATASIZE:" + String.valueOf(dataLength));
 
             if (dataLength > 0) {
                 outputStream.write(data);
@@ -112,6 +112,8 @@ public class SerialPortUtil {
                     return;
                 }
             }
+            LogUtil.d(TAG,"ReadThread重新启动");
+            new ReadThread().start();
         }
     }
 
