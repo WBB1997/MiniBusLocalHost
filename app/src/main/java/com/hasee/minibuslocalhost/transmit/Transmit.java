@@ -163,7 +163,7 @@ public class Transmit {
 
     // 消息标识符
     private ArrayList<Pair<String, ? extends BaseClass>> list = new ArrayList<>(Arrays.asList(
-            new Pair<>("00000200", new VCU2()),
+            new Pair<>("00000220", new VCU2()),
             new Pair<>("000003e1", new EPB1()),
             new Pair<>("00000300", new MCU1()),
             new Pair<>("00000373", new EPS1()),
@@ -176,7 +176,7 @@ public class Transmit {
             new Pair<>("00000383", new HMI()),
             new Pair<>("00000219", new RCU1()),
             new Pair<>("00000234", new OBU2()),
-            new Pair<>("00000234", new OBU5()),
+            new Pair<>("00000235", new OBU5()),
             new Pair<>("00000236", new HAD5()),
             new Pair<>("00000237", new HAD6()),
             new Pair<>("00000260", new BMS1()),

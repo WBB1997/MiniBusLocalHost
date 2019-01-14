@@ -47,6 +47,11 @@ public class EPS1 extends BaseClass {
     }
 
     @Override
+    public int getState() {
+        return ByteUtil.Motorola;
+    }
+
+    @Override
     public HashMap<Integer, MyPair<Integer>> getFields() {
         return fields;
     }

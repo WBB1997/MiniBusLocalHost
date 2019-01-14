@@ -2,6 +2,7 @@ package com.hasee.minibuslocalhost.transmit.Class;
 
 import com.hasee.minibuslocalhost.activity.MainActivity;
 import com.hasee.minibuslocalhost.bean.IntegerCommand;
+import com.hasee.minibuslocalhost.util.ByteUtil;
 import com.hasee.minibuslocalhost.util.LogUtil;
 
 import java.util.HashMap;
@@ -41,6 +42,11 @@ public class VCU3 extends BaseClass {
                 LogUtil.d(TAG, "数据下标错误");
         }
         return null;
+    }
+
+    @Override
+    public int getState() {
+        return ByteUtil.Intel;
     }
 
     @Override
