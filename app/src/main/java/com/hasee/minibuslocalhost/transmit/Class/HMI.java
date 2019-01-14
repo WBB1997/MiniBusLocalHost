@@ -28,11 +28,13 @@ public class HMI extends BaseClass {
 
     // status
     // 灯光和门
-    public static final int OFF = 1; // 开
-    public static final int ON = 2; // 关
+    public static final int OFF = 1; // 关
+    public static final int ON = 2; // 开
     // 驾驶控制
     public static final int DRIVE_MODEL_AUTO = 0; // 自动
     public static final int DRIVE_MODEL_REMOTE = 1; // 远程
+    public static final int DRIVE_MODEL_AUTO_CANCLE = 2; // 取消自动
+
     // 空调
     public static final int AIR_MODEL_COOL = 0; // 制冷
     public static final int AIR_MODEL_HEAT = 1; // 制热
@@ -103,7 +105,7 @@ public class HMI extends BaseClass {
                 setBits(bytes, (int) status, offset, 18, 3, ByteUtil.Motorola);
                 break;
             case HMI_Dig_Ord_eBooster_Warning:
-                setBit(bytes, offset, 21, ((int) status) == 1);
+                setBit(bytes, offset, 21, (boolean) status);
                 break;
             case HMI_Dig_Ord_FANPWM_Control:
                 setBits(bytes, (int) status, offset, 24, 8, ByteUtil.Motorola);

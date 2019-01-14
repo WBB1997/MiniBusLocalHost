@@ -15,6 +15,8 @@ public class HAD6 extends BaseClass {
     private HashMap<Integer, MyPair<Integer>> fields = new HashMap<Integer, MyPair<Integer>>(){{
         put(0,new MyPair<>(2, IntegerCommand.HAD_PedestrianAvoidanceRemind, MainActivity.SEND_TO_FRONTSCREEN));
         put(2,new MyPair<>(2, IntegerCommand.HAD_EmergencyParkingRemind, MainActivity.SEND_TO_FRONTSCREEN));
+        put(4,new MyPair<>(2, IntegerCommand.HAD_StartingSitedepartureRemind, MainActivity.SEND_TO_FRONTSCREEN));
+        put(6,new MyPair<>(2, IntegerCommand.HAD_ArrivingSiteRemind, MainActivity.SEND_TO_FRONTSCREEN));
     }};
     private byte[] bytes = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
@@ -39,6 +41,8 @@ public class HAD6 extends BaseClass {
         switch (index) {
             case 0:
             case 2:
+            case 4:
+            case 6:
                 return (int) countBits(bytes, 0, index, 2,ByteUtil.Motorola);
             default:
                 LogUtil.d(TAG, "数据下标错误");
