@@ -102,7 +102,7 @@ public class MainActivity extends BaseActivity {
         } else {
             //有权限的话什么都不做
         }
-//        reboot();//发送初始化数据
+        reboot();//发送初始化数据
 //        ToastUtil.getInstance(mContext).showShortToast("程序已经启动");
     }
 
