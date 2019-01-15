@@ -32,7 +32,7 @@ public class BatteryView extends View {
         int battery_left = 0;
         int battery_top = 0;
         int battery_width = 30;
-        int battery_height = 15;
+        int battery_height = 30;
  
         int battery_head_width = 3;
         int battery_head_height = 3;

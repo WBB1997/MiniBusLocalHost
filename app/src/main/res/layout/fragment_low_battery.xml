@@ -13,6 +13,8 @@
         android:paddingLeft="@dimen/margin_20px"
         android:paddingRight="@dimen/margin_20px"
         android:text="@string/lowSpeed_fragment_text"
-        android:textColor="@color/color_white" />
+        android:textColor="@color/color_white"
+        android:textScaleX="0.5"
+        android:textSize="30px" />
 
 </FrameLayout>

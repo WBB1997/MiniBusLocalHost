@@ -32,35 +32,35 @@
     <!--主界面上部宽度-->
     <dimen name="main_layout_top_width">708px</dimen>
     <!--主界面上部高度-->
-    <dimen name="main_layout_top_height">56px</dimen>
+    <dimen name="main_layout_top_height">112px</dimen>
     <!--主界面左边宽度-->
     <dimen name="main_layout_left_width">376px</dimen>
     <!--主界面左边高度-->
-    <dimen name="main_layout_left_height">446px</dimen>
+    <dimen name="main_layout_left_height">892px</dimen>
     <!--主界面中间宽度-->
-    <dimen name="main_layout_center_width">840px</dimen>
+    <dimen name="main_layout_center_width">880px</dimen>
     <!--主界面中间高度-->
-    <dimen name="main_layout_center_height">372px</dimen>
+    <dimen name="main_layout_center_height">744px</dimen>
     <!--主界面右边宽度-->
     <dimen name="main_layout_right1_width">360px</dimen>
     <!--主界面右边高度-->
-    <dimen name="main_layout_right1_height">304px</dimen>
+    <dimen name="main_layout_right1_height">608px</dimen>
     <!--主界面右边宽度-->
-    <dimen name="main_layout_right2_width">360px</dimen>
+    <dimen name="main_layout_right2_width">380px</dimen>
     <!--主界面右边高度-->
-    <dimen name="main_layout_right2_height">448px</dimen>
+    <dimen name="main_layout_right2_height">896px</dimen>
     <!--悬浮按钮布局宽度-->
-    <dimen name="main_layout_floatBtn_width">70px</dimen>
+    <dimen name="main_layout_floatBtn_width">100px</dimen>
     <!--悬浮按钮布局高度-->
-    <dimen name="main_layout_floatBtn_height">60px</dimen>
+    <dimen name="main_layout_floatBtn_height">120px</dimen>
     <!--主界面低速报警宽度-->
     <dimen name="main_layout_lowSpeed_width">300px</dimen>
     <!--主界面低速报警高度-->
-    <dimen name="main_layout_lowSpeed_height">54px</dimen>
+    <dimen name="main_layout_lowSpeed_height">108px</dimen>
     <!--主界面时间字体大小-->
-    <dimen name="main_layout_time_textSize">40px</dimen>
+    <dimen name="main_layout_time_textSize">80px</dimen>
     <!--左边Fragment字体大小-->
-    <dimen name="main_left_fragment_textSize">18px</dimen>
+    <dimen name="main_left_fragment_textSize">36px</dimen>
     <dimen name="main_left_fragment_light_margin">10px</dimen>
     <!--字体大小-->
     <dimen name="textSize_50px">50px</dimen>
@@ -81,5 +81,5 @@
     <dimen name="margin_100px">100px</dimen>
     <!--左边Fragment空调按钮大小-->
     <dimen name="button_width">90px</dimen>
-    <dimen name="button_height">36px</dimen>
+    <dimen name="button_height">72px</dimen>
 </resources>

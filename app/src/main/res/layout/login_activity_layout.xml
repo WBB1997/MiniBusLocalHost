@@ -442,14 +442,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:background="@drawable/ic_backspace"/>
+                        android:background="@drawable/ic_backspace" />
 
                     <TextView
-                        android:layout_toRightOf="@id/numberBack"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="BackSpace"
                         android:layout_marginLeft="@dimen/margin_20px"
+                        android:layout_toRightOf="@id/numberBack"
+                        android:text="BackSpace"
                         android:textColor="@color/color_white"
                         android:textSize="@dimen/login_activity_number_button_textSize_left"
                         android:textStyle="italic" />

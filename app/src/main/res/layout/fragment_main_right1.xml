@@ -14,8 +14,8 @@
         android:background="@drawable/circle_border_pressed"
         android:text="自动驾驶"
         android:textColor="@color/right_fragment1_text_color"
-        android:textSize="80px"
-        android:textScaleX="0.5"/>
+        android:textScaleX="0.5"
+        android:textSize="80px" />
     <!--远程驾驶-->
     <Button
         android:id="@+id/rightFragment1_longDrive"
@@ -27,8 +27,8 @@
         android:background="@drawable/circle_border_pressed"
         android:text="远程驾驶"
         android:textColor="@color/right_fragment1_text_color"
-        android:textSize="80px"
-        android:textScaleX="0.5"/>
+        android:textScaleX="0.5"
+        android:textSize="80px" />
     <!--待机-->
     <Button
         android:id="@+id/rightFragment1_await"
@@ -39,6 +39,6 @@
         android:background="@drawable/circle_border_pressed"
         android:text="待  机"
         android:textColor="@color/right_fragment1_text_color"
-        android:textSize="80px"
-        android:textScaleX="0.5"/>
+        android:textScaleX="0.5"
+        android:textSize="80px" />
 </RelativeLayout>

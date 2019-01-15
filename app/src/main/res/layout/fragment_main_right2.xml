@@ -44,32 +44,45 @@
                 android:layout_below="@id/rightFragment2_speed"
                 android:layout_centerHorizontal="true"
                 android:text="Km/h"
-                android:textSize="30px"
                 android:textColor="@color/right_fragment1_text_color"
-                android:textScaleX="0.5" />
+                android:textScaleX="0.5"
+                android:textSize="30px" />
         </RelativeLayout>
         <!--右边-->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/meterPanel_img"
+            android:layout_marginLeft="20px"
+            android:layout_marginRight="20px"
             android:layout_toRightOf="@id/meterPanel_img">
 
             <LinearLayout
                 android:id="@+id/rightFragment2_batteryTemperature_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true">
+                android:layout_centerHorizontal="true"
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/rightFragment2_batteryTemperature"
                     fontPath="fonts/font1.TTF"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="42℃"
+                    android:text="42"
                     android:textColor="@color/main_battery_color"
                     android:textScaleX="0.5"
                     android:textSize="100px"
+                    tools:ignore="MissingPrefix" />
+
+                <TextView
+                    fontPath="fonts/font1.TTF"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="℃"
+                    android:textColor="@color/main_battery_color"
+                    android:textScaleX="0.5"
+                    android:textSize="90px"
                     tools:ignore="MissingPrefix" />
             </LinearLayout>
 
@@ -102,7 +115,7 @@
             </LinearLayout>
         </RelativeLayout>
     </RelativeLayout>
-
+    <!--下部分-->
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -166,9 +179,9 @@
                         android:layout_alignBottom="@id/rightFragment2_zonlic"
                         android:layout_toRightOf="@id/rightFragment2_zonlic"
                         android:text="km"
-                        android:textSize="30px"
                         android:textColor="@color/right_fragment1_text_color"
-                        android:textScaleX="0.5" />
+                        android:textScaleX="0.5"
+                        android:textSize="30px" />
                 </RelativeLayout>
             </RelativeLayout>
 
@@ -176,8 +189,8 @@
                 android:layout_width="1dp"
                 android:layout_height="140px"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/margin_40px"
-                android:layout_toRightOf="@id/rightFragment2_zonlic_layout"
+                android:layout_marginRight="12px"
+                android:layout_toLeftOf="@id/rightFragment2_renwujd_layout"
                 android:background="#9bf7f9" />
             <!--任务进度-->
             <RelativeLayout
@@ -199,8 +212,8 @@
                         android:layout_centerInParent="true"
                         android:text="@string/right_fragment_tv_renwujd"
                         android:textColor="@color/right_fragment1_text_color"
-                        android:textSize="32px"
-                        android:textScaleX="0.5"/>
+                        android:textScaleX="0.5"
+                        android:textSize="32px" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -223,9 +236,9 @@
                         android:layout_alignBottom="@id/rightFragment2_renwujd"
                         android:layout_toRightOf="@id/rightFragment2_renwujd"
                         android:text="%"
-                        android:textSize="30px"
                         android:textColor="@color/right_fragment1_text_color"
-                        android:textScaleX="0.5" />
+                        android:textScaleX="0.5"
+                        android:textSize="30px" />
                 </RelativeLayout>
             </RelativeLayout>
 
@@ -233,8 +246,8 @@
                 android:layout_width="1dp"
                 android:layout_height="140px"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="66px"
-                android:layout_toRightOf="@id/rightFragment2_renwujd_layout"
+                android:layout_marginRight="12px"
+                android:layout_toLeftOf="@id/rightFragment2_pingjunss_layout"
                 android:background="#9bf7f9" />
             <!--平均时速-->
             <RelativeLayout
@@ -280,9 +293,9 @@
                         android:layout_alignBottom="@id/rightFragment2_pingjunss"
                         android:layout_toRightOf="@id/rightFragment2_pingjunss"
                         android:text="km/h"
-                        android:textSize="30px"
                         android:textColor="@color/right_fragment1_text_color"
-                        android:textScaleX="0.5" />
+                        android:textScaleX="0.5"
+                        android:textSize="30px" />
                 </RelativeLayout>
             </RelativeLayout>
         </RelativeLayout>
@@ -308,10 +321,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/driveInfo"
                 android:text=""
-
-                android:textSize="30px"
                 android:textColor="@color/right_fragment1_text_color"
-                android:textScaleX="0.5" />
+                android:textScaleX="0.5"
+                android:textSize="30px" />
         </RelativeLayout>
     </RelativeLayout>
 </RelativeLayout>

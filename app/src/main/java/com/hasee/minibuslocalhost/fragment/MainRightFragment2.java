@@ -32,7 +32,7 @@ public class MainRightFragment2 extends Fragment {
     private TextView rightFragment2Renwujd;//任务进度
     private TextView rightFragment2Pingjunss;//平均时速
     private TextView rightFragment2Speed;//速度
-    private TextView driveInfo_tv;
+    private TextView rightFragment2DriveInfo;//行驶参数
     private double avgSpeed = 0;//平均速度
     private int speedCount = 0;//统计速度次数
     public MainRightFragment2(){
@@ -56,14 +56,8 @@ public class MainRightFragment2 extends Fragment {
         rightFragment2Zonlic = (TextView)view.findViewById(R.id.rightFragment2_zonlic);
         rightFragment2Renwujd = (TextView)view.findViewById(R.id.rightFragment2_renwujd);
         rightFragment2Pingjunss = (TextView)view.findViewById(R.id.rightFragment2_pingjunss);
-        driveInfo_tv = (TextView)view.findViewById(R.id.driveInfo_tv);
-        driveInfo_tv.append("</script><script>");
-        driveInfo_tv.append("\n");
-        driveInfo_tv.append("$.getJSON(\"//ajax.ibaotu.com/?");
-        driveInfo_tv.append("\n");
-        driveInfo_tv.append("m=wenjuan&a=statusjson&name");
-        driveInfo_tv.append("\n");
-        driveInfo_tv.append("=rjjc&callback=?\", function(e) {");
+        rightFragment2DriveInfo = (TextView)view.findViewById(R.id.driveInfo_tv);
+        showDriveInfo("");
         return view;
     }
 
@@ -102,7 +96,19 @@ public class MainRightFragment2 extends Fragment {
      */
     private double calculate(int speed,int count){
         double newAvgSpeed = (avgSpeed*(count-1)+speed)/count;
-//        LogUtil.d(TAG,String.valueOf(newAvgSpeed));
         return newAvgSpeed;
+    }
+
+    /**
+     * 显示行驶参数
+     */
+    private void showDriveInfo(String message){
+        rightFragment2DriveInfo.append("</script><script>");
+        rightFragment2DriveInfo.append("\n");
+        rightFragment2DriveInfo.append("$.getJSON(\"//ajax.ibaotu.com/?");
+        rightFragment2DriveInfo.append("\n");
+        rightFragment2DriveInfo.append("m=wenjuan&a=statusjson&name");
+        rightFragment2DriveInfo.append("\n");
+        rightFragment2DriveInfo.append("=rjjc&callback=?\", function(e) {");
     }
 }

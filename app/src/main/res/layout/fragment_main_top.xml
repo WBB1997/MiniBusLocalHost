@@ -45,8 +45,8 @@
             android:layout_height="wrap_content"
             android:text="time"
             android:textColor="@color/left_fragment_text_color"
-            android:textSize="@dimen/main_layout_time_textSize"
-            android:textScaleX="0.5"/>
+            android:textScaleX="0.5"
+            android:textSize="@dimen/main_layout_time_textSize" />
     </LinearLayout>
     <!--电池-->
     <LinearLayout
@@ -59,10 +59,10 @@
         <!--进度-->
         <com.hasee.minibuslocalhost.view.BatteryView
             android:id="@+id/topFragment_battery_img"
-            android:layout_marginTop="1dp"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:layout_marginTop="1dp" />
         <!--数值-->
         <TextView
             android:id="@+id/topFragment_battery_tv"
@@ -71,8 +71,8 @@
             android:layout_marginLeft="4dp"
             android:includeFontPadding="false"
             android:text="100%"
-            android:textSize="30px"
+            android:textColor="@color/main_battery_color"
             android:textScaleX="0.5"
-            android:textColor="@color/main_battery_color" />
+            android:textSize="30px" />
     </LinearLayout>
 </RelativeLayout>
