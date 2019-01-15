@@ -13,10 +13,10 @@ import static com.hasee.minibuslocalhost.util.ByteUtil.*;
 public class PCGL1 extends BaseClass {
     private static final String TAG = "PCGL1";
     private HashMap<Integer, MyPair<Integer>> fields = new HashMap<Integer, MyPair<Integer>>(){{
-        put(0,new MyPair<>(3, IntegerCommand.PCG_Left_Work_Sts, MainActivity.SEND_TO_LEFTSCREEN)); // 档位位置;
-        put(3,new MyPair<>(3, IntegerCommand.PCG_Left_Error_Mode, MainActivity.SEND_TO_LEFTSCREEN)); // 档位位置;
-        put(6,new MyPair<>(2, IntegerCommand.PCG_Left_Anti_Pinch_Mode, MainActivity.SEND_TO_LEFTSCREEN)); // 档位位置;
-        put(8,new MyPair<>(8, IntegerCommand.PCG_Left_Open_Count, MainActivity.SEND_TO_LEFTSCREEN)); // 档位位置;
+        put(0,new MyPair<>(3, IntegerCommand.PCG_Left_Work_Sts, MainActivity.SEND_TO_SCREEN));
+        put(3,new MyPair<>(3, IntegerCommand.PCG_Left_Error_Mode, MainActivity.SEND_TO_LOCALHOST));
+        put(6,new MyPair<>(2, IntegerCommand.PCG_Left_Anti_Pinch_Mode, MainActivity.SEND_TO_LOCALHOST));
+        put(8,new MyPair<>(8, IntegerCommand.PCG_Left_Open_Count, MainActivity.SEND_TO_LOCALHOST));
     }};
     private byte[] bytes = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 

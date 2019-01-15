@@ -69,10 +69,8 @@ public class MainRightFragment2 extends Fragment {
         int id = object.getIntValue("id");
         if(id == Wheel_Speed_ABS){//车速
             int speed = (int) object.getDoubleValue("data");
-            speedCount++;
-//            avgSpeed = (int)calculate(speed,speedCount);
+//            speedCount++;
             rightFragment2Speed.setText(String.valueOf(speed));
-//            rightFragment2Pingjunss.setText(String.valueOf(avgSpeed));
         }
         if(id == BCM_InsideTemp){//车内温度
             int data = object.getIntValue("data");

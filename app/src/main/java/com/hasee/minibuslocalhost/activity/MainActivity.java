@@ -14,6 +14,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+
+import android.util.Pair;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
@@ -34,13 +36,25 @@ import com.hasee.minibuslocalhost.util.MyHandler;
 import com.hasee.minibuslocalhost.util.SendToScreenThread;
 import com.hasee.minibuslocalhost.util.ToastUtil;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import android_serialport_api.SreialComm;
 
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.*;
+import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_GRADE_OFF;
+import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_MODEL_AWAIT;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.DRIVE_MODEL_AUTO;
+import static com.hasee.minibuslocalhost.transmit.Class.HMI.DRIVE_MODEL_AUTO_AWAIT;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.DRIVE_MODEL_REMOTE;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.OFF;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.ON;
+import static com.hasee.minibuslocalhost.transmit.Class.HMI.Ord_Alam_ON;
+import static com.hasee.minibuslocalhost.transmit.Class.HMI.POINTLESS;
+import static com.hasee.minibuslocalhost.transmit.Class.HMI.eBooster_Warning_OFF;
+import static com.hasee.minibuslocalhost.transmit.Class.HMI.eBooster_Warning_ON;
 
 
 public class MainActivity extends BaseActivity {
@@ -49,6 +63,7 @@ public class MainActivity extends BaseActivity {
     public final static int SEND_TO_RIGHTSCREEN = 1;//右车门
     public final static int SEND_TO_LEFTSCREEN = 2;//左车门
     public final static int SEND_TO_LOCALHOST = 3;//主控屏
+    public final static int SEND_TO_SCREEN = 4;//发送给前风挡和左右屏
     public final static int LOCALHOST_SCREEN_TOP = 0;//主控屏上部分
     public final static int LOCALHOST_SCREEN_LEFT = 1;//主控屏左边部分
     public final static int LOCALHOST_SCREEN_CENTER = 2;//主控屏中间部分
@@ -87,6 +102,8 @@ public class MainActivity extends BaseActivity {
         } else {
             //有权限的话什么都不做
         }
+//        reboot();//发送初始化数据
+//        ToastUtil.getInstance(mContext).showShortToast("程序已经启动");
     }
 
     @Override
@@ -366,5 +383,27 @@ public class MainActivity extends BaseActivity {
             default:
                 return -1;
         }
+    }
+
+    /**
+     * 程序启动就发送数据
+     */
+    private void reboot(){
+        Map<Integer,Integer> map = new HashMap<>();
+        map.put(HMI_Dig_Ord_HighBeam,POINTLESS);//远光灯
+        map.put(HMI_Dig_Ord_LowBeam,POINTLESS);//近光灯
+        map.put(HMI_Dig_Ord_LeftTurningLamp,POINTLESS);//左转向灯
+        map.put(HMI_Dig_Ord_RightTurningLamp,POINTLESS);//右转向灯
+        map.put(HMI_Dig_Ord_RearFogLamp,POINTLESS);//后雾灯
+        map.put(HMI_Dig_Ord_DangerAlarm,POINTLESS);//警示灯
+        map.put(HMI_Dig_Ord_air_model,AIR_MODEL_AWAIT);//制冷，制热，除雾
+        map.put(HMI_Dig_Ord_Alam,Ord_Alam_ON);//低速报警
+        map.put(HMI_Dig_Ord_Driver_model,DRIVE_MODEL_AUTO_AWAIT);//驾驶模式
+        map.put(HMI_Dig_Ord_DoorLock,POINTLESS);//门锁控制
+        map.put(HMI_Dig_Ord_air_grade,AIR_GRADE_OFF);//空调档位
+        map.put(HMI_Dig_Ord_eBooster_Warning,eBooster_Warning_OFF);//制动液面报警
+        map.put(HMI_Dig_Ord_FANPWM_Control,AIR_GRADE_OFF);//风扇PWM占空比控制信号
+        Transmit.getInstance().Can_init(map);
+        LogUtil.d(TAG,"初始化");
     }
 }

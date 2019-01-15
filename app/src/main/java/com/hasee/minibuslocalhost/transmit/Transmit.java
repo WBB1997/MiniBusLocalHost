@@ -36,9 +36,12 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.*;
+import static com.hasee.minibuslocalhost.transmit.Class.HMI.DRIVE_MODEL_AUTO_AWAIT;
+import static com.hasee.minibuslocalhost.transmit.Class.HMI.eBooster_Warning_OFF;
 import static com.hasee.minibuslocalhost.util.ByteUtil.bytesToHex;
 import static com.hasee.minibuslocalhost.util.ByteUtil.subBytes;
 
@@ -46,7 +49,7 @@ public class Transmit {
     private final static String TAG = "Transmit";
     private final static int MESSAGELENGTH = 14;
     private final int PORT = 4001;   // port号
-    private final static String IP = "192.168.1.3"; // 总线ip地址
+    private final static String IP = "192.168.1.60"; // 总线ip地址
     private final static Transmit instance = new Transmit();
     private MyHandler handler;
 
@@ -72,6 +75,22 @@ public class Transmit {
         UDP_send(bytes);
     }
 
+    // 车辆初始化
+    public void  Can_init(Object obj){
+        HMI HMI_Class = (HMI) NAME_AND_CLASS.get("HMI");
+        Map<Integer,Integer> map = (Map<Integer, Integer>) obj;
+        Iterator<Map.Entry<Integer, Integer>> iterator = map.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<Integer, Integer> it = iterator.next();
+            int field = it.getKey();
+            Object o = it.getValue();
+            HMI_Class.changeStatus(field, o);
+        }
+        byte[] bytes = HMI_Class.getBytes();
+        LogUtil.d(TAG, bytesToHex(bytes));
+        UDP_send(bytes);
+    }
+
     public void setHandler(MyHandler handler) {
         this.handler = handler;
         LogUtil.d(TAG, "setHandler");
@@ -90,23 +109,23 @@ public class Transmit {
         int id = jsonObject.getIntValue("id");
         switch (id) {
             case BCM_Flg_Stat_HighBeam:
-                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI_Dig_Ord_HighBeam, jsonObject.getBoolean("data"));
+                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI_Dig_Ord_HighBeam, jsonObject.getInteger("data"));
                 break;
             case BCM_Flg_Stat_LowBeam:
-                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI_Dig_Ord_LowBeam, jsonObject.getBoolean("data"));
+                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI_Dig_Ord_LowBeam, jsonObject.getInteger("data"));
                 break;
             case BCM_Flg_Stat_LeftTurningLamp:
-                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI_Dig_Ord_LeftTurningLamp, jsonObject.getBoolean("data"));
+                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI_Dig_Ord_LeftTurningLamp, jsonObject.getInteger("data"));
                 break;
             case BCM_Flg_Stat_RightTurningLamp:
-                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI_Dig_Ord_RightTurningLamp, jsonObject.getBoolean("data"));
+                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI_Dig_Ord_RightTurningLamp, jsonObject.getInteger("data"));
                 break;
             case BCM_Flg_Stat_RearFogLamp:
-                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI_Dig_Ord_RearFogLamp, jsonObject.getBoolean("data"));
+                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI_Dig_Ord_RearFogLamp, jsonObject.getInteger("data"));
                 break;
-//            case 107:
-//                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI.HMI_Dig_Ord_DoorLock, jsonObject.getJSONArray("data").getBoolean(0));
-//                break;
+            case BCM_Flg_Stat_DangerAlarmLamp:
+                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI_Dig_Ord_DangerAlarm, jsonObject.getInteger("data"));
+                break;
             default:
                 break;
         }

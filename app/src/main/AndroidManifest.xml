@@ -23,6 +23,8 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <!-- 访问网络，网络定位需要上网 -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <!--自启动权限-->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <supports-screens
         android:anyDensity="true"
@@ -63,15 +65,15 @@
         <!--<activity android:name=".activity.MainActivity"-->
             <!--android:screenOrientation="landscape"/>-->
         <!--自启动广播-->
-        <!--<receiver-->
-            <!--android:name=".receive.SelfBootReceiver"-->
-            <!--android:enabled="true"-->
-            <!--android:exported="true">-->
-            <!--<intent-filter-->
-                <!--android:priority="1000">-->
-                <!--<action android:name="android.intent.action.BOOT_COMPLETED"/>-->
-            <!--</intent-filter>-->
-        <!--</receiver>-->
+        <receiver
+            android:name=".receive.SelfBootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter
+                android:priority="1000">
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

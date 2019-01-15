@@ -13,10 +13,10 @@ import static com.hasee.minibuslocalhost.util.ByteUtil.*;
 public class HAD5 extends BaseClass {
     private static final String TAG = "HAD5";
     private HashMap<Integer, MyPair<Integer>> fields = new HashMap<Integer, MyPair<Integer>>(){{
-        put(0,new MyPair<>(8, IntegerCommand.HAD_CurrentDrivingRoadIDNum, MainActivity.SEND_TO_LOCALHOST)); // 档位位置;
-        put(8,new MyPair<>(8, IntegerCommand.HAD_NextStationIDNumb, MainActivity.SEND_TO_LOCALHOST)); // 档位位置;
-        put(24,new MyPair<>(16, IntegerCommand.HAD_DistanceForNextStation, MainActivity.SEND_TO_LOCALHOST)); // 档位位置;
-        put(32,new MyPair<>(8, IntegerCommand.HAD_TimeForArrivingNextStation, MainActivity.SEND_TO_LOCALHOST)); // 档位位置;
+        put(0,new MyPair<>(8, IntegerCommand.HAD_CurrentDrivingRoadIDNum, MainActivity.SEND_TO_SCREEN)); // 档位位置;
+        put(8,new MyPair<>(8, IntegerCommand.HAD_NextStationIDNumb, MainActivity.SEND_TO_SCREEN)); // 档位位置;
+        put(24,new MyPair<>(16, IntegerCommand.HAD_DistanceForNextStation, MainActivity.SEND_TO_SCREEN)); // 档位位置;
+        put(32,new MyPair<>(8, IntegerCommand.HAD_TimeForArrivingNextStation, MainActivity.SEND_TO_SCREEN)); // 档位位置;
         put(40,new MyPair<>(8, IntegerCommand.HAD_StartingSiteNum, MainActivity.SEND_TO_LOCALHOST)); // 档位位置;
         put(48,new MyPair<>(8, IntegerCommand.HAD_EndingSiteNum, MainActivity.SEND_TO_LOCALHOST)); // 档位位置;
         put(56,new MyPair<>(8, IntegerCommand.HAD_PassingBySiteNum, MainActivity.SEND_TO_LOCALHOST)); // 档位位置;
