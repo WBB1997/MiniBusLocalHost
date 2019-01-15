@@ -44,7 +44,9 @@
                 android:name="com.hasee.minibuslocalhost.fragment.MainLeftFragment"
                 android:layout_width="@dimen/main_layout_left_width"
                 android:layout_height="@dimen/main_layout_left_height"
-                android:layout_centerInParent="true"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
                 tools:layout="@layout/fragment_main_left" />
         </RelativeLayout>
         <!--中间部分-->
@@ -59,7 +61,7 @@
                 android:id="@+id/center_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/main_layout_center_height"
-                android:layout_centerVertical="true"
+                android:layout_centerInParent="true"
                 android:layout_marginLeft="20px"
                 android:layout_marginRight="20px"
                 android:background="@drawable/map" />

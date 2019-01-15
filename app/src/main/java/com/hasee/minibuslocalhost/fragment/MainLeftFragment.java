@@ -150,6 +150,8 @@ public class MainLeftFragment extends Fragment {
                     seekBarIndex = AIR_GRADE_FIVE_GEAR;
                 }
                 leftFragmentConditionSize.setText(String.valueOf(seekBarIndex));
+                //发送最终数据至CAN(1-7档)
+                activity.sendToCAN(clazz, HMI_Dig_Ord_air_grade, seekBarIndex);
             }
         }
 
@@ -160,8 +162,8 @@ public class MainLeftFragment extends Fragment {
 
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
-            //发送最终数据至CAN(1-7档)
-            activity.sendToCAN(clazz, HMI_Dig_Ord_air_grade, seekBarIndex);
+//            //发送最终数据至CAN(1-7档)
+//            activity.sendToCAN(clazz, HMI_Dig_Ord_air_grade, seekBarIndex);
         }
     };
 

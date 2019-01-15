@@ -6,7 +6,7 @@
             <!--填充的颜色-->
             <solid android:color="@android:color/transparent"/>
             <!--边框颜色-->
-            <stroke android:width="2px" android:color="#3a5aaa"/>
+            <stroke android:width="2px" android:color="#385ba8"/>
         </shape>
     </item>
     <!--按压了-->
@@ -15,7 +15,7 @@
             <!--填充的颜色-->
             <solid android:color="@android:color/transparent"/>
             <!--边框颜色-->
-            <stroke android:width="2px" android:color="#05d2fa"/>
+            <stroke android:width="2px" android:color="#03d2f9"/>
         </shape>
     </item>
 </selector>

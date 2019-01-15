@@ -14,6 +14,7 @@ public class SreialComm {
     public static final int LIGHT_NUM = 2;
     private SerialPortUtil serialPortUtil = null;
     private int m = 0;
+    private int errorCount=0;
     private int ptr[] = new int[3];
     private byte bt[] = new byte[3];
     JSONObject object;//发送的数据
@@ -47,21 +48,23 @@ public class SreialComm {
                         ptr[0] = 2;
                     } else {
                         m = 0;
+                        errorCount++;
                     }
                 }
-                if (m == 2) {
+                if (m == 2&&object!=null) {
                     if (data[0] >= 0 && data[0] <= 26) {
                         object.put("data",data[0]);
                         ptr[1] = data[0];
                     } else {
                         m = 0;
+                        errorCount++;
                     }
                 }
                 if (m == 3) {
                     ptr[2] = data[0];
                     int c = Crc.xCal_crc(ptr, 2);
                     if (c == ptr[2]) {
-                        LogUtil.d(TAG,"校验正确！");
+                        LogUtil.d(TAG,"校验正确！"+"---"+"  pre[0]="+ptr[0]+"  pre[1]="+ptr[1]+"  pre[2]="+ptr[2]+"  c="+c);
                         m = 0;
                         handler.post(runnable);//发送给主线程
 
@@ -71,7 +74,9 @@ public class SreialComm {
                         serialPortUtil.sendDataToSerialPort(bt);
                     } else {
                         m = 0;
-                        LogUtil.d(TAG,"校验错误！");
+                        errorCount++;
+                        LogUtil.d(TAG,"校验错误！"+"---"+"  pre[0]="+ptr[0]+"  pre[1]="+ptr[1]+"  pre[2]="+ptr[2]+"  c="+c);
+                        LogUtil.d(TAG,"校验错误次数:"+errorCount);
                     }
                 }
             }

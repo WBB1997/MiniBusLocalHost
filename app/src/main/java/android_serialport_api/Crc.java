@@ -22,6 +22,8 @@ public class Crc {
 					crc >>= 1;
 			}
 		}
+		if(crc>127)
+			crc= crc-256;
 		return crc;
 	}
 
