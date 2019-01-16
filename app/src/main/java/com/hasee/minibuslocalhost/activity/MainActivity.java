@@ -230,11 +230,13 @@ public class MainActivity extends BaseActivity {
                             }
                             rightFragment2.refresh(object);
                         }
-                    }else{//发给主控的其他消息
-                        if(msg.what == HAD_CurrentDrivingRoadIDNum){//当前行驶线路ID
-                            new SendToScreenThread(object, SEND_TO_FRONTSCREEN).start();
-                        }
                     }
+                    break;
+                }
+                case SEND_TO_SCREEN:{//发送给前风挡、左右车门
+                    new SendToScreenThread(object, SEND_TO_FRONTSCREEN).start();
+                    new SendToScreenThread(object, SEND_TO_LEFTSCREEN).start();
+                    new SendToScreenThread(object, SEND_TO_RIGHTSCREEN).start();
                     break;
                 }
                 default:
