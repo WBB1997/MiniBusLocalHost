@@ -21,7 +21,24 @@ import com.hasee.minibuslocalhost.R;
 import com.hasee.minibuslocalhost.activity.MainActivity;
 import com.hasee.minibuslocalhost.util.LogUtil;
 
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.*;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_ACBlowingLevel;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_DemisterStatus;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_Flg_Stat_DangerAlarmLamp;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_Flg_Stat_HighBeam;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_Flg_Stat_LeftTurningLamp;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_Flg_Stat_LowBeam;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_Flg_Stat_RearFogLamp;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_Flg_Stat_RightTurningLamp;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_DangerAlarm;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_Demister_Control;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_FANPWM_Control;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_HighBeam;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_LeftTurningLamp;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_LowBeam;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_RearFogLamp;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_RightTurningLamp;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_air_grade;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_air_model;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_GRADE_FIRST_GEAR;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_GRADE_FIVE_GEAR;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_GRADE_FOURTH_GEAR;
@@ -30,7 +47,6 @@ import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_GRADE_SECOND_GEA
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_GRADE_THIRD_GEAR;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_MODEL_AWAIT;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_MODEL_COOL;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_MODEL_DEMIST;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_MODEL_HEAT;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.OFF;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.ON;
@@ -278,9 +294,6 @@ public class MainLeftFragment extends Fragment {
                         //关闭暖气
                         leftFragmentHotAirImg.setActivated(false);
                         leftFragmentHotAir.setActivated(false);
-//                        //关闭除雾
-//                        leftFragmentDeFogImg.setActivated(false);
-//                        leftFragmentDeFog.setActivated(false);
                     } else {
                         leftFragmentCoolAirImg.setActivated(false);
                     }
@@ -324,12 +337,8 @@ public class MainLeftFragment extends Fragment {
                         leftFragmentDeFogImg.setActivated(false);
                     }
                     typeFlag = true;
-                    field = HMI_Dig_Ord_air_model;//空调模式
-                    if(leftFragmentDeFog.isActivated()){
-                        o = AIR_MODEL_DEMIST;//除雾模式
-                    }else{
-                        o = AIR_MODEL_AWAIT;//关闭
-                    }
+                    field = HMI_Dig_Ord_Demister_Control;//除雾控制
+                    o = transInt(leftFragmentDeFog.isActivated());
                     break;
                 }
             }
@@ -414,6 +423,17 @@ public class MainLeftFragment extends Fragment {
 //                    leftFragmentRightLight.setActivated(false);
 //                    leftFragmentCarLeftlightOpen.setVisibility(View.INVISIBLE);
 //                }
+                break;
+            }
+            case BCM_ACBlowingLevel:{//空调风量档位
+                int index = object.getIntValue("data");//接收档位
+                seekBarIndex = index;//当前档位
+                leftFragmentConditionSize.setText(String.valueOf(seekBarIndex));//设置档位数值
+                leftFragmentSeekBar.setProgress(seekBarIndex*20);//设置滑动条
+                break;
+            }
+            case BCM_DemisterStatus:{//除雾状态
+                leftFragmentDeFog.setActivated(data);
                 break;
             }
         }

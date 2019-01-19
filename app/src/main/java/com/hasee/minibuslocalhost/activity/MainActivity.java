@@ -5,24 +5,20 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-
-import android.util.Pair;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hasee.minibuslocalhost.R;
-
 import com.hasee.minibuslocalhost.fragment.MainCenterFragment;
 import com.hasee.minibuslocalhost.fragment.MainLeftFragment;
 import com.hasee.minibuslocalhost.fragment.MainLowBatteryFragment;
@@ -36,25 +32,50 @@ import com.hasee.minibuslocalhost.util.MyHandler;
 import com.hasee.minibuslocalhost.util.SendToScreenThread;
 import com.hasee.minibuslocalhost.util.ToastUtil;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import android_serialport_api.SreialComm;
 
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.*;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_ACBlowingLevel;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_DemisterStatus;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_Flg_Stat_DangerAlarmLamp;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_Flg_Stat_HighBeam;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_Flg_Stat_LeftTurningLamp;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_Flg_Stat_LowBeam;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_Flg_Stat_RearFogLamp;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_Flg_Stat_RightTurningLamp;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_InsideTemp;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_OutsideTemp;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.BMS_SOC;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HAD_GPSPositioningStatus;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HIM_Dig_Ord_TotalOdmeter;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_Alam;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_DangerAlarm;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_Demister_Control;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_DoorLock;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_Driver_model;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_FANPWM_Control;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_HighBeam;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_LeftTurningLamp;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_LowBeam;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_RearFogLamp;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_RightTurningLamp;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_air_grade;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_air_model;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_eBooster_Warning;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.OBU_LocalTime;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.Wheel_Speed_ABS;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.can_RemainKm;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.can_num_PackAverageTemp;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_GRADE_OFF;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_MODEL_AWAIT;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.DRIVE_MODEL_AUTO;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.DRIVE_MODEL_AUTO_AWAIT;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.DRIVE_MODEL_REMOTE;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.OFF;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.ON;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.Ord_Alam_ON;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.POINTLESS;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.eBooster_Warning_OFF;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.eBooster_Warning_ON;
 
 
 public class MainActivity extends BaseActivity {
@@ -372,10 +393,13 @@ public class MainActivity extends BaseActivity {
             case BCM_Flg_Stat_LowBeam://近光灯状态信号
             case BCM_Flg_Stat_RearFogLamp://后雾灯状态信号
             case BCM_Flg_Stat_DangerAlarmLamp://危险报警灯控制（双闪）状态信号
+            case BCM_ACBlowingLevel://空调风量档位
+            case BCM_DemisterStatus://除雾状态
                 return LOCALHOST_SCREEN_LEFT;
             //右边Fragment
             case BCM_InsideTemp://车内温度
             case BCM_OutsideTemp://车外温度
+            case can_num_PackAverageTemp://电池包平均温度
             case can_RemainKm://剩余里程数
             case Wheel_Speed_ABS://车速信号
                 return LOCALHOST_SCREEN_RIGHT;
@@ -405,6 +429,8 @@ public class MainActivity extends BaseActivity {
         map.put(HMI_Dig_Ord_air_grade,AIR_GRADE_OFF);//空调档位
         map.put(HMI_Dig_Ord_eBooster_Warning,eBooster_Warning_OFF);//制动液面报警
         map.put(HMI_Dig_Ord_FANPWM_Control,AIR_GRADE_OFF);//风扇PWM占空比控制信号
+        map.put(HMI_Dig_Ord_Demister_Control,POINTLESS);//除雾控制
+        map.put(HIM_Dig_Ord_TotalOdmeter,0);//总里程
         Transmit.getInstance().Can_init(map);
         LogUtil.d(TAG,"初始化");
     }
