@@ -49,7 +49,7 @@ public class Transmit {
     private final static String TAG = "Transmit";
     private final static int MESSAGELENGTH = 14;
     private final int PORT = 4001;   // port号
-    private final static String IP = "192.168.1.60"; // 总线ip地址
+    private final static String IP = "192.168.1.60"; // ip地址
     private final static Transmit instance = new Transmit();
     private MyHandler handler;
 
