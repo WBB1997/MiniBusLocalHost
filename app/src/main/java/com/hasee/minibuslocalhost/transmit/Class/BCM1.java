@@ -40,6 +40,8 @@ public class BCM1 extends BaseClass {
         put(21, new MyPair<>(1, IntegerCommand.BCM_Flg_Stat_BeltsSensor6, MainActivity.SEND_TO_LOCALHOST)); // 安全带传感器6
         put(24, new MyPair<>(8, IntegerCommand.BCM_OutsideTemp, MainActivity.SEND_TO_LOCALHOST)); // 车外温度
         put(32, new MyPair<>(8, IntegerCommand.BCM_InsideTemp, MainActivity.SEND_TO_LOCALHOST)); // 车内温度
+        put(45, new MyPair<>(3, IntegerCommand.BCM_ACBlowingLevel, MainActivity.SEND_TO_LOCALHOST)); // 空调风量档位
+        put(44, new MyPair<>(1, IntegerCommand.BCM_DemisterStatus, MainActivity.SEND_TO_LOCALHOST)); // 除雾状态
     }};
     private byte[] bytes = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
@@ -87,10 +89,13 @@ public class BCM1 extends BaseClass {
             case 19:
             case 20:
             case 21:
+            case 44:
                 return viewBinary(bytes[index / 8], index % 8);
             case 24:
             case 32:
                 return countBits(bytes,0,index,8, ByteUtil.Motorola) * 0.5 - 20;
+            case 45:
+                return (int)countBits(bytes,0,index,3, ByteUtil.Motorola);
             default:
                 LogUtil.d(TAG, "数据下标错误");
                 break;
