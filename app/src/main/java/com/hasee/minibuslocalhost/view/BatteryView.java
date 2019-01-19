@@ -10,7 +10,6 @@ import android.view.View;
  
 /**
  * 自定义view  电池电量条
- * Created by ${赵小贱} on 2017/7/19.
  */
  
 public class BatteryView extends View {

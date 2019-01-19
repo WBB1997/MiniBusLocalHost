@@ -59,7 +59,7 @@
         <!--进度-->
         <com.hasee.minibuslocalhost.view.BatteryView
             android:id="@+id/topFragment_battery_img"
-            android:layout_width="30dp"
+            android:layout_width="24dp"
             android:layout_height="30dp"
             android:layout_gravity="center"
             android:layout_marginTop="1dp" />

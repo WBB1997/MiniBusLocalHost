@@ -70,12 +70,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="42"
-                    android:textColor="@color/main_battery_color"
+                    android:textColor="@color/right_fragment1_text_color"
                     android:textScaleX="0.5"
                     android:textSize="100px"
                     tools:ignore="MissingPrefix" />
 
                 <TextView
+                    android:id="@+id/rightFragment2_batteryTemperature_e"
                     fontPath="fonts/font1.TTF"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

@@ -47,15 +47,15 @@ public class MainTopFragment extends Fragment {
         topFragmentBatteryTv = (TextView)view.findViewById(R.id.topFragment_battery_tv);
         topFragmentBatteryImg = (BatteryView)view.findViewById(R.id.topFragment_battery_img);
         topFragmentBatteryImg.setPower(100);//默认
-        timeThread = new TimeThread(activity,topFragmentTime);
-        timeThread.start();
+//        timeThread = new TimeThread(activity,topFragmentTime);
+//        timeThread.start();
         return view;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        timeThread.setFlag(false);
+//        timeThread.setFlag(false);
     }
 
     /**
@@ -64,7 +64,7 @@ public class MainTopFragment extends Fragment {
     public void refresh(JSONObject object){
         int id = object.getIntValue("id");
         if(id == OBU_LocalTime){//本地时间
-
+            topFragmentTime.setText(getTime(object));
         }
         if(id == BMS_SOC){//动力电池剩余电量SOC
             //电量显示
@@ -75,5 +75,21 @@ public class MainTopFragment extends Fragment {
         if(id == HAD_GPSPositioningStatus){//GPS状态
 
         }
+    }
+
+    /**
+     * int转换成时间
+     */
+    private String getTime(JSONObject object){
+        StringBuffer stringBuffer = new StringBuffer();
+        int hour = object.getIntValue("hour");
+        int minute = object.getIntValue("minute");
+        int second = object.getIntValue("second");
+        stringBuffer.append(hour);
+        stringBuffer.append(":");
+        stringBuffer.append(minute);
+        stringBuffer.append(":");
+        stringBuffer.append(second);
+        return stringBuffer.toString();
     }
 }
