@@ -88,5 +88,9 @@ public class IntegerCommand {
     public static final int HAD_ArrivingSiteRemind = 76;//到站提醒
     public static final int Wheel_Speed_ABS = 77;//车速信号
     public static final int HMI_Dig_Ord_DangerAlarm = 78;//双闪信号
+    public static final int BCM_ACBlowingLevel = 79;//空调风量档位
+    public static final int BCM_DemisterStatus = 80;//除雾状态
+    public static final int HMI_Dig_Ord_Demister_Control = 81;//除雾控制
+    public static final int HIM_Dig_Ord_TotalOdmeter = 82;//除雾
 
 }
