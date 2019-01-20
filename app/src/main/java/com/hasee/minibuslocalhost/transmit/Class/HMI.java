@@ -6,6 +6,7 @@ import com.hasee.minibuslocalhost.util.LogUtil;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HIM_Dig_Ord_TotalOdmeter;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_Alam;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_DangerAlarm;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_Demister_Control;
@@ -124,6 +125,9 @@ public class HMI extends BaseClass {
                 break;
             case HMI_Dig_Ord_Demister_Control:
                 setBits(bytes, (int) status, offset, 38, 2, ByteUtil.Motorola);
+                break;
+            case HIM_Dig_Ord_TotalOdmeter:
+                setBits(bytes, (int) status, offset, 48, 20, ByteUtil.Motorola);
                 break;
             default:
                 LogUtil.d(TAG, "消息转换错误");
