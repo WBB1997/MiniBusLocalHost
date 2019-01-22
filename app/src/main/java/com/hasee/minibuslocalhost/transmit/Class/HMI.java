@@ -56,6 +56,12 @@ public class HMI extends BaseClass {
     // 制动液面报警
     public static final int eBooster_Warning_ON = 1; // 报警
     public static final int eBooster_Warning_OFF = 0; // 正常
+    // HMI控制器运行状态
+    public static final int Ord_SystemRuningStatus_ONINPUT = 0; // 无输入
+    public static final int Ord_SystemRuningStatus_NORMAL = 1; // 正常
+    public static final int Ord_SystemRuningStatus_ERROR = 2; // 故障
+    public static final int Ord_SystemRuningStatus_AWAIT = 3; // 预留
+
     //
     private Map<String, ? super BaseClass> NAME_AND_CLASS;
 
