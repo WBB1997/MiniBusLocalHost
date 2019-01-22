@@ -49,7 +49,7 @@ import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_InsideTemp;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_OutsideTemp;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.BMS_SOC;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.HAD_GPSPositioningStatus;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HIM_Dig_Ord_TotalOdmeter;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_TotalOdmeter;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_Alam;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_DangerAlarm;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_Demister_Control;
@@ -430,7 +430,7 @@ public class MainActivity extends BaseActivity {
         map.put(HMI_Dig_Ord_eBooster_Warning,eBooster_Warning_OFF);//制动液面报警
         map.put(HMI_Dig_Ord_FANPWM_Control,AIR_GRADE_OFF);//风扇PWM占空比控制信号
         map.put(HMI_Dig_Ord_Demister_Control,POINTLESS);//除雾控制
-        map.put(HIM_Dig_Ord_TotalOdmeter,0);//总里程
+        map.put(HMI_Dig_Ord_TotalOdmeter,0);//总里程
         Transmit.getInstance().Can_init(map);
         LogUtil.d(TAG,"初始化");
     }

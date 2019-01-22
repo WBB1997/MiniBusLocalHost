@@ -6,7 +6,6 @@ import com.hasee.minibuslocalhost.util.LogUtil;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HIM_Dig_Ord_TotalOdmeter;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_Alam;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_DangerAlarm;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_Demister_Control;
@@ -18,6 +17,8 @@ import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_LeftTur
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_LowBeam;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_RearFogLamp;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_RightTurningLamp;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_SystemRuningStatus;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_TotalOdmeter;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_air_grade;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_air_model;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_eBooster_Warning;
@@ -126,8 +127,11 @@ public class HMI extends BaseClass {
             case HMI_Dig_Ord_Demister_Control:
                 setBits(bytes, (int) status, offset, 38, 2, ByteUtil.Motorola);
                 break;
-            case HIM_Dig_Ord_TotalOdmeter:
+            case HMI_Dig_Ord_TotalOdmeter:
                 setBits(bytes, (int) status, offset, 48, 20, ByteUtil.Motorola);
+                break;
+            case HMI_Dig_Ord_SystemRuningStatus:
+                setBits(bytes, (int) status, offset, 36, 2, ByteUtil.Motorola);
                 break;
             default:
                 LogUtil.d(TAG, "消息转换错误");

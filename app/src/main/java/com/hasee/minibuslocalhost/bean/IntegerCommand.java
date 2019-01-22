@@ -91,7 +91,8 @@ public class IntegerCommand {
     public static final int BCM_ACBlowingLevel = 79;//空调风量档位
     public static final int BCM_DemisterStatus = 80;//除雾状态
     public static final int HMI_Dig_Ord_Demister_Control = 81;//除雾控制
-    public static final int HIM_Dig_Ord_TotalOdmeter = 82;//总里程
+    public static final int HMI_Dig_Ord_TotalOdmeter = 82;//总里程
     public static final int HAD_GPS_LatLng = 83;//经纬度
+    public static final int HMI_Dig_Ord_SystemRuningStatus = 84;//HMI控制器运行状态
 
 }
