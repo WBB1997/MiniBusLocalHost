@@ -2,6 +2,7 @@ package com.hasee.minibuslocalhost.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -118,33 +119,41 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         mContext = MainActivity.this;
         hideBottomUIMenu();
+        boolean isShow = getIntent().getBooleanExtra("isShow",false);
         //初始化布局
-        viewInit();
-        //初始化相关类
-        classInit();
-        //申请相关权限
-        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{
-                    Manifest.permission.READ_EXTERNAL_STORAGE
-            }, 1);
-        } else {
-            //有权限的话什么都不做
-            initMusic();
+        viewInit(isShow);
+        if(!isShow){//非锁屏状态
+            //初始化相关类
+            classInit();
+            //申请相关权限
+            if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{
+                        Manifest.permission.READ_EXTERNAL_STORAGE
+                }, 1);
+            } else {
+                //有权限的话什么都不做
+                initMusic();
+            }
+            reboot();//发送初始化数据
         }
-        reboot();//发送初始化数据
-//        ToastUtil.getInstance(mContext).showShortToast("程序已经启动");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         //中断CAN总线的子线程
-        canThread.interrupt();
+        if(canThread != null){
+            canThread.interrupt();
+        }
         //关闭485串口
-        sreialComm.close();
+        if(sreialComm != null){
+            sreialComm.close();
+        }
         //中断485线程
-        sreialThread.interrupt();
+        if(sreialThread != null){
+            sreialThread.interrupt();
+        }
         //关闭音乐
         destroyMusic();
         LogUtil.d(TAG,"onDestroy");
@@ -186,14 +195,16 @@ public class MainActivity extends BaseActivity {
      */
     private void destroyMusic(){
         //关闭播放器
-        musicBinder.closeMusic();
-        unbindService(connection);
+        if(musicBinder != null){
+            musicBinder.closeMusic();
+            unbindService(connection);
+        }
     }
 
     /**
      * 初始化控件
      */
-    private void viewInit() {
+    private void viewInit(boolean isShow) {
         floatBtn = (ImageButton)findViewById(R.id.floatBtn);
         floatBtn.setOnClickListener(onClickListener);
         //初始化右边Fragment
@@ -208,6 +219,9 @@ public class MainActivity extends BaseActivity {
         transaction.add(R.id.right_fragment, new MainRightFragment1());//右边
         transaction.add(R.id.lowBattery_fragment, lowBatteryFragment).hide(lowBatteryFragment);//加入低速报警并隐藏
         transaction.commit();
+        if(isShow){//锁屏
+            showShadeDialog();
+        }
     }
 
     /**
@@ -322,6 +336,16 @@ public class MainActivity extends BaseActivity {
 
         }
     };
+
+    /**
+     *锁屏状态
+     */
+    private void showShadeDialog(){
+        Dialog dialog = new Dialog(MainActivity.this,R.style.activity_translucent);
+        dialog.setContentView(R.layout.shade_dialog_layout);
+        dialog.setCancelable(false);
+        dialog.show();
+    }
 
     /**
      *点击事件监听器

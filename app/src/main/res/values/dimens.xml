@@ -28,6 +28,10 @@
     <dimen name="login_layout_margin_left_right">15px</dimen>
     <!--登陆界面的上下边距-->
     <dimen name="login_layout_margin_top_buttom">30px</dimen>
+    <!--登陆界面错误框宽度-->
+    <dimen name="login_error_dialog_width">518px</dimen>
+    <!--登陆界面错误框高度-->
+    <dimen name="login_error_dialog_height">262px</dimen>
     <!--显示主界面-->
     <!--主界面上部宽度-->
     <dimen name="main_layout_top_width">708px</dimen>
