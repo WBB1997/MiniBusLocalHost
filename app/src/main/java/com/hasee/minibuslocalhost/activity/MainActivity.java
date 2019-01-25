@@ -18,6 +18,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -35,6 +36,7 @@ import com.hasee.minibuslocalhost.util.ActivityCollector;
 import com.hasee.minibuslocalhost.util.LogUtil;
 import com.hasee.minibuslocalhost.util.MyHandler;
 import com.hasee.minibuslocalhost.util.SendToScreenThread;
+import com.hasee.minibuslocalhost.util.TimerManager;
 import com.hasee.minibuslocalhost.util.ToastUtil;
 
 import java.util.HashMap;
@@ -112,6 +114,7 @@ public class MainActivity extends BaseActivity {
     private Thread sreialThread;//处理485的子线程
     private SreialComm sreialComm;//串口
     private PlayerService.MusicBinder musicBinder;//音乐服务
+    private TimerManager timerManager;//定时发送模拟数据（只模拟）
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,6 +159,8 @@ public class MainActivity extends BaseActivity {
         }
         //关闭音乐
         destroyMusic();
+        //
+        timerManager.stopTimer();
         LogUtil.d(TAG,"onDestroy");
     }
 
@@ -180,6 +185,10 @@ public class MainActivity extends BaseActivity {
             }
         });
         sreialThread.start();
+        //
+        timerManager = new TimerManager(handler);
+        timerManager.startTimer();
+        leftFragment.setTimerManager(timerManager);
     }
 
     /**
@@ -241,6 +250,14 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+//        if(timerManager != null){
+//            timerManager.setPause(false);
+//        }
+        return super.onTouchEvent(event);
+    }
+
     /**
      * 接收CAN总线的信息，判断处理
      */
@@ -249,18 +266,21 @@ public class MainActivity extends BaseActivity {
         public void handleMessage(Message msg) {
             JSONObject object = (JSONObject) msg.obj;//CAN总线的数据
             LogUtil.d("MainActivity", object.toJSONString());
-            LogUtil.d("MainActivity", String.valueOf(msg.what));
+//            LogUtil.d("MainActivity", String.valueOf(msg.what));
             switch (msg.what) {
                 case SEND_TO_FRONTSCREEN: {//前风挡
                     new SendToScreenThread(object, SEND_TO_FRONTSCREEN).start();
+                    LogUtil.d(TAG,"发送信息给前风挡");
                     break;
                 }
                 case SEND_TO_RIGHTSCREEN: {//右车门
                     new SendToScreenThread(object, SEND_TO_RIGHTSCREEN).start();
+                    LogUtil.d(TAG,"发送信息给右车门");
                     break;
                 }
                 case SEND_TO_LEFTSCREEN: {//左车门
                     new SendToScreenThread(object, SEND_TO_LEFTSCREEN).start();
+                    LogUtil.d(TAG,"发送信息给左车门");
                     break;
                 }
                 case SEND_TO_LOCALHOST: {//主控屏
@@ -300,6 +320,7 @@ public class MainActivity extends BaseActivity {
                     new SendToScreenThread(object, SEND_TO_FRONTSCREEN).start();
                     new SendToScreenThread(object, SEND_TO_LEFTSCREEN).start();
                     new SendToScreenThread(object, SEND_TO_RIGHTSCREEN).start();
+                    LogUtil.d(TAG,"都发");
                     break;
                 }
                 default:

@@ -20,6 +20,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.hasee.minibuslocalhost.R;
 import com.hasee.minibuslocalhost.activity.MainActivity;
 import com.hasee.minibuslocalhost.util.LogUtil;
+import com.hasee.minibuslocalhost.util.TimerManager;
 
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_ACBlowingLevel;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_DemisterStatus;
@@ -85,8 +86,17 @@ public class MainLeftFragment extends Fragment {
     private Object o = null;//状态
     private int seekBarIndex = 0;
     private boolean typeFlag = false;//判断是否改变状态
+    private TimerManager timerManager = null;
 
     public MainLeftFragment() {
+    }
+
+    public TimerManager getTimerManager() {
+        return timerManager;
+    }
+
+    public void setTimerManager(TimerManager timerManager) {
+        this.timerManager = timerManager;
     }
 
     @Override
@@ -160,6 +170,7 @@ public class MainLeftFragment extends Fragment {
                 } else if (progress >=90 &&progress <=100) {
                     seekBarIndex = AIR_GRADE_FIVE_GEAR;
                 }
+                changeTimerFlag();
                 leftFragmentConditionSize.setText(String.valueOf(seekBarIndex));
                 //发送最终数据至CAN(1-5档)
                 activity.sendToCAN(clazz, HMI_Dig_Ord_air_grade, seekBarIndex);
@@ -343,6 +354,7 @@ public class MainLeftFragment extends Fragment {
                 }
             }
             if(typeFlag){
+                changeTimerFlag();
                 activity.sendToCAN(clazz, field, o);
                 if(field == HMI_Dig_Ord_air_model){//如果当前是空调模式
                     activity.sendToCAN(clazz, HMI_Dig_Ord_air_grade, seekBarIndex);//档位
@@ -351,6 +363,15 @@ public class MainLeftFragment extends Fragment {
             }
         }
     };
+
+    /**
+     * 改变定时器状态
+     */
+    private void changeTimerFlag(){
+        if(timerManager != null){
+            timerManager.setPause(false);
+        }
+    }
 
     /**
      * 更新布局

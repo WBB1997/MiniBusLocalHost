@@ -36,8 +36,8 @@ public class SendToScreenThread extends Thread {
             dSocket = new DatagramSocket();
             dPacket = new DatagramPacket(buffer,buffer.length,address,port);
             dSocket.send(dPacket);
-            LogUtil.d(TAG,message);
-            LogUtil.d(TAG,address.getHostAddress());
+//            LogUtil.d(TAG,message);
+//            LogUtil.d(TAG,address.getHostAddress());
             LogUtil.d(TAG,"发送成功");
         } catch (Exception e) {
             e.printStackTrace();
