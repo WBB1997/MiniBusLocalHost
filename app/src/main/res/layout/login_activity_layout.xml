@@ -102,7 +102,8 @@
                 android:id="@+id/login_activity_number_row_5"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/login_activity_number_button_height"
-                android:layout_alignParentBottom="true"
+                android:layout_below="@id/login_activity_input_layout_password"
+                android:layout_marginTop="158px"
                 android:orientation="vertical">
                 <!--确认-->
                 <RelativeLayout
@@ -112,13 +113,10 @@
                     android:background="@drawable/circle_border_pressed"
                     android:gravity="center">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:scaleX="0.5"
-                        android:text="确认"
-                        android:textColor="@color/color_white"
-                        android:textSize="50px" />
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/ic_submit" />
 
                 </RelativeLayout>
             </LinearLayout>
@@ -144,26 +142,11 @@
                     android:background="@drawable/circle_border_pressed"
                     android:gravity="center">
 
-                    <TextView
-                        android:id="@+id/number1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:scaleX="0.5"
-                        android:text="1"
-                        android:textColor="@color/color_white"
-                        android:textSize="@dimen/login_activity_number_button_textSize_left"
-                        android:textStyle="italic" />
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/ic_number1" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/login_activity_number_button_left_right_margin"
-                        android:layout_toRightOf="@id/number1"
-                        android:scaleX="0.5"
-                        android:text="ONE"
-                        android:textColor="@color/color_white"
-                        android:textSize="@dimen/login_activity_number_button_textSize_right"
-                        android:textStyle="italic" />
                 </RelativeLayout>
                 <!--数字2-->
                 <RelativeLayout
@@ -175,26 +158,11 @@
                     android:background="@drawable/circle_border_pressed"
                     android:gravity="center">
 
-                    <TextView
-                        android:id="@+id/number2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:scaleX="0.5"
-                        android:text="2"
-                        android:textColor="@color/color_white"
-                        android:textSize="@dimen/login_activity_number_button_textSize_left"
-                        android:textStyle="italic" />
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/ic_number2" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/login_activity_number_button_left_right_margin"
-                        android:layout_toRightOf="@id/number2"
-                        android:scaleX="0.5"
-                        android:text="TWO"
-                        android:textColor="@color/color_white"
-                        android:textSize="@dimen/login_activity_number_button_textSize_right"
-                        android:textStyle="italic" />
                 </RelativeLayout>
                 <!--数字3-->
                 <RelativeLayout
@@ -204,26 +172,11 @@
                     android:background="@drawable/circle_border_pressed"
                     android:gravity="center">
 
-                    <TextView
-                        android:id="@+id/number3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:scaleX="0.5"
-                        android:text="3"
-                        android:textColor="@color/color_white"
-                        android:textSize="@dimen/login_activity_number_button_textSize_left"
-                        android:textStyle="italic" />
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/ic_number3" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/login_activity_number_button_left_right_margin"
-                        android:layout_toRightOf="@id/number3"
-                        android:scaleX="0.5"
-                        android:text="THREE"
-                        android:textColor="@color/color_white"
-                        android:textSize="@dimen/login_activity_number_button_textSize_right"
-                        android:textStyle="italic" />
                 </RelativeLayout>
             </LinearLayout>
             <!--第二排数字-->
@@ -242,26 +195,11 @@
                     android:background="@drawable/circle_border_pressed"
                     android:gravity="center">
 
-                    <TextView
-                        android:id="@+id/number4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:scaleX="0.5"
-                        android:text="4"
-                        android:textColor="@color/color_white"
-                        android:textSize="@dimen/login_activity_number_button_textSize_left"
-                        android:textStyle="italic" />
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/ic_number4" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/login_activity_number_button_left_right_margin"
-                        android:layout_toRightOf="@id/number4"
-                        android:scaleX="0.5"
-                        android:text="FOUR"
-                        android:textColor="@color/color_white"
-                        android:textSize="@dimen/login_activity_number_button_textSize_right"
-                        android:textStyle="italic" />
                 </RelativeLayout>
                 <!--数字5-->
                 <RelativeLayout
@@ -273,26 +211,11 @@
                     android:background="@drawable/circle_border_pressed"
                     android:gravity="center">
 
-                    <TextView
-                        android:id="@+id/number5"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:scaleX="0.5"
-                        android:text="5"
-                        android:textColor="@color/color_white"
-                        android:textSize="@dimen/login_activity_number_button_textSize_left"
-                        android:textStyle="italic" />
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/ic_number5" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/login_activity_number_button_left_right_margin"
-                        android:layout_toRightOf="@id/number5"
-                        android:scaleX="0.5"
-                        android:text="FIVE"
-                        android:textColor="@color/color_white"
-                        android:textSize="@dimen/login_activity_number_button_textSize_right"
-                        android:textStyle="italic" />
                 </RelativeLayout>
                 <!--数字6-->
                 <RelativeLayout
@@ -302,26 +225,11 @@
                     android:background="@drawable/circle_border_pressed"
                     android:gravity="center">
 
-                    <TextView
-                        android:id="@+id/number6"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:scaleX="0.5"
-                        android:text="6"
-                        android:textColor="@color/color_white"
-                        android:textSize="@dimen/login_activity_number_button_textSize_left"
-                        android:textStyle="italic" />
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/ic_number6" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/login_activity_number_button_left_right_margin"
-                        android:layout_toRightOf="@id/number6"
-                        android:scaleX="0.5"
-                        android:text="SIX"
-                        android:textColor="@color/color_white"
-                        android:textSize="@dimen/login_activity_number_button_textSize_right"
-                        android:textStyle="italic" />
                 </RelativeLayout>
             </LinearLayout>
             <!--第三排数字-->
@@ -340,26 +248,11 @@
                     android:background="@drawable/circle_border_pressed"
                     android:gravity="center">
 
-                    <TextView
-                        android:id="@+id/number7"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:scaleX="0.5"
-                        android:text="7"
-                        android:textColor="@color/color_white"
-                        android:textSize="@dimen/login_activity_number_button_textSize_left"
-                        android:textStyle="italic" />
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/ic_number7" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/login_activity_number_button_left_right_margin"
-                        android:layout_toRightOf="@id/number7"
-                        android:scaleX="0.5"
-                        android:text="SEVEN"
-                        android:textColor="@color/color_white"
-                        android:textSize="@dimen/login_activity_number_button_textSize_right"
-                        android:textStyle="italic" />
                 </RelativeLayout>
                 <!--数字8-->
                 <RelativeLayout
@@ -371,26 +264,11 @@
                     android:background="@drawable/circle_border_pressed"
                     android:gravity="center">
 
-                    <TextView
-                        android:id="@+id/number8"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:scaleX="0.5"
-                        android:text="8"
-                        android:textColor="@color/color_white"
-                        android:textSize="@dimen/login_activity_number_button_textSize_left"
-                        android:textStyle="italic" />
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/ic_number8" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/login_activity_number_button_left_right_margin"
-                        android:layout_toRightOf="@id/number8"
-                        android:scaleX="0.5"
-                        android:text="EIGHT"
-                        android:textColor="@color/color_white"
-                        android:textSize="@dimen/login_activity_number_button_textSize_right"
-                        android:textStyle="italic" />
                 </RelativeLayout>
                 <!--数字9-->
                 <RelativeLayout
@@ -400,26 +278,11 @@
                     android:background="@drawable/circle_border_pressed"
                     android:gravity="center">
 
-                    <TextView
-                        android:id="@+id/number9"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:scaleX="0.5"
-                        android:text="9"
-                        android:textColor="@color/color_white"
-                        android:textSize="@dimen/login_activity_number_button_textSize_left"
-                        android:textStyle="italic" />
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/ic_number9" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/login_activity_number_button_left_right_margin"
-                        android:layout_toRightOf="@id/number9"
-                        android:scaleX="0.5"
-                        android:text="NINE"
-                        android:textColor="@color/color_white"
-                        android:textSize="@dimen/login_activity_number_button_textSize_right"
-                        android:textStyle="italic" />
                 </RelativeLayout>
             </LinearLayout>
             <!--第四排数字-->
@@ -436,26 +299,11 @@
                     android:background="@drawable/circle_border_pressed"
                     android:gravity="center">
 
-                    <TextView
-                        android:id="@+id/number0"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:scaleX="0.5"
-                        android:text="0"
-                        android:textColor="@color/color_white"
-                        android:textSize="@dimen/login_activity_number_button_textSize_left"
-                        android:textStyle="italic" />
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/ic_number0" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/login_activity_number_button_left_right_margin"
-                        android:layout_toRightOf="@id/number0"
-                        android:scaleX="0.5"
-                        android:text="ZERO"
-                        android:textColor="@color/color_white"
-                        android:textSize="@dimen/login_activity_number_button_textSize_right"
-                        android:textStyle="italic" />
                 </RelativeLayout>
                 <!--backSpace-->
                 <RelativeLayout
@@ -466,25 +314,10 @@
                     android:background="@drawable/circle_border_pressed"
                     android:gravity="center">
 
-                    <!--<ImageView-->
-                    <!--android:id="@+id/numberBack"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_centerVertical="true"-->
-                    <!--android:background="@drawable/ic_backspace" />-->
-
-                    <!--android:layout_marginLeft="@dimen/margin_20px"-->
-                    <!--android:layout_toRightOf="@id/numberBack"-->
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-
-                        android:scaleX="0.5"
-                        android:text="BackSpace"
-                        android:textColor="@color/color_white"
-                        android:textSize="@dimen/login_activity_number_button_textSize_left"
-                        android:textStyle="italic" />
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/ic_delete" />
 
                 </RelativeLayout>
 

@@ -66,7 +66,6 @@ public class LoginActivity extends BaseActivity {
         users.add(new Pair("sharing-van003","345678"));//用户3
     }
 
-
     /**
      * 界面初始化
      */
