@@ -25,9 +25,9 @@ public class PlayAudio {
     }
 
     /**
-     * 播放音频
+     * 播放分流音频
      */
-    public void playAudio() {
+    public void playSeparateAudio() {
         File video = new File(Environment.getExternalStorageDirectory(), "video.mp4");
         File out = new File(Environment.getExternalStorageDirectory(), "audio.mp3");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {

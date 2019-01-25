@@ -5,10 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Pair;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -18,8 +18,10 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.hasee.minibuslocalhost.R;
 import com.hasee.minibuslocalhost.util.MyHandler;
-import com.hasee.minibuslocalhost.util.SendToScreenThread;
 import com.hasee.minibuslocalhost.util.ToastUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -42,15 +44,28 @@ public class LoginActivity extends BaseActivity {
     private RelativeLayout number0Button;//数字0
     private RelativeLayout backSpaceButton;//删除按钮
     private RelativeLayout submitButton;//确认按钮
+    private List<Pair> users = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity_layout);
         mContext = LoginActivity.this;
+        hideBottomUIMenu();
         //界面控件初始化
         viewInit();
+        initUsers();
     }
+
+    /**
+     * 初始化本地用户名密码
+     */
+    private void initUsers() {
+        users.add(new Pair("sharing-van001","123456"));//用户1
+        users.add(new Pair("sharing-van002","234567"));//用户2
+        users.add(new Pair("sharing-van003","345678"));//用户3
+    }
+
 
     /**
      * 界面初始化
@@ -62,7 +77,7 @@ public class LoginActivity extends BaseActivity {
         passWordEt = (EditText)findViewById(R.id.password_et);
         //隐藏软键盘
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            userNameEt.setShowSoftInputOnFocus(false);
+//            userNameEt.setShowSoftInputOnFocus(false);
             passWordEt.setShowSoftInputOnFocus(false);
         }
         //取出本地密码
@@ -161,13 +176,25 @@ public class LoginActivity extends BaseActivity {
                         ToastUtil.getInstance(mContext).showShortToast(
                                 getResources().getString(R.string.et_empty));
                     }else{//登陆
-                        //保存密码至本地
-                        JSONObject object = new JSONObject();
-                        object.put("userName",userNameEt.getText().toString().trim());
-                        object.put("passWord",passWordEt.getText().toString().trim());
-                        App.getInstance().setPreferences(object.toJSONString());
-                        Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-                        startActivity(intent);
+                        String loginUserName = userNameEt.getText().toString().trim();//登陆账户
+                        String loginPwd = passWordEt.getText().toString().trim();//登陆密码
+                        for (int i = 0; i < users.size(); i++) {
+                            Pair pair = users.get(i);//账户
+                            String userName = (String) pair.first;//用户名
+                            String passWord = (String)pair.second;//密码
+                            if(loginUserName.equals(userName)&&loginPwd.equals(passWord)){//有当前账户
+                                //保存密码至本地
+                                JSONObject object = new JSONObject();
+                                object.put("userName",loginUserName);
+                                object.put("passWord",loginPwd);
+                                App.getInstance().setPreferences(object.toJSONString());
+                                Intent intent = new Intent(LoginActivity.this,MainActivity.class);//跳转到新页面
+                                startActivity(intent);
+                                return;
+                            }
+                        }
+                        ToastUtil.getInstance(mContext).showShortToast(
+                                getResources().getString(R.string.login_error));//登陆失败
                     }
                     break;
                 }
@@ -231,5 +258,22 @@ public class LoginActivity extends BaseActivity {
             return true;
         }
         return false;
+    }
+
+    /**
+     * 隐藏虚拟按键，并且全屏
+     */
+    protected void hideBottomUIMenu() {
+        //隐藏虚拟按键，并且全屏
+        if (Build.VERSION.SDK_INT > 11 && Build.VERSION.SDK_INT < 19) { // lower api
+            View v = this.getWindow().getDecorView();
+            v.setSystemUiVisibility(View.GONE);
+        } else if (Build.VERSION.SDK_INT >= 19) {
+            //for new api versions.
+            View decorView = getWindow().getDecorView();
+            int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN;
+            decorView.setSystemUiVisibility(uiOptions);
+        }
     }
 }

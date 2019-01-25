@@ -2,10 +2,14 @@ package com.hasee.minibuslocalhost.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -13,7 +17,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -25,6 +28,7 @@ import com.hasee.minibuslocalhost.fragment.MainLowBatteryFragment;
 import com.hasee.minibuslocalhost.fragment.MainRightFragment1;
 import com.hasee.minibuslocalhost.fragment.MainRightFragment2;
 import com.hasee.minibuslocalhost.fragment.MainTopFragment;
+import com.hasee.minibuslocalhost.service.PlayerService;
 import com.hasee.minibuslocalhost.transmit.Transmit;
 import com.hasee.minibuslocalhost.util.ActivityCollector;
 import com.hasee.minibuslocalhost.util.LogUtil;
@@ -49,7 +53,6 @@ import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_InsideTemp;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_OutsideTemp;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.BMS_SOC;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.HAD_GPSPositioningStatus;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_TotalOdmeter;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_Alam;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_DangerAlarm;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_Demister_Control;
@@ -61,6 +64,8 @@ import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_LeftTur
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_LowBeam;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_RearFogLamp;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_RightTurningLamp;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_SystemRuningStatus;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_TotalOdmeter;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_air_grade;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_air_model;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_eBooster_Warning;
@@ -74,6 +79,7 @@ import static com.hasee.minibuslocalhost.transmit.Class.HMI.DRIVE_MODEL_AUTO_AWA
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.OFF;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.ON;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.Ord_Alam_ON;
+import static com.hasee.minibuslocalhost.transmit.Class.HMI.Ord_SystemRuningStatus_ONINPUT;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.POINTLESS;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.eBooster_Warning_OFF;
 
@@ -90,6 +96,7 @@ public class MainActivity extends BaseActivity {
     public final static int LOCALHOST_SCREEN_CENTER = 2;//主控屏中间部分
     public final static int LOCALHOST_SCREEN_RIGHT = 3;//主控屏右边部分
     private final int MIN_BATTERY = 20;//低电量触发值
+    private final int MIN_SPEED = 5;//低速报警值
     private Context mContext;//上下文
     private FragmentManager fragmentManager;//Fragment管理器对象
     private FragmentTransaction transaction;//Fragment事务对象
@@ -103,6 +110,7 @@ public class MainActivity extends BaseActivity {
     private Thread canThread;//处理CAN总线的子线程
     private Thread sreialThread;//处理485的子线程
     private SreialComm sreialComm;//串口
+    private PlayerService.MusicBinder musicBinder;//音乐服务
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +130,7 @@ public class MainActivity extends BaseActivity {
             }, 1);
         } else {
             //有权限的话什么都不做
+            initMusic();
         }
         reboot();//发送初始化数据
 //        ToastUtil.getInstance(mContext).showShortToast("程序已经启动");
@@ -136,6 +145,8 @@ public class MainActivity extends BaseActivity {
         sreialComm.close();
         //中断485线程
         sreialThread.interrupt();
+        //关闭音乐
+        destroyMusic();
         LogUtil.d(TAG,"onDestroy");
     }
 
@@ -160,6 +171,23 @@ public class MainActivity extends BaseActivity {
             }
         });
         sreialThread.start();
+    }
+
+    /**
+     * 播放音乐
+     */
+    private void initMusic(){
+        Intent mediaServiceIntent = new Intent(MainActivity.this,PlayerService.class);
+        bindService(mediaServiceIntent,connection,BIND_AUTO_CREATE);
+    }
+
+    /**
+     * 销毁音乐
+     */
+    private void destroyMusic(){
+        //关闭播放器
+        musicBinder.closeMusic();
+        unbindService(connection);
     }
 
     /**
@@ -242,7 +270,7 @@ public class MainActivity extends BaseActivity {
                             int id = object.getIntValue("id");
                             if (id == Wheel_Speed_ABS) {//速度
                                 int speed = (int) object.getDoubleValue("data");
-                                if (speed <= 5) {//低速
+                                if (speed <= MIN_SPEED) {//低速
                                     //发送低速报警消息
                                     sendToCAN("HMI", HMI_Dig_Ord_Alam, ON);
                                 } else {
@@ -280,6 +308,22 @@ public class MainActivity extends BaseActivity {
     }
 
     /**
+     *
+     */
+    private ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            musicBinder = (PlayerService.MusicBinder) service;
+            LogUtil.d(TAG,"connection-->onServiceConnected");
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
+
+    /**
      *点击事件监听器
      */
     private View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -300,15 +344,6 @@ public class MainActivity extends BaseActivity {
         }
     };
 
-    /**
-     * 触摸事件
-     */
-    private View.OnTouchListener onTouchListener = new View.OnTouchListener() {
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            return false;
-        }
-    };
 
     /**
      * 返回键监听
@@ -431,6 +466,7 @@ public class MainActivity extends BaseActivity {
         map.put(HMI_Dig_Ord_FANPWM_Control,AIR_GRADE_OFF);//风扇PWM占空比控制信号
         map.put(HMI_Dig_Ord_Demister_Control,POINTLESS);//除雾控制
         map.put(HMI_Dig_Ord_TotalOdmeter,0);//总里程
+        map.put(HMI_Dig_Ord_SystemRuningStatus,Ord_SystemRuningStatus_ONINPUT);//HMI控制器运行状态
         Transmit.getInstance().Can_init(map);
         LogUtil.d(TAG,"初始化");
     }

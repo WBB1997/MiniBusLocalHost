@@ -12,7 +12,7 @@
         <RelativeLayout
             android:id="@+id/login_activity_input_layout"
             android:layout_width="374px"
-            android:layout_height="380px"
+            android:layout_height="760px"
             android:layout_alignParentLeft="true">
             <!--用户名输入框-->
             <LinearLayout
@@ -30,8 +30,11 @@
 
                     <ImageView
                         android:layout_width="31px"
-                        android:layout_height="31px"
-                        android:layout_margin="16px"
+                        android:layout_height="62px"
+                        android:layout_marginLeft="16px"
+                        android:layout_marginTop="32px"
+                        android:layout_marginRight="16px"
+                        android:layout_marginBottom="32px"
                         android:background="@drawable/ic_username"
                         android:gravity="center" />
                 </LinearLayout>
@@ -46,9 +49,10 @@
                         android:layout_height="match_parent"
                         android:background="@null"
                         android:hint="@string/login_activity_et_hint_username"
-                        android:inputType="number"
+                        android:inputType="text"
                         android:textColor="@color/login_hint_color"
-                        android:textColorHint="@color/login_hint_color" />
+                        android:textColorHint="@color/login_hint_color"
+                        android:textSize="30px" />
                 </LinearLayout>
             </LinearLayout>
             <!--密码输入框-->
@@ -68,8 +72,11 @@
 
                     <ImageView
                         android:layout_width="31px"
-                        android:layout_height="31px"
-                        android:layout_margin="16px"
+                        android:layout_height="62px"
+                        android:layout_marginLeft="16px"
+                        android:layout_marginTop="32px"
+                        android:layout_marginRight="16px"
+                        android:layout_marginBottom="32px"
                         android:background="@drawable/ic_password"
                         android:gravity="center" />
                 </LinearLayout>
@@ -86,7 +93,8 @@
                         android:hint="@string/login_activity_et_hint_password"
                         android:inputType="numberPassword"
                         android:textColor="@color/login_hint_color"
-                        android:textColorHint="@color/login_hint_color" />
+                        android:textColorHint="@color/login_hint_color"
+                        android:textSize="30px" />
                 </LinearLayout>
             </LinearLayout>
             <!--确认-->
@@ -107,9 +115,10 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:scaleX="0.5"
                         android:text="确认"
                         android:textColor="@color/color_white"
-                        android:textSize="25px" />
+                        android:textSize="50px" />
 
                 </RelativeLayout>
             </LinearLayout>
@@ -118,7 +127,7 @@
         <RelativeLayout
             android:id="@+id/login_activity_number_layout"
             android:layout_width="522px"
-            android:layout_height="380px"
+            android:layout_height="760px"
             android:layout_alignParentRight="true">
             <!--第一排数字-->
             <LinearLayout
@@ -139,6 +148,7 @@
                         android:id="@+id/number1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:scaleX="0.5"
                         android:text="1"
                         android:textColor="@color/color_white"
                         android:textSize="@dimen/login_activity_number_button_textSize_left"
@@ -149,6 +159,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/login_activity_number_button_left_right_margin"
                         android:layout_toRightOf="@id/number1"
+                        android:scaleX="0.5"
                         android:text="ONE"
                         android:textColor="@color/color_white"
                         android:textSize="@dimen/login_activity_number_button_textSize_right"
@@ -168,6 +179,7 @@
                         android:id="@+id/number2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:scaleX="0.5"
                         android:text="2"
                         android:textColor="@color/color_white"
                         android:textSize="@dimen/login_activity_number_button_textSize_left"
@@ -178,6 +190,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/login_activity_number_button_left_right_margin"
                         android:layout_toRightOf="@id/number2"
+                        android:scaleX="0.5"
                         android:text="TWO"
                         android:textColor="@color/color_white"
                         android:textSize="@dimen/login_activity_number_button_textSize_right"
@@ -195,6 +208,7 @@
                         android:id="@+id/number3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:scaleX="0.5"
                         android:text="3"
                         android:textColor="@color/color_white"
                         android:textSize="@dimen/login_activity_number_button_textSize_left"
@@ -205,6 +219,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/login_activity_number_button_left_right_margin"
                         android:layout_toRightOf="@id/number3"
+                        android:scaleX="0.5"
                         android:text="THREE"
                         android:textColor="@color/color_white"
                         android:textSize="@dimen/login_activity_number_button_textSize_right"
@@ -231,6 +246,7 @@
                         android:id="@+id/number4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:scaleX="0.5"
                         android:text="4"
                         android:textColor="@color/color_white"
                         android:textSize="@dimen/login_activity_number_button_textSize_left"
@@ -241,6 +257,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/login_activity_number_button_left_right_margin"
                         android:layout_toRightOf="@id/number4"
+                        android:scaleX="0.5"
                         android:text="FOUR"
                         android:textColor="@color/color_white"
                         android:textSize="@dimen/login_activity_number_button_textSize_right"
@@ -260,6 +277,7 @@
                         android:id="@+id/number5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:scaleX="0.5"
                         android:text="5"
                         android:textColor="@color/color_white"
                         android:textSize="@dimen/login_activity_number_button_textSize_left"
@@ -270,6 +288,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/login_activity_number_button_left_right_margin"
                         android:layout_toRightOf="@id/number5"
+                        android:scaleX="0.5"
                         android:text="FIVE"
                         android:textColor="@color/color_white"
                         android:textSize="@dimen/login_activity_number_button_textSize_right"
@@ -287,6 +306,7 @@
                         android:id="@+id/number6"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:scaleX="0.5"
                         android:text="6"
                         android:textColor="@color/color_white"
                         android:textSize="@dimen/login_activity_number_button_textSize_left"
@@ -297,6 +317,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/login_activity_number_button_left_right_margin"
                         android:layout_toRightOf="@id/number6"
+                        android:scaleX="0.5"
                         android:text="SIX"
                         android:textColor="@color/color_white"
                         android:textSize="@dimen/login_activity_number_button_textSize_right"
@@ -323,6 +344,7 @@
                         android:id="@+id/number7"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:scaleX="0.5"
                         android:text="7"
                         android:textColor="@color/color_white"
                         android:textSize="@dimen/login_activity_number_button_textSize_left"
@@ -333,6 +355,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/login_activity_number_button_left_right_margin"
                         android:layout_toRightOf="@id/number7"
+                        android:scaleX="0.5"
                         android:text="SEVEN"
                         android:textColor="@color/color_white"
                         android:textSize="@dimen/login_activity_number_button_textSize_right"
@@ -352,6 +375,7 @@
                         android:id="@+id/number8"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:scaleX="0.5"
                         android:text="8"
                         android:textColor="@color/color_white"
                         android:textSize="@dimen/login_activity_number_button_textSize_left"
@@ -362,6 +386,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/login_activity_number_button_left_right_margin"
                         android:layout_toRightOf="@id/number8"
+                        android:scaleX="0.5"
                         android:text="EIGHT"
                         android:textColor="@color/color_white"
                         android:textSize="@dimen/login_activity_number_button_textSize_right"
@@ -379,6 +404,7 @@
                         android:id="@+id/number9"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:scaleX="0.5"
                         android:text="9"
                         android:textColor="@color/color_white"
                         android:textSize="@dimen/login_activity_number_button_textSize_left"
@@ -389,6 +415,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/login_activity_number_button_left_right_margin"
                         android:layout_toRightOf="@id/number9"
+                        android:scaleX="0.5"
                         android:text="NINE"
                         android:textColor="@color/color_white"
                         android:textSize="@dimen/login_activity_number_button_textSize_right"
@@ -413,6 +440,7 @@
                         android:id="@+id/number0"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:scaleX="0.5"
                         android:text="0"
                         android:textColor="@color/color_white"
                         android:textSize="@dimen/login_activity_number_button_textSize_left"
@@ -423,6 +451,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/login_activity_number_button_left_right_margin"
                         android:layout_toRightOf="@id/number0"
+                        android:scaleX="0.5"
                         android:text="ZERO"
                         android:textColor="@color/color_white"
                         android:textSize="@dimen/login_activity_number_button_textSize_right"
@@ -437,18 +466,21 @@
                     android:background="@drawable/circle_border_pressed"
                     android:gravity="center">
 
-                    <ImageView
-                        android:id="@+id/numberBack"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:background="@drawable/ic_backspace" />
+                    <!--<ImageView-->
+                    <!--android:id="@+id/numberBack"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_centerVertical="true"-->
+                    <!--android:background="@drawable/ic_backspace" />-->
+
+                    <!--android:layout_marginLeft="@dimen/margin_20px"-->
+                    <!--android:layout_toRightOf="@id/numberBack"-->
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/margin_20px"
-                        android:layout_toRightOf="@id/numberBack"
+
+                        android:scaleX="0.5"
                         android:text="BackSpace"
                         android:textColor="@color/color_white"
                         android:textSize="@dimen/login_activity_number_button_textSize_left"

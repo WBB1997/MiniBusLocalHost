@@ -7,9 +7,7 @@ import android.media.AudioManager;
 import com.alibaba.fastjson.JSONObject;
 import com.baidu.mapapi.CoordType;
 import com.baidu.mapapi.SDKInitializer;
-import com.hasee.minibuslocalhost.util.LogUtil;
 
-import static android.support.constraint.Constraints.TAG;
 import static android_serialport_api.SreialComm.AUDIO_VOLUME;
 import static android_serialport_api.SreialComm.LIGHT_NUM;
 
@@ -77,7 +75,7 @@ public class App extends Application {
                     data = 15;
                 }
                 audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, data, AudioManager.FLAG_PLAY_SOUND);
-                LogUtil.d(TAG,"data:"+data);
+//                LogUtil.d(TAG,"data:"+data);
             }
         }
         if (id == LIGHT_NUM) {//灯光
