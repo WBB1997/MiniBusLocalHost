@@ -52,8 +52,6 @@ import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_Flg_Stat_LeftTu
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_Flg_Stat_LowBeam;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_Flg_Stat_RearFogLamp;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_Flg_Stat_RightTurningLamp;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_InsideTemp;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_OutsideTemp;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.BMS_SOC;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.HAD_GPSPositioningStatus;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_Alam;
@@ -74,7 +72,6 @@ import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_air_mod
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_eBooster_Warning;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.OBU_LocalTime;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.Wheel_Speed_ABS;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.can_RemainKm;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.can_num_PackAverageTemp;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_GRADE_OFF;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_MODEL_AWAIT;
@@ -477,10 +474,10 @@ public class MainActivity extends BaseActivity {
             case BCM_DemisterStatus://除雾状态
                 return LOCALHOST_SCREEN_LEFT;
             //右边Fragment
-            case BCM_InsideTemp://车内温度
-            case BCM_OutsideTemp://车外温度
+//            case BCM_InsideTemp://车内温度
+//            case BCM_OutsideTemp://车外温度
             case can_num_PackAverageTemp://电池包平均温度
-            case can_RemainKm://剩余里程数
+//            case can_RemainKm://剩余里程数
             case Wheel_Speed_ABS://车速信号
                 return LOCALHOST_SCREEN_RIGHT;
 //            //中间Fragment

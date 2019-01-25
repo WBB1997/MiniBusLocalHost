@@ -31,7 +31,7 @@
     <!--登陆界面错误框宽度-->
     <dimen name="login_error_dialog_width">518px</dimen>
     <!--登陆界面错误框高度-->
-    <dimen name="login_error_dialog_height">524px</dimen>
+    <dimen name="login_error_dialog_height">262px</dimen>
     <!--显示主界面-->
     <!--主界面上部宽度-->
     <dimen name="main_layout_top_width">708px</dimen>

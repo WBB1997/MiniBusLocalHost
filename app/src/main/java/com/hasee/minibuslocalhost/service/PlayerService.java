@@ -7,6 +7,8 @@ import android.os.Binder;
 import android.os.Environment;
 import android.os.IBinder;
 
+import com.alibaba.fastjson.JSONObject;
+import com.hasee.minibuslocalhost.activity.App;
 import com.hasee.minibuslocalhost.util.LogUtil;
 
 import java.io.File;
@@ -40,6 +42,10 @@ public class PlayerService extends Service {
         LogUtil.d(TAG,"onCreate");
         mediaPlayer.setOnCompletionListener(onCompletionListener);
         mediaPlayer.setOnErrorListener(onErrorListener);
+        JSONObject object = new JSONObject();
+        object.put("id",1);
+        object.put("data",10);
+        App.getInstance().setAudioVolume(object);
         binder.playMusic();
     }
 
