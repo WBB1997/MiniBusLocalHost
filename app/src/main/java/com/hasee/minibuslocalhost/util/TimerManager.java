@@ -48,32 +48,44 @@ public class TimerManager {
         JSONObject object1 = new JSONObject();//{id:"",delay:"",data:""}
         object1.put("id", SEND_TO_SCREEN);//都发
 //        object1.put("delay", 15000);//
-        object1.put("delay", 80000);//
+        object1.put("delay", 500);//
         JSONObject data1 = new JSONObject();
         data1.put("id", HAD_CurrentDrivingRoadIDNum);//63
         data1.put("data", 1);//第一条路线
         object1.put("data", data1);
         msgs.add(object1);
-        //2、自动驾驶轮播，都发，延时80s
-        JSONObject object2 = new JSONObject();//{id:"",delay:"",data:""}
-        object2.put("id", SEND_TO_SCREEN);
-//        object2.put("delay", 80000);
-        object2.put("delay", 500);
-        JSONObject data2 = new JSONObject();
-        data2.put("id", HAD_StartingSitedepartureRemind);
-        data2.put("data", 2);
-        object2.put("data", data2);
-        msgs.add(object2);
+
         //3、下一站站点，左车门，延时0.5s
         JSONObject object3 = new JSONObject();//{id:"",delay:"",data:""}
-        object3.put("id", SEND_TO_LEFTSCREEN);
+        object3.put("id", SEND_TO_SCREEN);
 //        object3.put("delay", 500);
-        object3.put("delay", 5000);
+        object3.put("delay", 80000);
         JSONObject data3 = new JSONObject();
         data3.put("id", HAD_NextStationIDNumb);
         data3.put("data", 3);
         object3.put("data", data3);
         msgs.add(object3);
+
+        //2、自动驾驶轮播，都发，延时80s
+        JSONObject object2 = new JSONObject();//{id:"",delay:"",data:""}
+        object2.put("id", SEND_TO_SCREEN);
+//        object2.put("delay", 80000);
+        object2.put("delay", 5000);
+        JSONObject data2 = new JSONObject();
+        data2.put("id", HAD_StartingSitedepartureRemind);
+        data2.put("data", 2);
+        object2.put("data", data2);
+        msgs.add(object2);
+//        //3、下一站站点，左车门，延时0.5s
+//        JSONObject object3 = new JSONObject();//{id:"",delay:"",data:""}
+//        object3.put("id", SEND_TO_LEFTSCREEN);
+////        object3.put("delay", 500);
+//        object3.put("delay", 5000);
+//        JSONObject data3 = new JSONObject();
+//        data3.put("id", HAD_NextStationIDNumb);
+//        data3.put("data", 3);
+//        object3.put("data", data3);
+//        msgs.add(object3);
         //4、发送到站信号，都发，延时5s
         JSONObject object4 = new JSONObject();//{id:"",delay:"",data:""}
         object4.put("id", SEND_TO_SCREEN);//
@@ -104,6 +116,16 @@ public class TimerManager {
         data6.put("data", 0);
         object6.put("data", data6);
         msgs.add(object6);
+        //11、发送下一站（终点站），左车门，延时0.5s
+        JSONObject object11 = new JSONObject();//{id:"",delay:"",data:""}
+        object11.put("id", SEND_TO_LEFTSCREEN);
+//        object11.put("delay", 500);
+        object11.put("delay", 5000);
+        JSONObject data11 = new JSONObject();
+        data11.put("id", HAD_NextStationIDNumb);
+        data11.put("data", 7);
+        object11.put("data", data11);
+        msgs.add(object11);
         //7、发送开车信息，都发，延时30s
         JSONObject object7 = new JSONObject();//{id:"",delay:"",data:""}
         object7.put("id", SEND_TO_SCREEN);
@@ -128,31 +150,14 @@ public class TimerManager {
         JSONObject object9 = new JSONObject();//{id:"",delay:"",data:""}
         object9.put("id", SEND_TO_FRONTSCREEN);
 //        object9.put("delay", 30000);
-        object9.put("delay", 500);
+        object9.put("delay", 5000);
         JSONObject data9 = new JSONObject();
         data9.put("id", HAD_PedestrianAvoidanceRemind);
         data9.put("data", 3);
         object9.put("data", data9);
         msgs.add(object9);
-//        //10、发送开车信息
-//        JSONObject object10 = new JSONObject();//{id:"",delay:"",data:""}
-//        object10.put("id",);
-//        object10.put("delay",);
-//        JSONObject data10 = new JSONObject();
-//        data10.put("id",);
-//        data10.put("data",);
-//        object10.put("data",data10);
-//        msgs.add(object10);
-        //11、发送下一站（终点站），左车门，延时0.5s
-        JSONObject object11 = new JSONObject();//{id:"",delay:"",data:""}
-        object11.put("id", SEND_TO_LEFTSCREEN);
-//        object11.put("delay", 500);
-        object11.put("delay", 5000);
-        JSONObject data11 = new JSONObject();
-        data11.put("id", HAD_NextStationIDNumb);
-        data11.put("data", 7);
-        object11.put("data", data11);
-        msgs.add(object11);
+
+
         //12、发送到站信息（到了），都发，延时5s
         JSONObject object12 = new JSONObject();//{id:"",delay:"",data:""}
         object12.put("id", SEND_TO_SCREEN);

@@ -194,6 +194,15 @@ public class MainActivity extends BaseActivity {
     private void initMusic(){
         Intent mediaServiceIntent = new Intent(MainActivity.this,PlayerService.class);
         bindService(mediaServiceIntent,connection,BIND_AUTO_CREATE);
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                JSONObject object = new JSONObject();
+                object.put("id",1);
+                object.put("data",2);
+                App.getInstance().setAudioVolume(object);
+            }
+        });
     }
 
     /**
