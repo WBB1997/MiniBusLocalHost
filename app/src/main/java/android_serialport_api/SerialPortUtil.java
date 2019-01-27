@@ -1,7 +1,5 @@
 package android_serialport_api;
 
-import android.util.Log;
-
 import com.hasee.minibuslocalhost.util.LogUtil;
 
 import java.io.File;
@@ -58,11 +56,15 @@ public class SerialPortUtil {
     public void closeSerialPort() {
 
         try {
-
-            inputStream.close();
-            outputStream.close();
-            serialPort.close();
-
+            if (inputStream != null) {
+                inputStream.close();
+            }
+            if (outputStream != null) {
+                outputStream.close();
+            }
+            if (serialPort != null) {
+                serialPort.close();
+            }
         } catch (IOException e) {
 
             e.printStackTrace();
@@ -112,7 +114,7 @@ public class SerialPortUtil {
                     return;
                 }
             }
-            LogUtil.d(TAG,"ReadThread重新启动");
+            LogUtil.d(TAG, "ReadThread重新启动");
             new ReadThread().start();
         }
     }

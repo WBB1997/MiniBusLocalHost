@@ -7,27 +7,31 @@
     <!--登陆界面操作区域的宽度-->
     <dimen name="login_handle_layout_width">960px</dimen>
     <!--登陆界面操作区域的高度-->
-    <dimen name="login_handle_layout_height">304px</dimen>
+    <dimen name="login_handle_layout_height">608px</dimen>
     <!--登陆界面数字按钮的宽度-->
     <dimen name="login_activity_number_button_width">164px</dimen>
     <!--登陆界面数字按钮的高度-->
-    <dimen name="login_activity_number_button_height">64px</dimen>
+    <dimen name="login_activity_number_button_height">128px</dimen>
     <!--登陆界面数字按钮的左边字体大小-->
-    <dimen name="login_activity_number_button_textSize_left">40px</dimen>
+    <dimen name="login_activity_number_button_textSize_left">80px</dimen>
     <!--登陆界面数字按钮的右边字体大小-->
-    <dimen name="login_activity_number_button_textSize_right">10px</dimen>
+    <dimen name="login_activity_number_button_textSize_right">20px</dimen>
     <!--登陆界面数字按钮的左边右边字体间距-->
-    <dimen name="login_activity_number_button_left_right_margin">32px</dimen>
+    <dimen name="login_activity_number_button_left_right_margin">64px</dimen>
     <!--登陆界面输入框的宽度-->
     <dimen name="login_layout_input_edittext_width">374px</dimen>
     <!--登陆界面输入框的高度-->
-    <dimen name="login_layout_input_edittext_height">64px</dimen>
+    <dimen name="login_layout_input_edittext_height">128px</dimen>
     <!--登陆界面输入框字体的大小-->
     <dimen name="login_layout_input_edittext_textSize"></dimen>
     <!--登陆界面的左右边距-->
     <dimen name="login_layout_margin_left_right">15px</dimen>
     <!--登陆界面的上下边距-->
-    <dimen name="login_layout_margin_top_buttom">15px</dimen>
+    <dimen name="login_layout_margin_top_buttom">30px</dimen>
+    <!--登陆界面错误框宽度-->
+    <dimen name="login_error_dialog_width">518px</dimen>
+    <!--登陆界面错误框高度-->
+    <dimen name="login_error_dialog_height">262px</dimen>
     <!--显示主界面-->
     <!--主界面上部宽度-->
     <dimen name="main_layout_top_width">708px</dimen>

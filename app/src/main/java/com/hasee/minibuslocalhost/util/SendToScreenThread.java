@@ -12,7 +12,7 @@ import java.net.InetAddress;
  */
 public class SendToScreenThread extends Thread {
     private static final String TAG = "SendToScreenThread";
-    private String[] hostNames = new String[]{"192.168.1.20","192.168.1.40","192.168.1.50"};//前风挡、左车门、右车门
+    private String[] hostNames = new String[]{"192.168.1.20","192.168.1.50","192.168.1.40"};//前风挡、左车门、右车门
     private int port = 5556;
     private DatagramSocket dSocket = null;
     private DatagramPacket dPacket = null;
@@ -36,8 +36,8 @@ public class SendToScreenThread extends Thread {
             dSocket = new DatagramSocket();
             dPacket = new DatagramPacket(buffer,buffer.length,address,port);
             dSocket.send(dPacket);
-            LogUtil.d(TAG,message);
-            LogUtil.d(TAG,address.getHostAddress());
+//            LogUtil.d(TAG,message);
+//            LogUtil.d(TAG,address.getHostAddress());
             LogUtil.d(TAG,"发送成功");
         } catch (Exception e) {
             e.printStackTrace();

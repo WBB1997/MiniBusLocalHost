@@ -4,8 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.hasee.minibuslocalhost.activity.MainActivity;
-import com.hasee.minibuslocalhost.util.LogUtil;
+import com.hasee.minibuslocalhost.activity.LoginActivity;
 
 public class SelfBootReceiver extends BroadcastReceiver {
     private static final String TAG = "SelfBootReceiver";
@@ -13,7 +12,7 @@ public class SelfBootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if(intent.getAction().equals(ACTION)){
-            Intent i = new Intent(context,MainActivity.class);
+            Intent i = new Intent(context, LoginActivity.class);
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(i);
         }

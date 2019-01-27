@@ -8,8 +8,9 @@
 
     <!--login-->
     <string name="et_empty">用户名或密码不能为空</string>
+    <string name="login_error">用户名或密码错误</string>
     <string name="login_success">登陆成功</string>
-    <string name="login_failed">登陆出错</string>
+    <string name="login_failed">登陆出错</string>z
 
     <string name="lowSpeed_fragment_text">电池电量低，请及时充电！</string>
 </resources>

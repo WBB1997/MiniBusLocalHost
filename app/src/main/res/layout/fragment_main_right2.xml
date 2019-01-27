@@ -69,7 +69,7 @@
                     fontPath="fonts/font1.TTF"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="42"
+                    android:text="20"
                     android:textColor="@color/right_fragment1_text_color"
                     android:textScaleX="0.5"
                     android:textSize="100px"
@@ -81,7 +81,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="℃"
-                    android:textColor="@color/main_battery_color"
+                    android:textColor="@color/right_fragment1_text_color"
                     android:textScaleX="0.5"
                     android:textSize="90px"
                     tools:ignore="MissingPrefix" />
@@ -169,7 +169,7 @@
                         android:id="@+id/rightFragment2_zonlic"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="654"
+                        android:text="0"
                         android:textColor="@color/right_fragment1_text_color"
                         android:textScaleX="0.5"
                         android:textSize="80px" />
@@ -226,7 +226,7 @@
                         android:id="@+id/rightFragment2_renwujd"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="80"
+                        android:text="0"
                         android:textColor="@color/right_fragment1_text_color"
                         android:textScaleX="0.5"
                         android:textSize="80px" />

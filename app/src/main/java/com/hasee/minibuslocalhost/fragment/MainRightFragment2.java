@@ -85,7 +85,7 @@ public class MainRightFragment2 extends Fragment {
 
         }
         if(id == can_num_PackAverageTemp){//电池包平均温度
-            int data = object.getIntValue("data");
+            int data = (int) object.getDoubleValue("data");
             if(data > 40){
                 rightFragment2BatteryTemperature.setTextColor(
                         getResources().getColor(R.color.main_battery_color));
@@ -117,12 +117,12 @@ public class MainRightFragment2 extends Fragment {
      * 显示行驶参数
      */
     private void showDriveInfo(String message){
-        rightFragment2DriveInfo.append("</script><script>");
-        rightFragment2DriveInfo.append("\n");
-        rightFragment2DriveInfo.append("$.getJSON(\"//ajax.ibaotu.com/?");
-        rightFragment2DriveInfo.append("\n");
-        rightFragment2DriveInfo.append("m=wenjuan&a=statusjson&name");
-        rightFragment2DriveInfo.append("\n");
-        rightFragment2DriveInfo.append("=rjjc&callback=?\", function(e) {");
+//        rightFragment2DriveInfo.append("</script><script>");
+//        rightFragment2DriveInfo.append("\n");
+//        rightFragment2DriveInfo.append("$.getJSON(\"//ajax.ibaotu.com/?");
+//        rightFragment2DriveInfo.append("\n");
+//        rightFragment2DriveInfo.append("m=wenjuan&a=statusjson&name");
+//        rightFragment2DriveInfo.append("\n");
+//        rightFragment2DriveInfo.append("=rjjc&callback=?\", function(e) {");
     }
 }

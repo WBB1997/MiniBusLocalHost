@@ -43,7 +43,7 @@
             android:id="@+id/topFragment_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="time"
+            android:text=""
             android:textColor="@color/left_fragment_text_color"
             android:textScaleX="0.5"
             android:textSize="@dimen/main_layout_time_textSize" />
