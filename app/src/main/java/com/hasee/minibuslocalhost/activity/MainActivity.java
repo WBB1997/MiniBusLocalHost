@@ -36,7 +36,7 @@ import com.hasee.minibuslocalhost.util.ActivityCollector;
 import com.hasee.minibuslocalhost.util.LogUtil;
 import com.hasee.minibuslocalhost.util.MyHandler;
 import com.hasee.minibuslocalhost.util.SendToScreenThread;
-import com.hasee.minibuslocalhost.util.TimerManager;
+import com.hasee.minibuslocalhost.test.TimerManager;
 import com.hasee.minibuslocalhost.util.ToastUtil;
 
 import java.util.HashMap;
@@ -182,10 +182,10 @@ public class MainActivity extends BaseActivity {
             }
         });
         sreialThread.start();
-        //
-        timerManager = new TimerManager(handler);
-        timerManager.startTimer();
-        leftFragment.setTimerManager(timerManager);
+        //模拟定时发送
+//        timerManager = new TimerManager(handler);
+//        timerManager.startTimer();
+//        leftFragment.setTimerManager(timerManager);
     }
 
     /**

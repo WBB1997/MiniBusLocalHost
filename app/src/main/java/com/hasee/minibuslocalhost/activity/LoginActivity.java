@@ -86,6 +86,9 @@ public class LoginActivity extends BaseActivity {
 //            userNameEt.setShowSoftInputOnFocus(false);
             passWordEt.setShowSoftInputOnFocus(false);
         }
+        //测试
+        userNameEt.setText("sharing-van001");
+        passWordEt.setText("123456");
         //取出本地密码
         String userInfo = App.getInstance().getPreferences();
         if (!TextUtils.isEmpty(userInfo)) {

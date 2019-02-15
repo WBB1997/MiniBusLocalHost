@@ -1,4 +1,4 @@
-package com.hasee.minibuslocalhost.util;
+package com.hasee.minibuslocalhost.test;
 
 import android.util.Log;
 

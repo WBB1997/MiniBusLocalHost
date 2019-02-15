@@ -20,7 +20,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.hasee.minibuslocalhost.R;
 import com.hasee.minibuslocalhost.activity.MainActivity;
 import com.hasee.minibuslocalhost.util.LogUtil;
-import com.hasee.minibuslocalhost.util.TimerManager;
+import com.hasee.minibuslocalhost.test.TimerManager;
 
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_ACBlowingLevel;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_DemisterStatus;

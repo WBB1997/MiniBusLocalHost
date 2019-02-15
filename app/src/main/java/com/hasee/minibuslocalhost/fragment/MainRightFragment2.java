@@ -71,7 +71,6 @@ public class MainRightFragment2 extends Fragment {
         int id = object.getIntValue("id");
         if(id == Wheel_Speed_ABS){//车速
             int speed = (int) object.getDoubleValue("data");
-//            speedCount++;
             rightFragment2Speed.setText(String.valueOf(speed));
         }
         if(id == BCM_InsideTemp){//车内温度
@@ -85,19 +84,19 @@ public class MainRightFragment2 extends Fragment {
 
         }
         if(id == can_num_PackAverageTemp){//电池包平均温度
-            int data = (int) object.getDoubleValue("data");
-            if(data > 40){
-                rightFragment2BatteryTemperature.setTextColor(
-                        getResources().getColor(R.color.main_battery_color));
-                rightFragment2BatteryTemperature_e.setTextColor(
-                        getResources().getColor(R.color.main_battery_color));
-            }else{
-                rightFragment2BatteryTemperature.setTextColor(
-                        getResources().getColor(R.color.right_fragment1_text_color));
-                rightFragment2BatteryTemperature_e.setTextColor(
-                        getResources().getColor(R.color.right_fragment1_text_color));
-            }
-            rightFragment2BatteryTemperature.setText(data);
+//            int data = (int) object.getDoubleValue("data");
+//            if(data > 40){
+//                rightFragment2BatteryTemperature.setTextColor(
+//                        getResources().getColor(R.color.main_battery_color));
+//                rightFragment2BatteryTemperature_e.setTextColor(
+//                        getResources().getColor(R.color.main_battery_color));
+//            }else{
+//                rightFragment2BatteryTemperature.setTextColor(
+//                        getResources().getColor(R.color.right_fragment1_text_color));
+//                rightFragment2BatteryTemperature_e.setTextColor(
+//                        getResources().getColor(R.color.right_fragment1_text_color));
+//            }
+//            rightFragment2BatteryTemperature.setText(data);
         }
     }
 
