@@ -7,6 +7,7 @@ import android.media.AudioManager;
 import com.alibaba.fastjson.JSONObject;
 import com.baidu.mapapi.CoordType;
 import com.baidu.mapapi.SDKInitializer;
+import com.hasee.minibuslocalhost.util.CrashHandler;
 
 import static android_serialport_api.SreialComm.AUDIO_VOLUME;
 import static android_serialport_api.SreialComm.LIGHT_NUM;
@@ -29,6 +30,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
+        CrashHandler.getInstance().init(this);//注册本地日志
         audioManager = (AudioManager) this.getSystemService(AUDIO_SERVICE);
         preferences = getSharedPreferences("userInfo", MODE_PRIVATE);
         editor = getSharedPreferences("userInfo", MODE_PRIVATE).edit();

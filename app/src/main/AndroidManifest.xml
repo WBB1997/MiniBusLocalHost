@@ -24,6 +24,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <!--自启动权限-->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <!--对SD卡文件的删除增加权限-->
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
+        tools:ignore="ProtectedPermissions" />
 
     <supports-screens
         android:anyDensity="true"
