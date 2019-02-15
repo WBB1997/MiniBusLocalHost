@@ -80,30 +80,30 @@ public class HMI extends BaseClass {
             case HMI_Dig_Ord_HighBeam:
                 setBits(bytes, (int) status, offset, 0, 2, ByteUtil.Motorola);
                 setBits(bytes, (int) status == POINTLESS ? POINTLESS : OFF, offset, 2, 2, ByteUtil.Motorola);
-                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 4, (int) status == ON);
-                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(5, 5,  false);
+//                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 4, (int) status == ON);
+//                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(5, 5,  false);
                 break;
             case HMI_Dig_Ord_LowBeam:
                 setBits(bytes,(int) status, offset, 2, 2, ByteUtil.Motorola);
                 setBits(bytes, (int) status == POINTLESS ? POINTLESS : OFF, offset, 0, 2, ByteUtil.Motorola);
-                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 5, (int) status == ON);
-                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 4, false);
+//                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 5, (int) status == ON);
+//                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 4, false);
                 break;
             case HMI_Dig_Ord_LeftTurningLamp:
                 setBits(bytes, (int) status, offset, 4, 2, ByteUtil.Motorola);
                 setBits(bytes, (int) status == POINTLESS ? POINTLESS : OFF, offset, 6, 2, ByteUtil.Motorola);
-                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 1, (int) status == ON);
-                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 2, false);
+//                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 1, (int) status == ON);
+//                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 2, false);
                 break;
             case HMI_Dig_Ord_RightTurningLamp:
                 setBits(bytes, (int) status, offset, 6, 2, ByteUtil.Motorola);
                 setBits(bytes, (int) status == POINTLESS ? POINTLESS : OFF, offset, 4, 2, ByteUtil.Motorola);
-                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 2, (int) status == ON);
-                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 1, false);
+//                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 2, (int) status == ON);
+//                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 1, false);
                 break;
             case HMI_Dig_Ord_RearFogLamp:
                 setBits(bytes, (int) status, offset, 8, 2, ByteUtil.Motorola);
-                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 6, (int) status == ON);
+//                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 6, (int) status == ON);
                 break;
             case HMI_Dig_Ord_DoorLock:
                 setBits(bytes, (int) status, offset, 10, 2, ByteUtil.Motorola);
@@ -125,7 +125,7 @@ public class HMI extends BaseClass {
                 break;
             case HMI_Dig_Ord_DangerAlarm:
                 setBits(bytes, (int) status, offset, 22, 2, ByteUtil.Motorola);
-                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 7, (int) status == ON);
+//                ((BCM1) NAME_AND_CLASS.get("BCM1")).setBytes(0, 7, (int) status == ON);
                 break;
             case HMI_Dig_Ord_FANPWM_Control:
                 setBits(bytes, (int) status, offset, 24, 8, ByteUtil.Motorola);

@@ -16,7 +16,7 @@ public class HAD6 extends BaseClass {
         put(0,new MyPair<>(2, IntegerCommand.HAD_PedestrianAvoidanceRemind, MainActivity.SEND_TO_FRONTSCREEN));
         put(2,new MyPair<>(2, IntegerCommand.HAD_EmergencyParkingRemind, MainActivity.SEND_TO_FRONTSCREEN));
         put(4,new MyPair<>(2, IntegerCommand.HAD_StartingSitedepartureRemind, MainActivity.SEND_TO_FRONTSCREEN));
-        put(6,new MyPair<>(2, IntegerCommand.HAD_ArrivingSiteRemind, MainActivity.SEND_TO_FRONTSCREEN));
+        put(6,new MyPair<>(2, IntegerCommand.HAD_ArrivingSiteRemind, MainActivity.SEND_TO_SCREEN));
     }};
     private byte[] bytes = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
