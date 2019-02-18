@@ -157,7 +157,9 @@ public class MainActivity extends BaseActivity {
         //关闭音乐
         destroyMusic();
         //
-        timerManager.stopTimer();
+//        if(timerManager != null){
+//            timerManager.stopTimer();
+//        }
         LogUtil.d(TAG,"onDestroy");
     }
 
