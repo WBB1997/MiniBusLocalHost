@@ -107,28 +107,28 @@ public class Transmit {
     public void callback(JSONObject jsonObject, int target) {
         //发给hmi
         int id = jsonObject.getIntValue("id");
-        switch (id) {
-            case BCM_Flg_Stat_HighBeam:
-                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI_Dig_Ord_HighBeam, jsonObject.getInteger("data"));
-                break;
-            case BCM_Flg_Stat_LowBeam:
-                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI_Dig_Ord_LowBeam, jsonObject.getInteger("data"));
-                break;
-            case BCM_Flg_Stat_LeftTurningLamp:
-                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI_Dig_Ord_LeftTurningLamp, jsonObject.getInteger("data"));
-                break;
-            case BCM_Flg_Stat_RightTurningLamp:
-                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI_Dig_Ord_RightTurningLamp, jsonObject.getInteger("data"));
-                break;
-            case BCM_Flg_Stat_RearFogLamp:
-                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI_Dig_Ord_RearFogLamp, jsonObject.getInteger("data"));
-                break;
-            case BCM_Flg_Stat_DangerAlarmLamp:
-                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI_Dig_Ord_DangerAlarm, jsonObject.getInteger("data"));
-                break;
-            default:
-                break;
-        }
+//        switch (id) {
+//            case BCM_Flg_Stat_HighBeam:
+//                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI_Dig_Ord_HighBeam, jsonObject.getInteger("data"));
+//                break;
+//            case BCM_Flg_Stat_LowBeam:
+//                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI_Dig_Ord_LowBeam, jsonObject.getInteger("data"));
+//                break;
+//            case BCM_Flg_Stat_LeftTurningLamp:
+//                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI_Dig_Ord_LeftTurningLamp, jsonObject.getInteger("data"));
+//                break;
+//            case BCM_Flg_Stat_RightTurningLamp:
+//                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI_Dig_Ord_RightTurningLamp, jsonObject.getInteger("data"));
+//                break;
+//            case BCM_Flg_Stat_RearFogLamp:
+//                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI_Dig_Ord_RearFogLamp, jsonObject.getInteger("data"));
+//                break;
+//            case BCM_Flg_Stat_DangerAlarmLamp:
+//                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI_Dig_Ord_DangerAlarm, jsonObject.getInteger("data"));
+//                break;
+//            default:
+//                break;
+//        }
         //通过message 发给ui
         Message msg = handler.obtainMessage();
         msg.what = target;
