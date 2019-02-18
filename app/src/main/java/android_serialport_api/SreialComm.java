@@ -1,8 +1,6 @@
 package android_serialport_api;
 
 
-import android.util.Log;
-
 import com.alibaba.fastjson.JSONObject;
 import com.hasee.minibuslocalhost.activity.App;
 import com.hasee.minibuslocalhost.util.LogUtil;
@@ -64,7 +62,7 @@ public class SreialComm {
                     ptr[2] = data[0];
                     int c = Crc.xCal_crc(ptr, 2);
                     if (c == ptr[2]) {
-                        LogUtil.d(TAG,"校验正确！"+"---"+"  pre[0]="+ptr[0]+"  pre[1]="+ptr[1]+"  pre[2]="+ptr[2]+"  c="+c);
+//                        LogUtil.d(TAG,"校验正确！"+"---"+"  pre[0]="+ptr[0]+"  pre[1]="+ptr[1]+"  pre[2]="+ptr[2]+"  c="+c);
                         m = 0;
                         handler.post(runnable);//发送给主线程
 
@@ -75,8 +73,8 @@ public class SreialComm {
                     } else {
                         m = 0;
                         errorCount++;
-                        LogUtil.d(TAG,"校验错误！"+"---"+"  pre[0]="+ptr[0]+"  pre[1]="+ptr[1]+"  pre[2]="+ptr[2]+"  c="+c);
-                        LogUtil.d(TAG,"校验错误次数:"+errorCount);
+//                        LogUtil.d(TAG,"校验错误！"+"---"+"  pre[0]="+ptr[0]+"  pre[1]="+ptr[1]+"  pre[2]="+ptr[2]+"  c="+c);
+//                        LogUtil.d(TAG,"校验错误次数:"+errorCount);
                     }
                 }
             }

@@ -129,7 +129,7 @@ public class MainActivity extends BaseActivity {
             if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(MainActivity.this, new String[]{
-                        Manifest.permission.READ_EXTERNAL_STORAGE
+                        Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE
                 }, 1);
             } else {
                 //有权限的话什么都不做
@@ -157,7 +157,9 @@ public class MainActivity extends BaseActivity {
         //关闭音乐
         destroyMusic();
         //
-        timerManager.stopTimer();
+//        if(timerManager != null){
+//            timerManager.stopTimer();
+//        }
         LogUtil.d(TAG,"onDestroy");
     }
 

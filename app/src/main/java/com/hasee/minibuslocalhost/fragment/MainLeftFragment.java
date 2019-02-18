@@ -170,7 +170,7 @@ public class MainLeftFragment extends Fragment {
                 } else if (progress >=90 &&progress <=100) {
                     seekBarIndex = AIR_GRADE_FIVE_GEAR;
                 }
-                changeTimerFlag();
+//                changeTimerFlag();
                 leftFragmentConditionSize.setText(String.valueOf(seekBarIndex));
                 //发送最终数据至CAN(1-5档)
                 activity.sendToCAN(clazz, HMI_Dig_Ord_air_grade, seekBarIndex);
@@ -354,7 +354,7 @@ public class MainLeftFragment extends Fragment {
                 }
             }
             if(typeFlag){
-                changeTimerFlag();
+//                changeTimerFlag();
                 activity.sendToCAN(clazz, field, o);
                 if(field == HMI_Dig_Ord_air_model){//如果当前是空调模式
                     activity.sendToCAN(clazz, HMI_Dig_Ord_air_grade, seekBarIndex);//档位

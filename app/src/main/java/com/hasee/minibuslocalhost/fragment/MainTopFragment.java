@@ -64,7 +64,8 @@ public class MainTopFragment extends Fragment {
     public void refresh(JSONObject object){
         int id = object.getIntValue("id");
         if(id == OBU_LocalTime){//本地时间
-            topFragmentTime.setText(getTime(object));
+            JSONObject data = object.getJSONObject("data");
+            topFragmentTime.setText(getTime(data));
         }
         if(id == BMS_SOC){//动力电池剩余电量SOC
             //电量显示
