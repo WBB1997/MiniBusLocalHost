@@ -141,6 +141,7 @@ public class MainLeftFragment extends Fragment {
         leftFragmentDeFog.setOnClickListener(onClickListener);
         leftFragmentConditionSize = (TextView) view.findViewById(R.id.leftFragment_condition_size);
         leftFragmentSeekBar = (SeekBar) view.findViewById(R.id.leftFragment_seekBar);
+        leftFragmentSeekBar.setEnabled(false);//默认滑动条无法点击
         leftFragmentSeekBar.setOnSeekBarChangeListener(onSeekBarChangeListener);
         //设置滑块颜色
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -301,6 +302,8 @@ public class MainLeftFragment extends Fragment {
                 case R.id.leftFragment_coolAir: {//冷气
                     leftFragmentCoolAir.setActivated(!leftFragmentCoolAir.isActivated());
                     if (leftFragmentCoolAir.isActivated()) {//如果冷气是开的
+                        //滑动条可点击
+                        leftFragmentSeekBar.setEnabled(true);
                         leftFragmentCoolAirImg.setActivated(true);
                         //关闭暖气
                         leftFragmentHotAirImg.setActivated(false);
@@ -313,8 +316,12 @@ public class MainLeftFragment extends Fragment {
                     if(leftFragmentCoolAir.isActivated()){
                         o = AIR_MODEL_COOL;//制冷模式
                     }else{
-                        if(!leftFragmentHotAir.isActivated()){
+                        if(!leftFragmentHotAir.isActivated()){//空调冷气和暖气都关闭
                             o = AIR_MODEL_AWAIT;//关闭
+                            //滑动条不可点击
+                            seekBarIndex = AIR_GRADE_OFF;//变为OFF档
+                            leftFragmentSeekBar.setEnabled(false);
+                            leftFragmentConditionSize.setText(String.valueOf(seekBarIndex));
                         }
                     }
                     break;
@@ -322,6 +329,8 @@ public class MainLeftFragment extends Fragment {
                 case R.id.leftFragment_hotAir: {//暖气
                     leftFragmentHotAir.setActivated(!leftFragmentHotAir.isActivated());
                     if (leftFragmentHotAir.isActivated()) {//如果暖气是开的
+                        //滑动条可点击
+                        leftFragmentSeekBar.setEnabled(true);
                         leftFragmentHotAirImg.setActivated(true);
                         //关闭冷气
                         leftFragmentCoolAirImg.setActivated(false);
@@ -334,8 +343,12 @@ public class MainLeftFragment extends Fragment {
                     if(leftFragmentHotAir.isActivated()){
                         o = AIR_MODEL_HEAT;//制热模式
                     }else{
-                        if(!leftFragmentCoolAir.isActivated()){
+                        if(!leftFragmentCoolAir.isActivated()){//空调冷气和暖气都关闭
                             o = AIR_MODEL_AWAIT;//关闭
+                            //滑动条不可点击
+                            seekBarIndex = AIR_GRADE_OFF;
+                            leftFragmentSeekBar.setEnabled(false);
+                            leftFragmentConditionSize.setText(String.valueOf(seekBarIndex));
                         }
                     }
                     break;
