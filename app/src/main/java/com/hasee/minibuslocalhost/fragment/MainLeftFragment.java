@@ -371,6 +371,10 @@ public class MainLeftFragment extends Fragment {
                 activity.sendToCAN(clazz, field, o);
                 if(field == HMI_Dig_Ord_air_model){//如果当前是空调模式
                     activity.sendToCAN(clazz, HMI_Dig_Ord_air_grade, seekBarIndex);//档位
+                    if(AIR_MODEL_AWAIT == (int)o){//空调关闭
+                        // 风扇PWM占比控制信号
+                        activity.sendToCAN(clazz,HMI_Dig_Ord_FANPWM_Control,0);
+                    }
                 }
                 typeFlag = false;
             }
