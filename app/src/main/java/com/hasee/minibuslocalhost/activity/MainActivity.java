@@ -157,9 +157,9 @@ public class MainActivity extends BaseActivity {
         //关闭音乐
         destroyMusic();
         //
-//        if(timerManager != null){
-//            timerManager.stopTimer();
-//        }
+        if(timerManager != null){
+            timerManager.stopTimer();
+        }
         LogUtil.d(TAG,"onDestroy");
     }
 
@@ -185,9 +185,9 @@ public class MainActivity extends BaseActivity {
         });
         sreialThread.start();
         //模拟定时发送
-//        timerManager = new TimerManager(handler);
-//        timerManager.startTimer();
-//        leftFragment.setTimerManager(timerManager);
+        timerManager = new TimerManager(handler);
+        timerManager.startTimer();
+        leftFragment.setTimerManager(timerManager);
     }
 
     /**
