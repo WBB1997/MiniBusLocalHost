@@ -53,6 +53,7 @@ public class HMI extends BaseClass {
     public static final int AIR_GRADE_THIRD_GEAR = 3; // 3挡
     public static final int AIR_GRADE_FOURTH_GEAR = 4; // 4挡
     public static final int AIR_GRADE_FIVE_GEAR = 5; // 5挡
+    public static final int AIR_GRADE_SIX_GEAR = 6; // 无输入
     // 制动液面报警
     public static final int eBooster_Warning_ON = 1; // 报警
     public static final int eBooster_Warning_OFF = 0; // 正常
@@ -109,7 +110,7 @@ public class HMI extends BaseClass {
                 setBits(bytes, (int) status, offset, 10, 2, ByteUtil.Motorola);
                 break;
             case HMI_Dig_Ord_Alam:
-                setBits(bytes, (int) status, offset, 12, 1, ByteUtil.Motorola);
+                setBits(bytes, (int) status, offset, 12, 2, ByteUtil.Motorola);
                 break;
             case HMI_Dig_Ord_Driver_model:
                 setBits(bytes, (int) status, offset, 14, 2, ByteUtil.Motorola);
