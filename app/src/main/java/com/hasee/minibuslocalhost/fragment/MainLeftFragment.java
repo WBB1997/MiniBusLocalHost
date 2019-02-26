@@ -45,6 +45,7 @@ import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_GRADE_FIVE_GEAR;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_GRADE_FOURTH_GEAR;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_GRADE_OFF;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_GRADE_SECOND_GEAR;
+import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_GRADE_SIX_GEAR;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_GRADE_THIRD_GEAR;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_MODEL_AWAIT;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_MODEL_COOL;
@@ -158,26 +159,26 @@ public class MainLeftFragment extends Fragment {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 //            LogUtil.d(TAG,String.valueOf(progress));
-            if(fromUser){
-                if (progress >=0 &&progress <10) {
+            if (fromUser) {
+                if (progress >= 0 && progress < 10) {
                     seekBarIndex = AIR_GRADE_OFF;
-                } else if (progress >=10 &&progress <30) {
+                } else if (progress >= 10 && progress < 30) {
                     seekBarIndex = AIR_GRADE_FIRST_GEAR;
-                } else if (progress >=30 &&progress <50) {
+                } else if (progress >= 30 && progress < 50) {
                     seekBarIndex = AIR_GRADE_SECOND_GEAR;
-                } else if (progress >=50 &&progress <70) {
+                } else if (progress >= 50 && progress < 70) {
                     seekBarIndex = AIR_GRADE_THIRD_GEAR;
-                } else if (progress >=70 &&progress <90) {
+                } else if (progress >= 70 && progress < 90) {
                     seekBarIndex = AIR_GRADE_FOURTH_GEAR;
-                } else if (progress >=90 &&progress <=100) {
+                } else if (progress >= 90 && progress <= 100) {
                     seekBarIndex = AIR_GRADE_FIVE_GEAR;
                 }
-                changeTimerFlag();
+//                changeTimerFlag();
                 leftFragmentConditionSize.setText(String.valueOf(seekBarIndex));
                 //发送最终数据至CAN(1-5档)
                 activity.sendToCAN(clazz, HMI_Dig_Ord_air_grade, seekBarIndex);
                 // 风扇PWM占比控制信号
-                activity.sendToCAN(clazz,HMI_Dig_Ord_FANPWM_Control,progress);
+                activity.sendToCAN(clazz, HMI_Dig_Ord_FANPWM_Control, progress);
             }
         }
 
@@ -314,13 +315,13 @@ public class MainLeftFragment extends Fragment {
                     }
                     typeFlag = true;
                     field = HMI_Dig_Ord_air_model;//空调模式
-                    if(leftFragmentCoolAir.isActivated()){
+                    if (leftFragmentCoolAir.isActivated()) {
                         o = AIR_MODEL_COOL;//制冷模式
-                    }else{
-                        if(!leftFragmentHotAir.isActivated()){//空调冷气和暖气都关闭
+                    } else {
+                        if (!leftFragmentHotAir.isActivated()) {//空调冷气和暖气都关闭
                             o = AIR_MODEL_AWAIT;//关闭
                             //滑动条不可点击
-                            seekBarIndex = AIR_GRADE_OFF;//变为OFF档
+                            seekBarIndex = AIR_GRADE_SIX_GEAR;//变为OFF档
                             leftFragmentSeekBar.setEnabled(false);
                             leftFragmentConditionSize.setText(String.valueOf(seekBarIndex));
                         }
@@ -341,13 +342,13 @@ public class MainLeftFragment extends Fragment {
                     }
                     typeFlag = true;
                     field = HMI_Dig_Ord_air_model;//空调模式
-                    if(leftFragmentHotAir.isActivated()){
+                    if (leftFragmentHotAir.isActivated()) {
                         o = AIR_MODEL_HEAT;//制热模式
-                    }else{
-                        if(!leftFragmentCoolAir.isActivated()){//空调冷气和暖气都关闭
+                    } else {
+                        if (!leftFragmentCoolAir.isActivated()) {//空调冷气和暖气都关闭
                             o = AIR_MODEL_AWAIT;//关闭
                             //滑动条不可点击
-                            seekBarIndex = AIR_GRADE_OFF;
+                            seekBarIndex = AIR_GRADE_SIX_GEAR;
                             leftFragmentSeekBar.setEnabled(false);
                             leftFragmentConditionSize.setText(String.valueOf(seekBarIndex));
                         }
@@ -367,18 +368,18 @@ public class MainLeftFragment extends Fragment {
                     break;
                 }
             }
-            if(typeFlag){
-                changeTimerFlag();
+            if (typeFlag) {
+//                changeTimerFlag();
                 activity.sendToCAN(clazz, field, o);
-                if(field == HMI_Dig_Ord_air_model){//如果当前是空调模式
+                if (field == HMI_Dig_Ord_air_model) {//如果当前是空调模式
                     activity.sendToCAN(clazz, HMI_Dig_Ord_air_grade, seekBarIndex);//档位
-                    if(AIR_MODEL_AWAIT == (int)o){//空调关闭
+                    if (AIR_MODEL_AWAIT == (int) o) {//空调关闭
                         // 风扇PWM占比控制信号
-                        activity.sendToCAN(clazz,HMI_Dig_Ord_FANPWM_Control,0);
+                        activity.sendToCAN(clazz, HMI_Dig_Ord_FANPWM_Control, 0);
                     }
                 }
                 typeFlag = false;
-                activity.sendToCAN(clazz,field,(Object) POINTLESS);//发送无意义数据
+                activity.sendToCAN(clazz, field, (Object) POINTLESS);//发送无意义数据
             }
         }
     };
@@ -386,8 +387,8 @@ public class MainLeftFragment extends Fragment {
     /**
      * 改变定时器状态
      */
-    private void changeTimerFlag(){
-        if(timerManager != null){
+    private void changeTimerFlag() {
+        if (timerManager != null) {
             timerManager.setPause(false);
         }
     }
@@ -397,8 +398,8 @@ public class MainLeftFragment extends Fragment {
      */
     public void refresh(JSONObject object) {
         boolean data = object.getBoolean("data");
-        int id= object.getIntValue("id");
-        LogUtil.d(TAG,"id:"+id);
+        int id = object.getIntValue("id");
+        LogUtil.d(TAG, "id:" + id);
         switch (id) {
             case BCM_Flg_Stat_LeftTurningLamp: {// 左转
                 leftFragmentLeftLight.setActivated(data);
@@ -465,14 +466,14 @@ public class MainLeftFragment extends Fragment {
 //                }
                 break;
             }
-            case BCM_ACBlowingLevel:{//空调风量档位
+            case BCM_ACBlowingLevel: {//空调风量档位
                 int index = object.getIntValue("data");//接收档位
                 seekBarIndex = index;//当前档位
                 leftFragmentConditionSize.setText(String.valueOf(seekBarIndex));//设置档位数值
-                leftFragmentSeekBar.setProgress(seekBarIndex*20);//设置滑动条
+                leftFragmentSeekBar.setProgress(seekBarIndex * 20);//设置滑动条
                 break;
             }
-            case BCM_DemisterStatus:{//除雾状态
+            case BCM_DemisterStatus: {//除雾状态
                 leftFragmentDeFog.setActivated(data);
                 break;
             }
@@ -481,11 +482,12 @@ public class MainLeftFragment extends Fragment {
 
     /**
      * 将boolean转换成int
+     *
      * @param flag
      * @return
      */
-    private int transInt(boolean flag){
-        if(flag){
+    private int transInt(boolean flag) {
+        if (flag) {
             return ON;
         }
         return OFF;

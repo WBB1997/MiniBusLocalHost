@@ -12,4 +12,5 @@
     <color name="lowSpeed_fragment_bg_color">#d22c2b</color>
     <color name="floatbtn_bg">#272f83</color>
     <color name="login_error_dialog_tv">#2bdeff</color>
+    <color name="seekbar_color">#9cf8f8</color>
 </resources>
