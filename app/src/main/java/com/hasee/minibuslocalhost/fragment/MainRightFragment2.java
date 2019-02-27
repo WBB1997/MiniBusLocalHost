@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,8 +37,10 @@ public class MainRightFragment2 extends Fragment {
     private TextView rightFragment2DriveInfo;//行驶参数
     private double avgSpeed = 0;//平均速度
     private int speedCount = 0;//统计速度次数
+    private double lastSpeed = 0;//上一次的速度
+    
     public MainRightFragment2(){
-
+        Log.d(TAG, "MainRightFragment2: ");
     }
 
     @Override
@@ -62,6 +65,7 @@ public class MainRightFragment2 extends Fragment {
         showDriveInfo("");
         return view;
     }
+
 
     /**
      * 更新UI

@@ -19,8 +19,8 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSONObject;
 import com.hasee.minibuslocalhost.R;
 import com.hasee.minibuslocalhost.activity.MainActivity;
-import com.hasee.minibuslocalhost.util.LogUtil;
 import com.hasee.minibuslocalhost.test.TimerManager;
+import com.hasee.minibuslocalhost.util.LogUtil;
 
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_ACBlowingLevel;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_DemisterStatus;
@@ -52,15 +52,12 @@ import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_MODEL_COOL;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_MODEL_HEAT;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.OFF;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.ON;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.POINTLESS;
 
 /**
  * 左边Fragment
  */
 public class MainLeftFragment extends Fragment {
     private static final String TAG = "MainLeftFragment";
-    public static final int HMI_LIGHT = 1;//灯光
-    public static final int HMI_AIR = 2;//空调
     private MainActivity activity;//MainActivity
     private ImageView leftFragmentCarCloseDoor;//车门关
     private ImageView leftFragmentCarOpenDoor;//车门开
@@ -88,7 +85,6 @@ public class MainLeftFragment extends Fragment {
     private String clazz = "HMI";//所属类名
     private int field = -1;//属性
     private Object o = null;//状态
-    private int flag = 0;//标志着是灯光还是空调
     private int seekBarIndex = 0;
     private boolean typeFlag = false;//判断是否改变状态
     private TimerManager timerManager = null;
@@ -215,7 +211,6 @@ public class MainLeftFragment extends Fragment {
                     typeFlag = true;
                     field = HMI_Dig_Ord_LowBeam;
                     o = transInt(leftFragmentLowBeam.isActivated());
-                    flag = HMI_LIGHT;
                     break;
                 }
                 case R.id.leftFragment_highBeam: {//远光灯
@@ -232,7 +227,6 @@ public class MainLeftFragment extends Fragment {
                     typeFlag = true;
                     field = HMI_Dig_Ord_HighBeam;
                     o = transInt(leftFragmentHighBeam.isActivated());
-                    flag = HMI_LIGHT;
                     break;
                 }
                 case R.id.leftFragment_front_fogLight: {//前雾灯
@@ -251,7 +245,6 @@ public class MainLeftFragment extends Fragment {
                     typeFlag = true;
                     field = HMI_Dig_Ord_RearFogLamp;
                     o = transInt(leftFragmentBackFogLight.isActivated());
-                    flag = HMI_LIGHT;
                     break;
                 }
                 case R.id.leftFragment_leftLight: {//左转向灯
@@ -271,7 +264,6 @@ public class MainLeftFragment extends Fragment {
                     typeFlag = true;
                     field = HMI_Dig_Ord_LeftTurningLamp;
                     o = transInt(leftFragmentLeftLight.isActivated());
-                    flag = HMI_LIGHT;
                     break;
                 }
                 case R.id.leftFragment_rightLight: {//右转向灯
@@ -289,7 +281,6 @@ public class MainLeftFragment extends Fragment {
                     typeFlag = true;
                     field = HMI_Dig_Ord_RightTurningLamp;
                     o = transInt(leftFragmentRightLight.isActivated());
-                    flag = HMI_LIGHT;
                     break;
                 }
                 case R.id.leftFragment_errorLight: {//警示灯
@@ -304,7 +295,6 @@ public class MainLeftFragment extends Fragment {
                     typeFlag = true;
                     field = HMI_Dig_Ord_DangerAlarm;
                     o = transInt(leftFragmentErrorLight.isActivated());
-                    flag = HMI_LIGHT;
                     break;
                 }
                 case R.id.leftFragment_coolAir: {//冷气
@@ -329,10 +319,10 @@ public class MainLeftFragment extends Fragment {
                             //滑动条不可点击
                             seekBarIndex = AIR_GRADE_SIX_GEAR;//变为OFF档
                             leftFragmentSeekBar.setEnabled(false);
-                            leftFragmentConditionSize.setText(String.valueOf(seekBarIndex));
+                            leftFragmentSeekBar.setProgress(0);
+                            leftFragmentConditionSize.setText("0");
                         }
                     }
-                    flag = HMI_AIR;
                     break;
                 }
                 case R.id.leftFragment_hotAir: {//暖气
@@ -357,10 +347,10 @@ public class MainLeftFragment extends Fragment {
                             //滑动条不可点击
                             seekBarIndex = AIR_GRADE_SIX_GEAR;
                             leftFragmentSeekBar.setEnabled(false);
-                            leftFragmentConditionSize.setText(String.valueOf(seekBarIndex));
+                            leftFragmentSeekBar.setProgress(0);
+                            leftFragmentConditionSize.setText("0");
                         }
                     }
-                    flag = HMI_AIR;
                     break;
                 }
                 case R.id.leftFragment_deFog: {//除雾
@@ -373,7 +363,6 @@ public class MainLeftFragment extends Fragment {
                     typeFlag = true;
                     field = HMI_Dig_Ord_Demister_Control;//除雾控制
                     o = transInt(leftFragmentDeFog.isActivated());
-                    flag = HMI_AIR;
                     break;
                 }
             }
@@ -388,7 +377,6 @@ public class MainLeftFragment extends Fragment {
                     }
                 }
                 typeFlag = false;
-                activity.sendToCAN(clazz, field, POINTLESS, flag);//发送无意义数据
             }
         }
     };

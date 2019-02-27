@@ -75,7 +75,7 @@ public class Transmit {
         byte[] bytes_1 = baseClass.getBytes();
         LogUtil.d(TAG, "hostToCan" + bytesToHex(bytes_1));
         if (baseClass instanceof HMI)
-            ((HMI) baseClass).changeStatus(0, o);
+            ((HMI) baseClass).changeStatus(field, 0);
         byte[] bytes_2 = baseClass.getBytes();
         try {
             sendQueue.put(new Pair<>(new Pair<>(bytes_1, bytes_2), (long) 0));

@@ -32,6 +32,7 @@ import static com.hasee.minibuslocalhost.fragment.LoginFragmentDialog.ERROR2;
  * Created by fangju on 2018/12/15
  */
 public class LoginActivity extends BaseActivity {
+    private static final String TAG = "LoginActivity";
     private Context mContext;//上下文
     private int focuState = -1;//判断输入框焦点在哪个上面
     private EditText userNameEt;//用户名输入框
@@ -52,6 +53,7 @@ public class LoginActivity extends BaseActivity {
     private LoginFragmentDialog errorDialog;//提示框
     private int errorCount = 0;//错误次数
     private final int REQUEST_CODE = 1;
+    private int flag = 0;//判断是第几次进入登陆界面，默认第一次
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,6 +61,7 @@ public class LoginActivity extends BaseActivity {
         setContentView(R.layout.login_activity_layout);
         mContext = LoginActivity.this;
         hideBottomUIMenu();
+        flag = getIntent().getIntExtra("flag",0);
         //界面控件初始化
         viewInit();
         initUsers();
@@ -199,9 +202,7 @@ public class LoginActivity extends BaseActivity {
                                 object.put("userName", loginUserName);
                                 object.put("passWord", loginPwd);
                                 App.getInstance().setPreferences(object.toJSONString());
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);//跳转到新页面
-                                intent.putExtra("isShow",false);
-                                startActivity(intent);
+                                MainActivity.actionStart(mContext,false,true);
                                 return;
                             }
                         }
@@ -216,9 +217,7 @@ public class LoginActivity extends BaseActivity {
                                 @Override
                                 public void run() {
                                     errorDialog.dismiss();
-                                    Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-                                    intent.putExtra("isShow",true);
-                                    startActivity(intent);
+                                    MainActivity.actionStart(mContext,true,false);
                                 }
                             },3000);
                         } else {
@@ -234,6 +233,27 @@ public class LoginActivity extends BaseActivity {
             }
         }
     };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    /**
+     * 从另一个页面携带数据跳转至本页面
+     * @param mContext
+     * @param flag
+     */
+    public static void actionStart(Context mContext,int flag){
+        Intent intent = new Intent(mContext,LoginActivity.class);
+        intent.putExtra("flag",flag);
+        mContext.startActivity(intent);
+    }
 
     /**
      * 输入框焦点监听
