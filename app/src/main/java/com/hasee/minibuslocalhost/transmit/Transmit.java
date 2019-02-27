@@ -78,7 +78,7 @@ public class Transmit {
             ((HMI) baseClass).changeStatus(0, o);
         byte[] bytes_2 = baseClass.getBytes();
         try {
-            sendQueue.put(new Pair<>(new Pair<>(bytes_1, bytes_2), (long) 20));
+            sendQueue.put(new Pair<>(new Pair<>(bytes_1, bytes_2), (long) 0));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
