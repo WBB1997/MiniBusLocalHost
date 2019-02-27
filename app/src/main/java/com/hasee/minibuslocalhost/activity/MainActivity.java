@@ -73,6 +73,8 @@ import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_eBooste
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.OBU_LocalTime;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.Wheel_Speed_ABS;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.can_num_PackAverageTemp;
+import static com.hasee.minibuslocalhost.fragment.MainLeftFragment.HMI_AIR;
+import static com.hasee.minibuslocalhost.fragment.MainLeftFragment.HMI_LIGHT;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_GRADE_OFF;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_MODEL_AWAIT;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.DRIVE_MODEL_AUTO_AWAIT;
@@ -184,6 +186,8 @@ public class MainActivity extends BaseActivity {
             }
         });
         sreialThread.start();
+        //将sendToCANHandler传递至LeftFragment
+
         //模拟定时发送
 //        timerManager = new TimerManager(handler);
 //        timerManager.startTimer();
@@ -269,6 +273,7 @@ public class MainActivity extends BaseActivity {
     /**
      * 接收CAN总线的信息，判断处理
      */
+    @SuppressLint("HandlerLeak")
     private MyHandler handler = new MyHandler(mContext) {
         @Override
         public void handleMessage(Message msg) {
@@ -415,7 +420,26 @@ public class MainActivity extends BaseActivity {
      * @param o     对象
      */
     public void sendToCAN(String clazz, int field, Object o) {
-        Transmit.getInstance().hostToCAN(clazz, field, o);
+        Transmit.getInstance().hostToCAN(clazz, field, o,0);
+    }
+
+    /**
+     *
+     * @param clazz 类名
+     * @param field 字段名
+     * @param o 对象
+     * @param flag 标志位
+     */
+    public void sendToCAN(String clazz, int field, Object o,int flag){
+        switch (flag){
+            case HMI_LIGHT:{
+                Transmit.getInstance().hostToCAN(clazz, field, o,300);
+                break;
+            }
+            case HMI_AIR:{
+                break;
+            }
+        }
     }
 
     /**

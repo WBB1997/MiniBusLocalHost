@@ -39,9 +39,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.*;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.DRIVE_MODEL_AUTO_AWAIT;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.eBooster_Warning_OFF;
 import static com.hasee.minibuslocalhost.util.ByteUtil.bytesToHex;
 import static com.hasee.minibuslocalhost.util.ByteUtil.subBytes;
 
@@ -61,8 +58,9 @@ public class Transmit {
         init();
     }
 
+
     // 主机发送数据给CAN总线
-    public void hostToCAN(String clazz, int field, Object o) {
+    public void hostToCAN(String clazz, int field, Object o,long time) {
         BaseClass baseClass = (BaseClass) NAME_AND_CLASS.get(clazz);
         if (baseClass == null) {
             LogUtil.d(TAG, "类转换错误");
