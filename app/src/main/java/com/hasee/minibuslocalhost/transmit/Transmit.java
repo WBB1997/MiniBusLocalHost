@@ -6,6 +6,7 @@ import android.util.Pair;
 import com.alibaba.fastjson.JSONObject;
 import com.hasee.minibuslocalhost.transmit.Class.AD1;
 import com.hasee.minibuslocalhost.transmit.Class.AD4;
+import com.hasee.minibuslocalhost.transmit.Class.AD_FeedBack;
 import com.hasee.minibuslocalhost.transmit.Class.BCM1;
 import com.hasee.minibuslocalhost.transmit.Class.BMS1;
 import com.hasee.minibuslocalhost.transmit.Class.BMS7;
@@ -23,6 +24,7 @@ import com.hasee.minibuslocalhost.transmit.Class.OBU5;
 import com.hasee.minibuslocalhost.transmit.Class.PCGL1;
 import com.hasee.minibuslocalhost.transmit.Class.PCGR1;
 import com.hasee.minibuslocalhost.transmit.Class.RCU1;
+import com.hasee.minibuslocalhost.transmit.Class.RCU_FeedBack;
 import com.hasee.minibuslocalhost.transmit.Class.VCU2;
 import com.hasee.minibuslocalhost.transmit.Class.VCU3;
 import com.hasee.minibuslocalhost.transmit.Class.VCU4;
@@ -36,8 +38,8 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import static com.hasee.minibuslocalhost.util.ByteUtil.bytesToHex;
 import static com.hasee.minibuslocalhost.util.ByteUtil.subBytes;
@@ -49,18 +51,20 @@ public class Transmit {
     private final static String IP = "192.168.1.60"; // ip地址
     private final static Transmit instance = new Transmit();
     private MyHandler handler;
+    private LinkedBlockingQueue<Pair<Pair<byte[],byte[]>, Long>> sendQueue = new LinkedBlockingQueue<>();
+    private boolean threadFlag = true; // 接收线程是否关闭
 
     public static void main(String[] args) {
         new Transmit();
     }
 
-    public Transmit() {
+    private Transmit() {
         init();
     }
 
 
     // 主机发送数据给CAN总线
-    public void hostToCAN(String clazz, int field, Object o,long time) {
+    public void hostToCAN(String clazz, int field, Object o) {
         BaseClass baseClass = (BaseClass) NAME_AND_CLASS.get(clazz);
         if (baseClass == null) {
             LogUtil.d(TAG, "类转换错误");
@@ -68,18 +72,44 @@ public class Transmit {
         }
         if (baseClass instanceof HMI)
             ((HMI) baseClass).changeStatus(field, o);
-        byte[] bytes = baseClass.getBytes();
-        LogUtil.d(TAG, bytesToHex(bytes));
-        UDP_send(bytes);
+        byte[] bytes_1 = baseClass.getBytes();
+        LogUtil.d(TAG, "hostToCan" + bytesToHex(bytes_1));
+        if (baseClass instanceof HMI)
+            ((HMI) baseClass).changeStatus(0, o);
+        byte[] bytes_2 = baseClass.getBytes();
+        try {
+            sendQueue.put(new Pair<>(new Pair<>(bytes_1, bytes_2), (long) 0));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 发送队列线程
+    private class StartSend implements Runnable{
+
+        @Override
+        public void run() {
+            try {
+                while (threadFlag) {
+                    Pair<Pair<byte[], byte[]>, Long> tmp = sendQueue.take();
+                    for (int i = 0; i < 5; i++) {
+                        UDP_send(tmp.first.first);
+                        Thread.sleep(tmp.second);
+                    }
+                    UDP_send(tmp.first.second);
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            LogUtil.d(TAG, "发送队列退出");
+        }
     }
 
     // 车辆初始化
     public void  Can_init(Object obj){
         HMI HMI_Class = (HMI) NAME_AND_CLASS.get("HMI");
         Map<Integer,Integer> map = (Map<Integer, Integer>) obj;
-        Iterator<Map.Entry<Integer, Integer>> iterator = map.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry<Integer, Integer> it = iterator.next();
+        for (Map.Entry<Integer, Integer> it : map.entrySet()) {
             int field = it.getKey();
             Object o = it.getValue();
             HMI_Class.changeStatus(field, o);
@@ -92,7 +122,8 @@ public class Transmit {
     public void setHandler(MyHandler handler) {
         this.handler = handler;
         LogUtil.d(TAG, "setHandler");
-        UDP_receive();
+        new Thread(new StartSend()).start(); // 开启发送线程
+        UDP_receive(); // 开启接收线程
     }
 
     public static Transmit getInstance() {
@@ -104,7 +135,7 @@ public class Transmit {
     // jsonObject:{'id':1, 'data':[1,1,...], 'target':1}
     public void callback(JSONObject jsonObject, int target) {
         //发给hmi
-        int id = jsonObject.getIntValue("id");
+//        int id = jsonObject.getIntValue("id");
 //        switch (id) {
 //            case BCM_Flg_Stat_HighBeam:
 //                ((HMI) NAME_AND_CLASS.get("HMI")).changeStatus(HMI_Dig_Ord_HighBeam, jsonObject.getInteger("data"));
@@ -153,6 +184,8 @@ public class Transmit {
             // 关闭socket
             if (datagramSocket != null)
                 datagramSocket.close();
+            threadFlag = false;
+            sendQueue = null;
         }
     }
 
@@ -201,7 +234,9 @@ public class Transmit {
             new Pair<>("00000260", new BMS1()),
             new Pair<>("00000420", new VCU3()),
             new Pair<>("00000421", new VCU4()),
-            new Pair<>("00000465", new BMS7())
+            new Pair<>("00000465", new BMS7()),
+            new Pair<>("00000081", new AD_FeedBack()),
+            new Pair<>("00000080", new RCU_FeedBack())
     ));
     // 消息标识符键值对，方便查找
     private Map<String, ? super BaseClass> FLAG_AND_CLASS = new HashMap<>();
