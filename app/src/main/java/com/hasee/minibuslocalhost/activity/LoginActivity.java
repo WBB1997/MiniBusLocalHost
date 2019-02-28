@@ -93,7 +93,7 @@ public class LoginActivity extends BaseActivity {
         userNameEt.setText("sharing-van001");
         passWordEt.setText("123456");
         //取出本地密码
-        String userInfo = App.getInstance().getPreferences();
+        String userInfo = App.getInstance().getPreferences("userInfo");
         if (!TextUtils.isEmpty(userInfo)) {
             JSONObject object = JSON.parseObject(userInfo);
             String userName = object.getString("userName");
@@ -201,7 +201,7 @@ public class LoginActivity extends BaseActivity {
                                 JSONObject object = new JSONObject();
                                 object.put("userName", loginUserName);
                                 object.put("passWord", loginPwd);
-                                App.getInstance().setPreferences(object.toJSONString());
+                                App.getInstance().setPreferences("userInfo",object.toJSONString());
                                 MainActivity.actionStart(mContext,false,true);
                                 return;
                             }

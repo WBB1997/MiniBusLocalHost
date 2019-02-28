@@ -11,12 +11,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.hasee.minibuslocalhost.R;
+import com.hasee.minibuslocalhost.activity.App;
 import com.hasee.minibuslocalhost.activity.MainActivity;
+import com.hasee.minibuslocalhost.util.LogUtil;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_InsideTemp;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_OutsideTemp;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_TotalOdmeter;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.Wheel_Speed_ABS;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.can_RemainKm;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.can_num_PackAverageTemp;
@@ -37,10 +44,25 @@ public class MainRightFragment2 extends Fragment {
     private TextView rightFragment2DriveInfo;//行驶参数
     private double avgSpeed = 0;//平均速度
     private int speedCount = 0;//统计速度次数
+    private double totalMile = 0;//总里程
+    private double newSpeed = 0;
     private double lastSpeed = 0;//上一次的速度
-    
-    public MainRightFragment2(){
+    private ReadSpeedTimer readSpeedTimer = null;
+
+
+    public MainRightFragment2() {
+        JSONObject carInfo = JSON.parseObject(App.getInstance().getPreferences("carInfo"));
+        if (carInfo != null) {
+            totalMile = carInfo.getDouble("totalMile");
+        }
         Log.d(TAG, "MainRightFragment2: ");
+    }
+
+    public ReadSpeedTimer getReadSpeedTimer() {
+        if (readSpeedTimer == null) {
+            readSpeedTimer = new ReadSpeedTimer();
+        }
+        return readSpeedTimer;
     }
 
     @Override
@@ -53,73 +75,74 @@ public class MainRightFragment2 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main_right2, container, false);
-        rightFragment2BatteryTemperature = (TextView)view.findViewById(R.id.rightFragment2_batteryTemperature);
-        Typeface typeface = Typeface.createFromAsset(activity.getAssets(),"font1.ttf");
+        rightFragment2BatteryTemperature = (TextView) view.findViewById(R.id.rightFragment2_batteryTemperature);
+        Typeface typeface = Typeface.createFromAsset(activity.getAssets(), "font1.ttf");
         rightFragment2BatteryTemperature.setTypeface(typeface);
-        rightFragment2BatteryTemperature_e = (TextView)view.findViewById(R.id.rightFragment2_batteryTemperature_e);
-        rightFragment2Speed = (TextView)view.findViewById(R.id.rightFragment2_speed);
-        rightFragment2Zonlic = (TextView)view.findViewById(R.id.rightFragment2_zonlic);
-        rightFragment2Renwujd = (TextView)view.findViewById(R.id.rightFragment2_renwujd);
-        rightFragment2Pingjunss = (TextView)view.findViewById(R.id.rightFragment2_pingjunss);
-        rightFragment2DriveInfo = (TextView)view.findViewById(R.id.driveInfo_tv);
-        showDriveInfo("");
+        rightFragment2BatteryTemperature_e = (TextView) view.findViewById(R.id.rightFragment2_batteryTemperature_e);
+        rightFragment2Speed = (TextView) view.findViewById(R.id.rightFragment2_speed);
+        rightFragment2Zonlic = (TextView) view.findViewById(R.id.rightFragment2_zonlic);
+        rightFragment2Renwujd = (TextView) view.findViewById(R.id.rightFragment2_renwujd);
+        rightFragment2Pingjunss = (TextView) view.findViewById(R.id.rightFragment2_pingjunss);
+        rightFragment2DriveInfo = (TextView) view.findViewById(R.id.driveInfo_tv);
+        rightFragment2Zonlic.setText(String.valueOf((int) totalMile));
+//        showDriveInfo("");
         return view;
     }
 
 
     /**
      * 更新UI
+     *
      * @param object
      */
-    public void refresh(JSONObject object){
+    public void refresh(JSONObject object) {
         int id = object.getIntValue("id");
-        if(id == Wheel_Speed_ABS){//车速
-            int speed = (int) object.getDoubleValue("data");
-            rightFragment2Speed.setText(String.valueOf(speed));
+        if (id == Wheel_Speed_ABS) {//车速
+            newSpeed = (int) object.getDoubleValue("data");//新速度
         }
-        if(id == BCM_InsideTemp){//车内温度
+        if (id == BCM_InsideTemp) {//车内温度
 
         }
-        if(id == BCM_OutsideTemp){//车外温度
+        if (id == BCM_OutsideTemp) {//车外温度
 
         }
-        if(id == can_RemainKm){//剩余里程数
-//            int data = (int) object.getDoubleValue("data");
-
+        if (id == can_RemainKm) {//剩余里程数
+            int data = (int) object.getDoubleValue("data");
+            int d = (int) (((totalMile - data) / totalMile) * 100);
+            rightFragment2Renwujd.setText(String.valueOf(d));
         }
-        if(id == can_num_PackAverageTemp){//电池包平均温度
-//            int data = (int) object.getDoubleValue("data");
-//            if(data > 40){
-//                rightFragment2BatteryTemperature.setTextColor(
-//                        getResources().getColor(R.color.main_battery_color));
-//                rightFragment2BatteryTemperature_e.setTextColor(
-//                        getResources().getColor(R.color.main_battery_color));
-//            }else{
-//                rightFragment2BatteryTemperature.setTextColor(
-//                        getResources().getColor(R.color.right_fragment1_text_color));
-//                rightFragment2BatteryTemperature_e.setTextColor(
-//                        getResources().getColor(R.color.right_fragment1_text_color));
-//            }
-//            rightFragment2BatteryTemperature.setText(data);
+        if (id == can_num_PackAverageTemp) {//电池包平均温度
+            int data = (int) object.getDoubleValue("data");
+            if (data > 40) {
+                rightFragment2BatteryTemperature.setTextColor(
+                        getResources().getColor(R.color.main_battery_color));
+                rightFragment2BatteryTemperature_e.setTextColor(
+                        getResources().getColor(R.color.main_battery_color));
+            } else {
+                rightFragment2BatteryTemperature.setTextColor(
+                        getResources().getColor(R.color.right_fragment1_text_color));
+                rightFragment2BatteryTemperature_e.setTextColor(
+                        getResources().getColor(R.color.right_fragment1_text_color));
+            }
+            rightFragment2BatteryTemperature.setText(String.valueOf(data));
         }
     }
 
-
     /**
-     * 计算平均速度
-     * @param speed
-     * @param count
+     * 计算总里程
+     *
+     * @param newSpeed
      * @return
      */
-    private double calculate(int speed,int count){
-        double newAvgSpeed = (avgSpeed*(count-1)+speed)/count;
-        return newAvgSpeed;
+    private double calculateTotalMile(double newSpeed) {
+        double totalMile = (lastSpeed + newSpeed) / (7200.0);
+        return totalMile;
     }
 
     /**
      * 显示行驶参数
      */
-    private void showDriveInfo(String message){
+    private void showDriveInfo(String message) {
 //        rightFragment2DriveInfo.append("</script><script>");
 //        rightFragment2DriveInfo.append("\n");
 //        rightFragment2DriveInfo.append("$.getJSON(\"//ajax.ibaotu.com/?");
@@ -127,5 +150,64 @@ public class MainRightFragment2 extends Fragment {
 //        rightFragment2DriveInfo.append("m=wenjuan&a=statusjson&name");
 //        rightFragment2DriveInfo.append("\n");
 //        rightFragment2DriveInfo.append("=rjjc&callback=?\", function(e) {");
+    }
+
+    public class ReadSpeedTimer {
+        private static final String TAG = "ReadSpeedTimer";
+        private Timer timer = null;
+        private TimerTask timerTask = null;
+        private int delay = 0;
+        private int period = 1000;
+
+        public ReadSpeedTimer() {
+        }
+
+        public void startTimer() {
+            if (timer == null) {
+                timer = new Timer();
+            }
+            if (timerTask == null) {
+                timerTask = new TimerTask() {
+                    @Override
+                    public void run() {
+                        //获取车辆的速度和总里程
+                        if(newSpeed != 0){
+                            totalMile += calculateTotalMile(newSpeed);
+                            lastSpeed = newSpeed;
+                            activity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    rightFragment2Speed.setText(String.valueOf((int) newSpeed));
+                                    rightFragment2Zonlic.setText(String.valueOf((int) totalMile));
+                                }
+                            });
+                            JSONObject carInfo = new JSONObject();
+                            carInfo.put("totalMile", totalMile);
+                            App.getInstance().setPreferences("carInfo", carInfo.toJSONString());
+                            activity.sendToCAN("HMI", HMI_Dig_Ord_TotalOdmeter, (int) totalMile);
+                            LogUtil.d(TAG, "定时读取总里程:" + totalMile);
+                        }
+                    }
+                };
+            }
+            if (timer != null && timerTask != null) {
+                timer.schedule(timerTask, delay, period);
+            }
+        }
+
+        /**
+         * 关闭定时器
+         */
+        public void stopTimer() {
+            if (timer != null) {
+                timer.cancel();
+                timer = null;
+            }
+            if (timerTask != null) {
+                timerTask.cancel();
+                timerTask = null;
+            }
+            LogUtil.d(TAG, "stopTimer");
+        }
     }
 }

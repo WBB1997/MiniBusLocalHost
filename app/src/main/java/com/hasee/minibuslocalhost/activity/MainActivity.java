@@ -117,6 +117,7 @@ public class MainActivity extends BaseActivity {
     private TimerManager timerManager;//定时发送模拟数据（只模拟）
     public static boolean target = false;//默认没跳转
     private int currentDriveModel = DRIVE_MODEL_AUTO_AWAIT;//当前驾驶状态默认为待定
+    private MainRightFragment2.ReadSpeedTimer readSpeedTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,6 +163,10 @@ public class MainActivity extends BaseActivity {
                 autoDriveModel = true;//驾驶模式打开
                 sendToCAN(clazz,field,currentDriveModel);//发送数据
                 rightFragment1.changeBtnColor(currentDriveModel);//改变驾驶模式按钮颜色
+                if(readSpeedTimer == null){
+                    readSpeedTimer = rightFragment2.getReadSpeedTimer();
+                    readSpeedTimer.startTimer();
+                }
                 LogUtil.d(TAG,"登陆成功");
             }else{//登陆失败
                 LogUtil.d(TAG,"登陆失败");
@@ -192,6 +197,10 @@ public class MainActivity extends BaseActivity {
         //中断485线程
         if (sreialThread != null) {
             sreialThread.interrupt();
+        }
+        //关闭定时读取总里程
+        if(readSpeedTimer != null){
+            readSpeedTimer.stopTimer();
         }
         //关闭音乐
         destroyMusic();

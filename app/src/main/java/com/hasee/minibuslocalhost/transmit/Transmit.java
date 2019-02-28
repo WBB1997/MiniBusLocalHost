@@ -28,6 +28,7 @@ import com.hasee.minibuslocalhost.transmit.Class.RCU_FeedBack;
 import com.hasee.minibuslocalhost.transmit.Class.VCU2;
 import com.hasee.minibuslocalhost.transmit.Class.VCU3;
 import com.hasee.minibuslocalhost.transmit.Class.VCU4;
+import com.hasee.minibuslocalhost.util.ByteUtil;
 import com.hasee.minibuslocalhost.util.LogUtil;
 import com.hasee.minibuslocalhost.util.MyHandler;
 
@@ -194,6 +195,7 @@ public class Transmit {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                LogUtil.d(TAG, ByteUtil.bytesToHex(sendMsgs));
                 DatagramSocket datagramSocket = null;
                 DatagramPacket datagramPacket;
                 try {
