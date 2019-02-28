@@ -78,14 +78,16 @@ public class LogUtil {
             dir.mkdirs();
         }
         long current = System.currentTimeMillis();
-        String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(current));
+        String time = new SimpleDateFormat("yyyy-MM-dd").format(new Date(current));
         File file = new File(PATH + FILE_NAME + time + FILE_NAME_SUFFIX);
-
+        if(!file.exists()){
+            file.createNewFile();
+        }
         try {
-            PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
-            pw.println(time);
-            pw.println();
+            PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file,true)));
+            pw.println(time+"---");
             pw.println(tag+":"+msg);
+            pw.println();
             pw.close();
         } catch (Exception e) {
             Log.e(TAG, "dump crash info failed");

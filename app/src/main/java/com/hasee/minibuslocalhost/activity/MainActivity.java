@@ -18,6 +18,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
@@ -99,6 +100,7 @@ public class MainActivity extends BaseActivity {
     public final static int LOCALHOST_SCREEN_RIGHT = 3;//主控屏右边部分
     private final int MIN_BATTERY = 20;//低电量触发值
     private final int MIN_SPEED = 5;//低速报警值
+    private final int REQUEST_CODE = 1;//请求码
     private Context mContext;//上下文
     private FragmentManager fragmentManager;//Fragment管理器对象
     private FragmentTransaction transaction;//Fragment事务对象
@@ -151,6 +153,7 @@ public class MainActivity extends BaseActivity {
         super.onResume();
         LogUtil.d(TAG, "onResume");
         boolean loginFlag = getIntent().getBooleanExtra("flag", false);
+        Log.d(TAG, "onResume: "+loginFlag);
         if(target){//如果页面跳转
             target = false;
             playMusic();
@@ -175,6 +178,20 @@ public class MainActivity extends BaseActivity {
 
     }
 
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        Log.d(TAG, "onActivityResult: "+requestCode);
+//        switch (requestCode){
+//            case REQUEST_CODE:{
+//                if(resultCode == RESULT_OK){
+//                    Log.d(TAG, "onActivityResult: 登陆失败"+data.getStringExtra("data"));
+//                }
+//                break;
+//            }
+//        }
+//    }
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -185,7 +202,6 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        LogUtil.d(TAG, "onDestroy");
         //中断CAN总线的子线程
         if (canThread != null) {
             canThread.interrupt();
@@ -213,14 +229,14 @@ public class MainActivity extends BaseActivity {
 
     /**
      * 从另一个页面携带数据跳转至本页面
-     *
      * @param mContext
-     * @param flag
+     * @param isShow
+     * @param loginFlag
      */
-    public static void actionStart(Context mContext, boolean isShow,boolean flag) {
+    public static void actionStart(Context mContext, boolean isShow,boolean loginFlag) {
         Intent intent = new Intent(mContext, MainActivity.class);
         intent.putExtra("isShow", isShow);
-        intent.putExtra("flag",flag);
+        intent.putExtra("flag",loginFlag);
         mContext.startActivity(intent);
     }
 
@@ -515,11 +531,18 @@ public class MainActivity extends BaseActivity {
     @SuppressLint("RestrictedApi")
     public void handleFragmentMsg(int flag) {
         if (flag == DRIVE_MODEL_AUTO || flag == DRIVE_MODEL_REMOTE) {
-            currentDriveModel = flag;//当前驾驶模式
-//            if(!autoDriveModel){//驾驶模式关闭
-                target = true;
+            if(currentDriveModel == flag){//当前已经处于某一种驾驶模式
+                currentDriveModel = flag;//当前驾驶模式
+                showFragment(rightFragment1,false);
+                showFragment(rightFragment2,true);
+                floatBtn.setVisibility(View.VISIBLE);
+            }else{//跳转至登陆页面
+                target = true;//跳转
+                currentDriveModel = flag;//当前驾驶模式
                 LoginActivity.actionStart(mContext, 1);
-//            }
+//                Intent intent = new Intent(mContext,LoginActivity.class);
+//                startActivityForResult(intent,REQUEST_CODE);
+            }
         }
     }
 
@@ -554,14 +577,18 @@ public class MainActivity extends BaseActivity {
      * 显示和隐藏低电量报警Fragment
      */
     private void showLowBatteryFragment(boolean show) {
-        fragmentManager = getSupportFragmentManager();
-        transaction = fragmentManager.beginTransaction();
-        if (show) {
-            transaction.show(lowBatteryFragment);
-        } else {
-            transaction.hide(lowBatteryFragment);
+        try {
+            fragmentManager = getSupportFragmentManager();
+            transaction = fragmentManager.beginTransaction();
+            if (show) {
+                transaction.show(lowBatteryFragment);
+            } else {
+                transaction.hide(lowBatteryFragment);
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        transaction.commit();
     }
 
     /**
@@ -572,7 +599,6 @@ public class MainActivity extends BaseActivity {
      */
     private int whatFragment(JSONObject object) {
         int id = object.getIntValue("id");
-        LogUtil.d(TAG, "id:" + id);
         switch (id) {
             //上部Fragment
             case OBU_LocalTime://本地时间

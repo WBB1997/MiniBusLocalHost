@@ -20,7 +20,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.hasee.minibuslocalhost.R;
 import com.hasee.minibuslocalhost.activity.MainActivity;
 import com.hasee.minibuslocalhost.test.TimerManager;
-import com.hasee.minibuslocalhost.util.LogUtil;
 
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_ACBlowingLevel;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_DemisterStatus;
@@ -396,7 +395,7 @@ public class MainLeftFragment extends Fragment {
     public void refresh(JSONObject object) {
         boolean data = object.getBoolean("data");
         int id = object.getIntValue("id");
-        LogUtil.d(TAG, "id:" + id);
+//        LogUtil.d(TAG, "id:" + id);
         switch (id) {
             case BCM_Flg_Stat_LeftTurningLamp: {// 左转
                 leftFragmentLeftLight.setActivated(data);

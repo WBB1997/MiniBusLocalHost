@@ -10,7 +10,6 @@ import com.baidu.mapapi.SDKInitializer;
 import com.hasee.minibuslocalhost.util.CrashHandler;
 
 import static android_serialport_api.SreialComm.AUDIO_VOLUME;
-import static android_serialport_api.SreialComm.LIGHT_NUM;
 
 /**
  * Created by fangju on 2018/12/28
@@ -69,7 +68,6 @@ public class App extends Application {
         int data = object.getIntValue("data");
         if (id == AUDIO_VOLUME) {//音量
             if (data >= 0) {//音量值大于等于零
-
                 if(data > 1&&data< 26){
                     data = (data*15)/26+1;
                 }
@@ -77,11 +75,7 @@ public class App extends Application {
                     data = 15;
                 }
                 audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, data, AudioManager.FLAG_PLAY_SOUND);
-//                LogUtil.d(TAG,"data:"+data);
             }
-        }
-        if (id == LIGHT_NUM) {//灯光
-
         }
     }
 }

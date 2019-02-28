@@ -52,8 +52,9 @@ public class LoginActivity extends BaseActivity {
     private List<Pair> users = new ArrayList<>();
     private LoginFragmentDialog errorDialog;//提示框
     private int errorCount = 0;//错误次数
-    private final int REQUEST_CODE = 1;
-    private int flag = 0;//判断是第几次进入登陆界面，默认第一次
+    private boolean isShow = false;//默认不锁屏
+    private boolean loginFlag = false;//默认登陆失败
+    private final int MAX_ERROR_NUM = 5;//最大错误次数
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,7 +62,6 @@ public class LoginActivity extends BaseActivity {
         setContentView(R.layout.login_activity_layout);
         mContext = LoginActivity.this;
         hideBottomUIMenu();
-        flag = getIntent().getIntExtra("flag",0);
         //界面控件初始化
         viewInit();
         initUsers();
@@ -192,47 +192,85 @@ public class LoginActivity extends BaseActivity {
                     } else {//登陆
                         String loginUserName = userNameEt.getText().toString().trim();//登陆账户
                         String loginPwd = passWordEt.getText().toString().trim();//登陆密码
-                        for (int i = 0; i < users.size(); i++) {
-                            Pair pair = users.get(i);//账户
-                            String userName = (String) pair.first;//用户名
-                            String passWord = (String) pair.second;//密码
-                            if (loginUserName.equals(userName) && loginPwd.equals(passWord)) {//有当前账户
-                                //保存密码至本地
-                                JSONObject object = new JSONObject();
-                                object.put("userName", loginUserName);
-                                object.put("passWord", loginPwd);
-                                App.getInstance().setPreferences("userInfo",object.toJSONString());
-                                MainActivity.actionStart(mContext,false,true);
-                                return;
+                        if(checkUser(loginUserName,loginPwd)){//存在该用户
+                            //保存密码至本地
+                            JSONObject object = new JSONObject();
+                            object.put("userName", loginUserName);
+                            object.put("passWord", loginPwd);
+                            App.getInstance().setPreferences("userInfo",object.toJSONString());
+                            isShow = false;//不锁屏
+                            loginFlag = true;//登陆成功
+                        }else{
+                            loginFlag = false;//登陆失败
+                            errorCount++;//错误次数增加
+                            Bundle bundle = new Bundle();
+                            if(errorCount > MAX_ERROR_NUM){//已经达到最大容错次数
+                                //跳转至主界面并锁屏
+                                isShow = true;//锁屏
+                                bundle.putInt("key", ERROR2);
+                                errorDialog.setArguments(bundle);
+                                errorDialog.show(getSupportFragmentManager(), "error2");
+                                errorDialog.setCancelable(false);
+                            }else{
+                                //提示出错
+                                isShow = false;//不锁屏
+                                bundle.putInt("key", ERROR1);
+                                errorDialog.setArguments(bundle);
+                                errorDialog.show(getSupportFragmentManager(), "error1");
                             }
                         }
-                        Bundle bundle = new Bundle();
-                        errorCount++;
-                        if (errorCount >= 5) {//错误5次之后锁屏
-                            bundle.putInt("key", ERROR2);
-                            errorDialog.setArguments(bundle);
-                            errorDialog.show(getSupportFragmentManager(), "error2");
-                            errorDialog.setCancelable(false);
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    errorDialog.dismiss();
-                                    MainActivity.actionStart(mContext,true,false);
-                                }
-                            },3000);
-                        } else {
-//                            ToastUtil.getInstance(mContext).showShortToast(
-//                                    getResources().getString(R.string.login_error));//登陆失败
-                            bundle.putInt("key", ERROR1);
-                            errorDialog.setArguments(bundle);
-                            errorDialog.show(getSupportFragmentManager(), "error1");
+                        //相应处理
+                        if(loginFlag || isShow){//登陆成功或者锁屏跳转
+                            if(isShow){
+                                toActivity(3000);
+                            }else{
+                                toActivity(0);
+                            }
                         }
+
                     }
                     break;
                 }
             }
         }
     };
+
+    private void toActivity(int delayMilis){
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                MainActivity.actionStart(mContext,isShow,loginFlag);
+            }
+        },delayMilis);
+    }
+
+    /**
+     * 查找是否有该用户
+     * @param loginUserName
+     * @param loginPwd
+     * @return
+     */
+    private boolean checkUser(String loginUserName,String loginPwd){
+        boolean flag = false;
+        for (int i = 0; i < users.size(); i++) {
+            Pair pair = users.get(i);//账户
+            String userName = (String) pair.first;//用户名
+            String passWord = (String) pair.second;//密码
+            if (loginUserName.equals(userName) && loginPwd.equals(passWord)) {//有当前账户
+                flag = true;
+            }
+        }
+        return flag;
+    }
+
+//    @Override
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        Intent i = new Intent();
+//        i.putExtra("data","asdsdadsadsad");
+//        setResult(RESULT_OK,i);
+//        finish();
+//    }
 
     @Override
     protected void onDestroy() {
@@ -326,8 +364,12 @@ public class LoginActivity extends BaseActivity {
         } else if (Build.VERSION.SDK_INT >= 19) {
             //for new api versions.
             View decorView = getWindow().getDecorView();
-            int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN;
+            int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
             decorView.setSystemUiVisibility(uiOptions);
         }
     }
