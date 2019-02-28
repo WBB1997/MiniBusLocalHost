@@ -498,8 +498,13 @@ public class MainActivity extends BaseActivity {
      * @param field 字段名
      * @param o     对象
      */
-    public void sendToCAN(String clazz, int field, Object o) {
-        Transmit.getInstance().hostToCAN(clazz, field, o);
+    public void sendToCAN(final String clazz, final int field, final Object o) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Transmit.getInstance().hostToCAN(clazz, field, o);
+            }
+        }).start();
     }
 
     /**
@@ -603,7 +608,7 @@ public class MainActivity extends BaseActivity {
      * 程序启动就发送数据
      */
     private void reboot() {
-        Map<Integer, Integer> map = new HashMap<>();
+        final Map<Integer, Integer> map = new HashMap<>();
         map.put(HMI_Dig_Ord_HighBeam, POINTLESS);//远光灯
         map.put(HMI_Dig_Ord_LowBeam, POINTLESS);//近光灯
         map.put(HMI_Dig_Ord_LeftTurningLamp, POINTLESS);//左转向灯
@@ -620,7 +625,12 @@ public class MainActivity extends BaseActivity {
         map.put(HMI_Dig_Ord_Demister_Control, POINTLESS);//除雾控制
         map.put(HMI_Dig_Ord_TotalOdmeter, 0);//总里程
         map.put(HMI_Dig_Ord_SystemRuningStatus, Ord_SystemRuningStatus_ONINPUT);//HMI控制器运行状态
-        Transmit.getInstance().Can_init(map);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Transmit.getInstance().Can_init(map);
+            }
+        }).start();
         LogUtil.d(TAG, "初始化");
     }
 }

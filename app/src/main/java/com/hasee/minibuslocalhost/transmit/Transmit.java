@@ -100,8 +100,8 @@ public class Transmit {
                     Pair<byte[], Long> tmp = sendQueue.take();
                     for (int i = 0; i < 5; i++) {
                         UDP_send(tmp.first);
-                        Thread.sleep(tmp.second);
                     }
+                    Thread.sleep(300);
                     UDP_send(bytes);
                 }
             } catch (InterruptedException e) {
@@ -197,9 +197,9 @@ public class Transmit {
 
     // 发到CAN总线
     private void UDP_send(final byte[] sendMsgs) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
                 LogUtil.d(TAG, ByteUtil.bytesToHex(sendMsgs));
                 DatagramSocket datagramSocket = null;
                 DatagramPacket datagramPacket;
@@ -215,8 +215,8 @@ public class Transmit {
                         datagramSocket.close();
                     }
                 }
-            }
-        }).start();
+//            }
+//        }).start();
     }
 
     // 消息标识符
