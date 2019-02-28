@@ -66,7 +66,7 @@
 
                 <TextView
                     android:id="@+id/rightFragment2_batteryTemperature"
-                    fontPath="fonts/font1.TTF"
+
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="20"
@@ -77,7 +77,6 @@
 
                 <TextView
                     android:id="@+id/rightFragment2_batteryTemperature_e"
-                    fontPath="fonts/font1.TTF"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="℃"

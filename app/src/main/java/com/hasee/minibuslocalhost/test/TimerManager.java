@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static com.hasee.minibuslocalhost.activity.MainActivity.SEND_TO_SCREEN;
+import static com.hasee.minibuslocalhost.activity.MainActivity.SEND_TO_LOCALHOST;
 
 /**
  * Created by fangju on 2019/1/25
@@ -161,13 +161,29 @@ public class TimerManager {
                 "{\"id\":67,\"data\":3}", //紧急停车结束信号
                 "{\"id\":69,\"data\":2}" //到达终点站
         };
-        addMsg(qinFront);
+        String[] me = new String[]{
+            "{\"id\":77,\"data\":30}",//车速信号
+            "{\"id\":77,\"data\":20}",//车速信号
+            "{\"id\":39,\"data\":20}",////剩余里程数
+            "{\"id\":77,\"data\":60}",//车速信号
+            "{\"id\":42,\"data\":50.0}",//电池包平均温度
+            "{\"id\":77,\"data\":50}",//车速信号
+            "{\"id\":39,\"data\":2}",//剩余里程数
+            "{\"id\":77,\"data\":10}",//车速信号
+            "{\"id\":34,\"data\":10}",//动力电池剩余电量SOC
+            "{\"id\":77,\"data\":50}",//车速信号
+            "{\"id\":34,\"data\":50}",//动力电池剩余电量SOC
+             "{\"id\":42,\"data\":20.0}"//电池包平均温度
+
+        };
+
+        addMsg(me);
     }
 
     private void addMsg(String[] msgs) {
         for (int i = 0; i < msgs.length; i++) {
             JSONObject object = new JSONObject();
-            object.put("target", SEND_TO_SCREEN);//发给谁
+            object.put("target", SEND_TO_LOCALHOST);//发给谁
             object.put("delay", 3000);//延时
             JSONObject data = JSON.parseObject(msgs[i]);//发送的数据
             object.put("data", data);

@@ -71,4 +71,16 @@ public class MainRightFragment1 extends Fragment {
         }
     };
 
+    /**
+     *
+     * @param flag
+     */
+    public void changeBtnColor(int flag){
+        if(flag == DRIVE_MODEL_AUTO){//如果当前是自动驾驶
+
+        }else if(flag == DRIVE_MODEL_REMOTE){//如果当前是远程驾驶
+
+        }
+    }
+
 }

@@ -28,6 +28,7 @@ import com.hasee.minibuslocalhost.transmit.Class.RCU_FeedBack;
 import com.hasee.minibuslocalhost.transmit.Class.VCU2;
 import com.hasee.minibuslocalhost.transmit.Class.VCU3;
 import com.hasee.minibuslocalhost.transmit.Class.VCU4;
+import com.hasee.minibuslocalhost.util.ByteUtil;
 import com.hasee.minibuslocalhost.util.LogUtil;
 import com.hasee.minibuslocalhost.util.MyHandler;
 
@@ -75,7 +76,7 @@ public class Transmit {
         byte[] bytes_1 = baseClass.getBytes();
         LogUtil.d(TAG, "hostToCan" + bytesToHex(bytes_1));
         if (baseClass instanceof HMI)
-            ((HMI) baseClass).changeStatus(0, o);
+            ((HMI) baseClass).changeStatus(field, 0);
         byte[] bytes_2 = baseClass.getBytes();
         try {
             sendQueue.put(new Pair<>(new Pair<>(bytes_1, bytes_2), (long) 0));
@@ -194,6 +195,7 @@ public class Transmit {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                LogUtil.d(TAG, ByteUtil.bytesToHex(sendMsgs));
                 DatagramSocket datagramSocket = null;
                 DatagramPacket datagramPacket;
                 try {
