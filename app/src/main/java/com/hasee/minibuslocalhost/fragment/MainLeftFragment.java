@@ -465,9 +465,11 @@ public class MainLeftFragment extends Fragment {
             }
             case BCM_ACBlowingLevel: {//空调风量档位
                 int index = object.getIntValue("data");//接收档位
-                seekBarIndex = index;//当前档位
-                leftFragmentConditionSize.setText(String.valueOf(seekBarIndex));//设置档位数值
-                leftFragmentSeekBar.setProgress(seekBarIndex * 20);//设置滑动条
+                if(index != AIR_GRADE_SIX_GEAR){
+                    seekBarIndex = index;//当前档位
+                    leftFragmentConditionSize.setText(String.valueOf(seekBarIndex));//设置档位数值
+                    leftFragmentSeekBar.setProgress(seekBarIndex * 20);//设置滑动条
+                }
                 break;
             }
             case BCM_DemisterStatus: {//除雾状态

@@ -94,14 +94,14 @@ public class Transmit {
         @Override
         public void run() {
             try {
-                byte[] bytes = new byte[]{(byte) 0xFF, (byte) 0xAA, 0x03, (byte) 0x83, 0x00, 0x00, 0x1A, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x02};
+                byte[] bytes = new byte[]{(byte) 0xFF, (byte) 0xAA, 0x03, (byte) 0x83, 0x00, (byte) 0x80, 0x1A, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x02};
                 while (threadFlag) {
 //                    Pair<Pair<byte[], byte[]>, Long> tmp = sendQueue.take();
                     Pair<byte[], Long> tmp = sendQueue.take();
                     for (int i = 0; i < 5; i++) {
                         UDP_send(tmp.first);
                     }
-                    Thread.sleep(300);
+                    Thread.sleep(1000);
                     UDP_send(bytes);
                 }
             } catch (InterruptedException e) {

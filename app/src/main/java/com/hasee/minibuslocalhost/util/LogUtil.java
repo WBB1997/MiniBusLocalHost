@@ -1,11 +1,25 @@
 package com.hasee.minibuslocalhost.util;
 
+import android.os.Environment;
 import android.util.Log;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import static android.support.constraint.Constraints.TAG;
 
 /**
  * Created by fangju on 2018/11/23
  */
 public class LogUtil {
+    private static final String PATH = Environment.getExternalStorageDirectory().getPath() + "/Crash/out/";
+    private static final String FILE_NAME = "crash";
+    private static final String FILE_NAME_SUFFIX = ".log";
     public static final int VERBOSE = 1;
     public static final int DEBUG = 2;
     public static final int INFO = 3;
@@ -24,6 +38,11 @@ public class LogUtil {
     public static void d(String tag,String msg){
         if(level <= DEBUG){
             Log.d(tag, msg);
+            try {
+                dumpExceptionToSDCard(null,tag,msg);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -42,6 +61,34 @@ public class LogUtil {
     public static void e(String tag,String msg){
         if(level <= ERROR){
             Log.e(tag, msg);
+        }
+    }
+
+    private static void dumpExceptionToSDCard(Throwable ex, String tag, String msg) throws IOException {
+        //如果SD卡不存在或无法使用，则无法把异常信息写入SD卡
+        if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            if (true) {
+                Log.w(TAG, "sdcard unmounted,skip dump exception");
+                return;
+            }
+        }
+
+        File dir = new File(PATH);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        long current = System.currentTimeMillis();
+        String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(current));
+        File file = new File(PATH + FILE_NAME + time + FILE_NAME_SUFFIX);
+
+        try {
+            PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+            pw.println(time);
+            pw.println();
+            pw.println(tag+":"+msg);
+            pw.close();
+        } catch (Exception e) {
+            Log.e(TAG, "dump crash info failed");
         }
     }
 }
