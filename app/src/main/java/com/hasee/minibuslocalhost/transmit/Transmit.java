@@ -52,7 +52,8 @@ public class Transmit {
     private final static String IP = "192.168.1.60"; // ip地址
     private final static Transmit instance = new Transmit();
     private MyHandler handler;
-    private LinkedBlockingQueue<Pair<Pair<byte[],byte[]>, Long>> sendQueue = new LinkedBlockingQueue<>();
+//    private LinkedBlockingQueue<Pair<Pair<byte[],byte[]>, Long>> sendQueue = new LinkedBlockingQueue<>();
+    private LinkedBlockingQueue<Pair<byte[], Long>> sendQueue = new LinkedBlockingQueue<>();
     private boolean threadFlag = true; // 接收线程是否关闭
 
     public static void main(String[] args) {
@@ -73,13 +74,15 @@ public class Transmit {
         }
         if (baseClass instanceof HMI)
             ((HMI) baseClass).changeStatus(field, o);
-        byte[] bytes_1 = baseClass.getBytes();
-        LogUtil.d(TAG, "hostToCan" + bytesToHex(bytes_1));
-        if (baseClass instanceof HMI)
-            ((HMI) baseClass).changeStatus(field, 0);
-        byte[] bytes_2 = baseClass.getBytes();
+//        byte[] bytes_1 = baseClass.getBytes();
+//        LogUtil.d(TAG, "hostToCan" + bytesToHex(bytes_1));
+//        if (baseClass instanceof HMI)
+//            ((HMI) baseClass).changeStatus(field, 0);
+//        byte[] bytes_2 = baseClass.getBytes();
+        byte[] bytes = baseClass.getBytes();
         try {
-            sendQueue.put(new Pair<>(new Pair<>(bytes_1, bytes_2), (long) 0));
+//            sendQueue.put(new Pair<>(new Pair<>(bytes_1, bytes_2), (long) 0));
+            sendQueue.put(new Pair<>(bytes, (long) 0));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -91,13 +94,15 @@ public class Transmit {
         @Override
         public void run() {
             try {
+                byte[] bytes = new byte[]{(byte) 0xFF, (byte) 0xAA, 0x03, (byte) 0x83, 0x00, 0x00, 0x1A, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x02};
                 while (threadFlag) {
-                    Pair<Pair<byte[], byte[]>, Long> tmp = sendQueue.take();
+//                    Pair<Pair<byte[], byte[]>, Long> tmp = sendQueue.take();
+                    Pair<byte[], Long> tmp = sendQueue.take();
                     for (int i = 0; i < 5; i++) {
-                        UDP_send(tmp.first.first);
+                        UDP_send(tmp.first);
                         Thread.sleep(tmp.second);
                     }
-                    UDP_send(tmp.first.second);
+                    UDP_send(bytes);
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
