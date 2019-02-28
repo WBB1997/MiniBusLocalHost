@@ -80,6 +80,7 @@ public class Transmit {
 //            ((HMI) baseClass).changeStatus(field, 0);
 //        byte[] bytes_2 = baseClass.getBytes();
         byte[] bytes = baseClass.getBytes();
+        LogUtil.d(TAG, "主机向车辆CAN总线发的信息:" + bytesToHex(bytes));
         try {
 //            sendQueue.put(new Pair<>(new Pair<>(bytes_1, bytes_2), (long) 0));
             sendQueue.put(new Pair<>(bytes, (long) 0));
@@ -121,13 +122,12 @@ public class Transmit {
             HMI_Class.changeStatus(field, o);
         }
         byte[] bytes = HMI_Class.getBytes();
-        LogUtil.d(TAG, bytesToHex(bytes));
+        LogUtil.d(TAG, "车辆初始化：" + bytesToHex(bytes));
         UDP_send(bytes);
     }
 
     public void setHandler(MyHandler handler) {
         this.handler = handler;
-        LogUtil.d(TAG, "setHandler");
         new Thread(new StartSend()).start(); // 开启发送线程
         UDP_receive(); // 开启接收线程
     }
@@ -181,7 +181,6 @@ public class Transmit {
             while (true) {
                 datagramPacket = new DatagramPacket(receMsgs, receMsgs.length);
                 datagramSocket.receive(datagramPacket);
-                LogUtil.d(TAG, bytesToHex(receMsgs));
                 dispose(datagramPacket.getData());
             }
         } catch (IOException e) {
@@ -197,26 +196,20 @@ public class Transmit {
 
     // 发到CAN总线
     private void UDP_send(final byte[] sendMsgs) {
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-                LogUtil.d(TAG, ByteUtil.bytesToHex(sendMsgs));
-                DatagramSocket datagramSocket = null;
-                DatagramPacket datagramPacket;
-                try {
-                    datagramSocket = new DatagramSocket();
-                    datagramPacket = new DatagramPacket(sendMsgs, sendMsgs.length, InetAddress.getByName(IP), PORT);
-                    datagramSocket.send(datagramPacket);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    // 关闭socket
-                    if (datagramSocket != null) {
-                        datagramSocket.close();
-                    }
-                }
-//            }
-//        }).start();
+        DatagramSocket datagramSocket = null;
+        DatagramPacket datagramPacket;
+        try {
+            datagramSocket = new DatagramSocket();
+            datagramPacket = new DatagramPacket(sendMsgs, sendMsgs.length, InetAddress.getByName(IP), PORT);
+            datagramSocket.send(datagramPacket);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            // 关闭socket
+            if (datagramSocket != null) {
+                datagramSocket.close();
+            }
+        }
     }
 
     // 消息标识符
@@ -264,7 +257,7 @@ public class Transmit {
         String check;
         key = bytesToHex(subBytes(receMsgs, 10, 4));
         check = bytesToHex(subBytes(receMsgs, 0, 2));
-        LogUtil.d(TAG, "dispose->bytes:" + bytesToHex(receMsgs));
+        LogUtil.d(TAG, "接收到的bytes:" + bytesToHex(receMsgs));
         LogUtil.d(TAG, "key:" + key);
         LogUtil.d(TAG, "check:" + check);
         if(!check.equals("aabb")){
