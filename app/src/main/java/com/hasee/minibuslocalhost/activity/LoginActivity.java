@@ -55,12 +55,14 @@ public class LoginActivity extends BaseActivity {
     private boolean isShow = false;//默认不锁屏
     private boolean loginFlag = false;//默认登陆失败
     private final int MAX_ERROR_NUM = 5;//最大错误次数
+    private boolean isFirst = true;//默认第一次调用该页面
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity_layout);
         mContext = LoginActivity.this;
+        isFirst = getIntent().getBooleanExtra("isFirst",true);
         hideBottomUIMenu();
         //界面控件初始化
         viewInit();
@@ -227,7 +229,6 @@ public class LoginActivity extends BaseActivity {
                                 toActivity(0);
                             }
                         }
-
                     }
                     break;
                 }
@@ -236,12 +237,20 @@ public class LoginActivity extends BaseActivity {
     };
 
     private void toActivity(int delayMilis){
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                MainActivity.actionStart(mContext,isShow,loginFlag);
-            }
-        },delayMilis);
+        if(!isFirst){//不是第一次跳转至本页面,直接出栈
+            Intent i = new Intent();
+            i.putExtra("isShow",isShow);
+            i.putExtra("loginFlag",loginFlag);
+            setResult(RESULT_OK,i);
+            finish();
+        }else{
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    MainActivity.actionStart(mContext,isShow,loginFlag);
+                }
+            },delayMilis);
+        }
     }
 
     /**
@@ -263,14 +272,15 @@ public class LoginActivity extends BaseActivity {
         return flag;
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        super.onBackPressed();
-//        Intent i = new Intent();
-//        i.putExtra("data","asdsdadsadsad");
-//        setResult(RESULT_OK,i);
-//        finish();
-//    }
+    @Override
+    public void onBackPressed() {
+        //返回给上一个页面的数据
+        Intent i = new Intent();
+        i.putExtra("isShow",isShow);
+        i.putExtra("loginFlag",false);
+        setResult(RESULT_OK,i);
+        finish();
+    }
 
     @Override
     protected void onDestroy() {
@@ -280,17 +290,6 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-    }
-
-    /**
-     * 从另一个页面携带数据跳转至本页面
-     * @param mContext
-     * @param flag
-     */
-    public static void actionStart(Context mContext,int flag){
-        Intent intent = new Intent(mContext,LoginActivity.class);
-        intent.putExtra("flag",flag);
-        mContext.startActivity(intent);
     }
 
     /**

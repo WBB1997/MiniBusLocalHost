@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -120,6 +121,7 @@ public class MainActivity extends BaseActivity {
     public static boolean target = false;//默认没跳转
     private int currentDriveModel = DRIVE_MODEL_AUTO_AWAIT;//当前驾驶状态默认为待定
     private MainRightFragment2.ReadSpeedTimer readSpeedTimer;
+    private boolean loginFlag = false;//是否登陆成功
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,45 +154,7 @@ public class MainActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         LogUtil.d(TAG, "onResume");
-        boolean loginFlag = getIntent().getBooleanExtra("flag", false);
-        Log.d(TAG, "onResume: "+loginFlag);
-        if(target){//如果页面跳转
-            target = false;
-            playMusic();
-            if(loginFlag){//登陆成功
-                String clazz = "HMI";
-                int field = HMI_Dig_Ord_Driver_model;
-                showFragment(rightFragment1,false);//切换界面
-                showFragment(rightFragment2,true);//切换界面
-                floatBtn.setVisibility(View.VISIBLE);//按钮显示
-                autoDriveModel = true;//驾驶模式打开
-                sendToCAN(clazz,field,currentDriveModel);//发送数据
-                rightFragment1.changeBtnColor(currentDriveModel);//改变驾驶模式按钮颜色
-                if(readSpeedTimer == null){
-                    readSpeedTimer = rightFragment2.getReadSpeedTimer();
-                    readSpeedTimer.startTimer();
-                }
-                LogUtil.d(TAG,"登陆成功");
-            }else{//登陆失败
-                LogUtil.d(TAG,"登陆失败");
-            }
-        }
-
     }
-
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        Log.d(TAG, "onActivityResult: "+requestCode);
-//        switch (requestCode){
-//            case REQUEST_CODE:{
-//                if(resultCode == RESULT_OK){
-//                    Log.d(TAG, "onActivityResult: 登陆失败"+data.getStringExtra("data"));
-//                }
-//                break;
-//            }
-//        }
-//    }
 
     @Override
     protected void onPause() {
@@ -237,6 +201,7 @@ public class MainActivity extends BaseActivity {
         Intent intent = new Intent(mContext, MainActivity.class);
         intent.putExtra("isShow", isShow);
         intent.putExtra("flag",loginFlag);
+        Log.d(TAG, "actionStart: "+loginFlag);
         mContext.startActivity(intent);
     }
 
@@ -253,14 +218,14 @@ public class MainActivity extends BaseActivity {
         });
         canThread.start();
         //打开re485
-        sreialThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                sreialComm = new SreialComm(handler);
-                sreialComm.receive();
-            }
-        });
-        sreialThread.start();
+//        sreialThread = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                sreialComm = new SreialComm(handler);
+//                sreialComm.receive();
+//            }
+//        });
+//        sreialThread.start();
         //将sendToCANHandler传递至LeftFragment
 
         //模拟定时发送
@@ -503,7 +468,6 @@ public class MainActivity extends BaseActivity {
      */
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         ActivityCollector.finshAll();
     }
 
@@ -523,6 +487,43 @@ public class MainActivity extends BaseActivity {
         }).start();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        Log.d(TAG, "requestCode: "+requestCode+"----"+"resultCode:"+resultCode);
+        switch (requestCode){
+            case REQUEST_CODE:{
+                if(resultCode == RESULT_OK){//取消
+                    Boolean isShow = data.getBooleanExtra("isShow",false);
+                    Boolean loginFlag = data.getBooleanExtra("loginFlag",false);
+                    Log.d(TAG, "onActivityResult: "+isShow+":"+loginFlag);
+                    if(target){//如果页面跳转
+                        target = false;
+                        playMusic();
+                        Log.d(TAG, "onResume: "+loginFlag);
+                        if(loginFlag){//登陆成功
+                            String clazz = "HMI";
+                            int field = HMI_Dig_Ord_Driver_model;
+                            showFragment(rightFragment1,false);//切换界面
+                            showFragment(rightFragment2,true);//切换界面
+                            floatBtn.setVisibility(View.VISIBLE);//按钮显示
+                            autoDriveModel = true;//驾驶模式打开
+                            sendToCAN(clazz,field,currentDriveModel);//发送数据
+                            rightFragment1.changeBtnColor(currentDriveModel);//改变驾驶模式按钮颜色
+                            if(readSpeedTimer == null){
+                                readSpeedTimer = rightFragment2.getReadSpeedTimer();
+                                readSpeedTimer.startTimer();
+                            }
+                            LogUtil.d(TAG,"登陆成功");
+                        }else{//登陆失败
+                            LogUtil.d(TAG,"登陆失败");
+                        }
+                    }
+                }
+                break;
+            }
+        }
+    }
+
     /**
      * 处理Fragment的消息
      *
@@ -539,9 +540,9 @@ public class MainActivity extends BaseActivity {
             }else{//跳转至登陆页面
                 target = true;//跳转
                 currentDriveModel = flag;//当前驾驶模式
-                LoginActivity.actionStart(mContext, 1);
-//                Intent intent = new Intent(mContext,LoginActivity.class);
-//                startActivityForResult(intent,REQUEST_CODE);
+                Intent intent = new Intent(mContext,LoginActivity.class);
+                intent.putExtra("isFirst",false);
+                startActivityForResult(intent,REQUEST_CODE);
             }
         }
     }
@@ -570,7 +571,7 @@ public class MainActivity extends BaseActivity {
         }else{
             transaction.hide(fragment);
         }
-       transaction.commit();
+       transaction.commitAllowingStateLoss();//不保存状态
     }
 
     /**
