@@ -136,6 +136,9 @@ public class MainRightFragment2 extends Fragment {
      */
     private double calculateTotalMile(double newSpeed) {
         double totalMile = (lastSpeed + newSpeed) / (7200.0);
+//        Log.d(TAG, "上一次速度: "+lastSpeed);
+//        Log.d(TAG, "新速度: "+newSpeed);
+//        Log.d(TAG, "计算的里程: "+totalMile);
         return totalMile;
     }
 
@@ -153,7 +156,6 @@ public class MainRightFragment2 extends Fragment {
     }
 
     public class ReadSpeedTimer {
-        private static final String TAG = "ReadSpeedTimer";
         private Timer timer = null;
         private TimerTask timerTask = null;
         private int delay = 0;
@@ -181,11 +183,11 @@ public class MainRightFragment2 extends Fragment {
                                     rightFragment2Zonlic.setText(String.valueOf((int) totalMile));
                                 }
                             });
+                            activity.sendToCAN("HMI", HMI_Dig_Ord_TotalOdmeter, (int) totalMile);
                             JSONObject carInfo = new JSONObject();
                             carInfo.put("totalMile", totalMile);
                             App.getInstance().setPreferences("carInfo", carInfo.toJSONString());
-                            activity.sendToCAN("HMI", HMI_Dig_Ord_TotalOdmeter, (int) totalMile);
-                            LogUtil.d(TAG, "定时读取总里程:" + totalMile);
+                            LogUtil.d(TAG, "总里程:" + totalMile);
                         }
                     }
                 };
@@ -207,7 +209,7 @@ public class MainRightFragment2 extends Fragment {
                 timerTask.cancel();
                 timerTask = null;
             }
-            LogUtil.d(TAG, "stopTimer");
+//            LogUtil.d(TAG, "stopTimer");
         }
     }
 }

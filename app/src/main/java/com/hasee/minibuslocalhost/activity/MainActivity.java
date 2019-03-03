@@ -39,6 +39,7 @@ import com.hasee.minibuslocalhost.util.ActivityCollector;
 import com.hasee.minibuslocalhost.util.LogUtil;
 import com.hasee.minibuslocalhost.util.MyHandler;
 import com.hasee.minibuslocalhost.util.SendToScreenThread;
+import com.hasee.minibuslocalhost.util.StationPlayer;
 import com.hasee.minibuslocalhost.util.ToastUtil;
 
 import java.util.HashMap;
@@ -46,46 +47,8 @@ import java.util.Map;
 
 import android_serialport_api.SreialComm;
 
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_ACBlowingLevel;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_DemisterStatus;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_Flg_Stat_DangerAlarmLamp;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_Flg_Stat_HighBeam;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_Flg_Stat_LeftTurningLamp;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_Flg_Stat_LowBeam;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_Flg_Stat_RearFogLamp;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_Flg_Stat_RightTurningLamp;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.BMS_SOC;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HAD_GPSPositioningStatus;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_Alam;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_DangerAlarm;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_Demister_Control;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_DoorLock;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_Driver_model;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_FANPWM_Control;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_HighBeam;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_LeftTurningLamp;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_LowBeam;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_RearFogLamp;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_RightTurningLamp;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_SystemRuningStatus;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_TotalOdmeter;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_air_grade;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_air_model;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_eBooster_Warning;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.OBU_LocalTime;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.Wheel_Speed_ABS;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.can_num_PackAverageTemp;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_GRADE_OFF;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_MODEL_AWAIT;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.DRIVE_MODEL_AUTO;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.DRIVE_MODEL_AUTO_AWAIT;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.DRIVE_MODEL_REMOTE;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.OFF;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.ON;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.Ord_Alam_ON;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.Ord_SystemRuningStatus_ONINPUT;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.POINTLESS;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.eBooster_Warning_OFF;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.*;
+import static com.hasee.minibuslocalhost.transmit.Class.HMI.*;
 
 
 public class MainActivity extends BaseActivity {
@@ -122,6 +85,7 @@ public class MainActivity extends BaseActivity {
     private int currentDriveModel = DRIVE_MODEL_AUTO_AWAIT;//当前驾驶状态默认为待定
     private MainRightFragment2.ReadSpeedTimer readSpeedTimer;
     private boolean loginFlag = false;//是否登陆成功
+    private StationPlayer stationPlayer = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,7 +104,7 @@ public class MainActivity extends BaseActivity {
             if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(MainActivity.this, new String[]{
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE
                 }, 1);
             } else {
                 //有权限的话什么都不做
@@ -182,6 +146,8 @@ public class MainActivity extends BaseActivity {
         if(readSpeedTimer != null){
             readSpeedTimer.stopTimer();
         }
+        //释放语音播报类
+        stationPlayer.destory();
         //关闭音乐
         destroyMusic();
         //关闭定时发送
@@ -209,6 +175,8 @@ public class MainActivity extends BaseActivity {
      * 初始化相关类
      */
     private void classInit() {
+        //初始化语音到站类
+        stationPlayer = StationPlayer.getInstance(mContext,2);
         //打开CAN监听
         canThread = new Thread(new Runnable() {
             @Override
@@ -218,16 +186,14 @@ public class MainActivity extends BaseActivity {
         });
         canThread.start();
         //打开re485
-//        sreialThread = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                sreialComm = new SreialComm(handler);
-//                sreialComm.receive();
-//            }
-//        });
-//        sreialThread.start();
-        //将sendToCANHandler传递至LeftFragment
-
+        sreialThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                sreialComm = new SreialComm(handler);
+                sreialComm.receive();
+            }
+        });
+        sreialThread.start();
         //模拟定时发送
 //        timerManager = new TimerManager(handler);
 //        timerManager.startTimer();
@@ -355,6 +321,13 @@ public class MainActivity extends BaseActivity {
                 }
                 case SEND_TO_LEFTSCREEN: {//左车门
                     new SendToScreenThread(object, SEND_TO_LEFTSCREEN).start();
+                    int id = object.getIntValue("id");
+                    int data = object.getIntValue("data");
+                    if(id == HAD_CurrentDrivingRoadIDNum){//当前行驶路线ID
+                        stationPlayer.setRouteNum(data);
+                    }else if(id == HAD_NextStationIDNumb){//下一个站点ID
+                        stationPlayer.playMusic(data-1);
+                    }
                     LogUtil.d(TAG, "发送信息给左车门");
                     break;
                 }

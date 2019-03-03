@@ -38,11 +38,11 @@ public class LogUtil {
     public static void d(String tag,String msg){
         if(level <= DEBUG){
             Log.d(tag, msg);
-            try {
-                dumpExceptionToSDCard(null,tag,msg);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                dumpExceptionToSDCard(null,tag,msg);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
         }
     }
 
@@ -64,6 +64,13 @@ public class LogUtil {
         }
     }
 
+    /**
+     * 将日志输出到本地文件
+     * @param ex
+     * @param tag
+     * @param msg
+     * @throws IOException
+     */
     private static void dumpExceptionToSDCard(Throwable ex, String tag, String msg) throws IOException {
         //如果SD卡不存在或无法使用，则无法把异常信息写入SD卡
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
