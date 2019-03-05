@@ -38,11 +38,11 @@ public class LogUtil {
     public static void d(String tag,String msg){
         if(level <= DEBUG){
             Log.d(tag, msg);
-            try {
-                dumpExceptionToSDCard(null,tag,msg);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                dumpExceptionToSDCard(null,tag,msg);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
         }
     }
 
@@ -64,6 +64,13 @@ public class LogUtil {
         }
     }
 
+    /**
+     * 将日志输出到本地文件
+     * @param ex
+     * @param tag
+     * @param msg
+     * @throws IOException
+     */
     private static void dumpExceptionToSDCard(Throwable ex, String tag, String msg) throws IOException {
         //如果SD卡不存在或无法使用，则无法把异常信息写入SD卡
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
@@ -78,14 +85,16 @@ public class LogUtil {
             dir.mkdirs();
         }
         long current = System.currentTimeMillis();
-        String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(current));
+        String time = new SimpleDateFormat("yyyy-MM-dd").format(new Date(current));
         File file = new File(PATH + FILE_NAME + time + FILE_NAME_SUFFIX);
-
+        if(!file.exists()){
+            file.createNewFile();
+        }
         try {
-            PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
-            pw.println(time);
-            pw.println();
+            PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file,true)));
+            pw.println(time+"---");
             pw.println(tag+":"+msg);
+            pw.println();
             pw.close();
         } catch (Exception e) {
             Log.e(TAG, "dump crash info failed");

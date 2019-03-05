@@ -13,11 +13,13 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
@@ -37,6 +39,7 @@ import com.hasee.minibuslocalhost.util.ActivityCollector;
 import com.hasee.minibuslocalhost.util.LogUtil;
 import com.hasee.minibuslocalhost.util.MyHandler;
 import com.hasee.minibuslocalhost.util.SendToScreenThread;
+import com.hasee.minibuslocalhost.util.StationPlayer;
 import com.hasee.minibuslocalhost.util.ToastUtil;
 
 import java.util.HashMap;
@@ -44,46 +47,8 @@ import java.util.Map;
 
 import android_serialport_api.SreialComm;
 
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_ACBlowingLevel;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_DemisterStatus;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_Flg_Stat_DangerAlarmLamp;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_Flg_Stat_HighBeam;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_Flg_Stat_LeftTurningLamp;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_Flg_Stat_LowBeam;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_Flg_Stat_RearFogLamp;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_Flg_Stat_RightTurningLamp;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.BMS_SOC;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HAD_GPSPositioningStatus;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_Alam;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_DangerAlarm;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_Demister_Control;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_DoorLock;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_Driver_model;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_FANPWM_Control;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_HighBeam;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_LeftTurningLamp;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_LowBeam;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_RearFogLamp;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_RightTurningLamp;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_SystemRuningStatus;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_TotalOdmeter;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_air_grade;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_air_model;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_eBooster_Warning;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.OBU_LocalTime;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.Wheel_Speed_ABS;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.can_num_PackAverageTemp;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_GRADE_OFF;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_MODEL_AWAIT;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.DRIVE_MODEL_AUTO;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.DRIVE_MODEL_AUTO_AWAIT;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.DRIVE_MODEL_REMOTE;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.OFF;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.ON;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.Ord_Alam_ON;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.Ord_SystemRuningStatus_ONINPUT;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.POINTLESS;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.eBooster_Warning_OFF;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.*;
+import static com.hasee.minibuslocalhost.transmit.Class.HMI.*;
 
 
 public class MainActivity extends BaseActivity {
@@ -99,6 +64,7 @@ public class MainActivity extends BaseActivity {
     public final static int LOCALHOST_SCREEN_RIGHT = 3;//主控屏右边部分
     private final int MIN_BATTERY = 20;//低电量触发值
     private final int MIN_SPEED = 5;//低速报警值
+    private final int REQUEST_CODE = 1;//请求码
     private Context mContext;//上下文
     private FragmentManager fragmentManager;//Fragment管理器对象
     private FragmentTransaction transaction;//Fragment事务对象
@@ -118,6 +84,8 @@ public class MainActivity extends BaseActivity {
     public static boolean target = false;//默认没跳转
     private int currentDriveModel = DRIVE_MODEL_AUTO_AWAIT;//当前驾驶状态默认为待定
     private MainRightFragment2.ReadSpeedTimer readSpeedTimer;
+    private boolean loginFlag = false;//是否登陆成功
+    private StationPlayer stationPlayer = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,7 +104,7 @@ public class MainActivity extends BaseActivity {
             if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(MainActivity.this, new String[]{
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE
                 }, 1);
             } else {
                 //有权限的话什么都不做
@@ -150,29 +118,6 @@ public class MainActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         LogUtil.d(TAG, "onResume");
-        boolean loginFlag = getIntent().getBooleanExtra("flag", false);
-        if(target){//如果页面跳转
-            target = false;
-            playMusic();
-            if(loginFlag){//登陆成功
-                String clazz = "HMI";
-                int field = HMI_Dig_Ord_Driver_model;
-                showFragment(rightFragment1,false);//切换界面
-                showFragment(rightFragment2,true);//切换界面
-                floatBtn.setVisibility(View.VISIBLE);//按钮显示
-                autoDriveModel = true;//驾驶模式打开
-                sendToCAN(clazz,field,currentDriveModel);//发送数据
-                rightFragment1.changeBtnColor(currentDriveModel);//改变驾驶模式按钮颜色
-                if(readSpeedTimer == null){
-                    readSpeedTimer = rightFragment2.getReadSpeedTimer();
-                    readSpeedTimer.startTimer();
-                }
-                LogUtil.d(TAG,"登陆成功");
-            }else{//登陆失败
-                LogUtil.d(TAG,"登陆失败");
-            }
-        }
-
     }
 
     @Override
@@ -185,7 +130,6 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        LogUtil.d(TAG, "onDestroy");
         //中断CAN总线的子线程
         if (canThread != null) {
             canThread.interrupt();
@@ -202,6 +146,8 @@ public class MainActivity extends BaseActivity {
         if(readSpeedTimer != null){
             readSpeedTimer.stopTimer();
         }
+        //释放语音播报类
+        stationPlayer.destory();
         //关闭音乐
         destroyMusic();
         //关闭定时发送
@@ -213,14 +159,15 @@ public class MainActivity extends BaseActivity {
 
     /**
      * 从另一个页面携带数据跳转至本页面
-     *
      * @param mContext
-     * @param flag
+     * @param isShow
+     * @param loginFlag
      */
-    public static void actionStart(Context mContext, boolean isShow,boolean flag) {
+    public static void actionStart(Context mContext, boolean isShow,boolean loginFlag) {
         Intent intent = new Intent(mContext, MainActivity.class);
         intent.putExtra("isShow", isShow);
-        intent.putExtra("flag",flag);
+        intent.putExtra("flag",loginFlag);
+        Log.d(TAG, "actionStart: "+loginFlag);
         mContext.startActivity(intent);
     }
 
@@ -228,6 +175,8 @@ public class MainActivity extends BaseActivity {
      * 初始化相关类
      */
     private void classInit() {
+        //初始化语音到站类
+        stationPlayer = StationPlayer.getInstance(mContext,2);
         //打开CAN监听
         canThread = new Thread(new Runnable() {
             @Override
@@ -245,8 +194,6 @@ public class MainActivity extends BaseActivity {
             }
         });
         sreialThread.start();
-        //将sendToCANHandler传递至LeftFragment
-
         //模拟定时发送
 //        timerManager = new TimerManager(handler);
 //        timerManager.startTimer();
@@ -374,6 +321,13 @@ public class MainActivity extends BaseActivity {
                 }
                 case SEND_TO_LEFTSCREEN: {//左车门
                     new SendToScreenThread(object, SEND_TO_LEFTSCREEN).start();
+                    int id = object.getIntValue("id");
+                    int data = object.getIntValue("data");
+                    if(id == HAD_CurrentDrivingRoadIDNum){//当前行驶路线ID
+                        stationPlayer.setRouteNum(data);
+                    }else if(id == HAD_NextStationIDNumb){//下一个站点ID
+                        stationPlayer.playMusic(data-1);
+                    }
                     LogUtil.d(TAG, "发送信息给左车门");
                     break;
                 }
@@ -487,7 +441,6 @@ public class MainActivity extends BaseActivity {
      */
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         ActivityCollector.finshAll();
     }
 
@@ -507,6 +460,43 @@ public class MainActivity extends BaseActivity {
         }).start();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        Log.d(TAG, "requestCode: "+requestCode+"----"+"resultCode:"+resultCode);
+        switch (requestCode){
+            case REQUEST_CODE:{
+                if(resultCode == RESULT_OK){//取消
+                    Boolean isShow = data.getBooleanExtra("isShow",false);
+                    Boolean loginFlag = data.getBooleanExtra("loginFlag",false);
+                    Log.d(TAG, "onActivityResult: "+isShow+":"+loginFlag);
+                    if(target){//如果页面跳转
+                        target = false;
+                        playMusic();
+                        Log.d(TAG, "onResume: "+loginFlag);
+                        if(loginFlag){//登陆成功
+                            String clazz = "HMI";
+                            int field = HMI_Dig_Ord_Driver_model;
+                            showFragment(rightFragment1,false);//切换界面
+                            showFragment(rightFragment2,true);//切换界面
+                            floatBtn.setVisibility(View.VISIBLE);//按钮显示
+                            autoDriveModel = true;//驾驶模式打开
+                            sendToCAN(clazz,field,currentDriveModel);//发送数据
+                            rightFragment1.changeBtnColor(currentDriveModel);//改变驾驶模式按钮颜色
+                            if(readSpeedTimer == null){
+                                readSpeedTimer = rightFragment2.getReadSpeedTimer();
+                                readSpeedTimer.startTimer();
+                            }
+                            LogUtil.d(TAG,"登陆成功");
+                        }else{//登陆失败
+                            LogUtil.d(TAG,"登陆失败");
+                        }
+                    }
+                }
+                break;
+            }
+        }
+    }
+
     /**
      * 处理Fragment的消息
      *
@@ -515,11 +505,18 @@ public class MainActivity extends BaseActivity {
     @SuppressLint("RestrictedApi")
     public void handleFragmentMsg(int flag) {
         if (flag == DRIVE_MODEL_AUTO || flag == DRIVE_MODEL_REMOTE) {
-            currentDriveModel = flag;//当前驾驶模式
-//            if(!autoDriveModel){//驾驶模式关闭
-                target = true;
-                LoginActivity.actionStart(mContext, 1);
-//            }
+            if(currentDriveModel == flag){//当前已经处于某一种驾驶模式
+                currentDriveModel = flag;//当前驾驶模式
+                showFragment(rightFragment1,false);
+                showFragment(rightFragment2,true);
+                floatBtn.setVisibility(View.VISIBLE);
+            }else{//跳转至登陆页面
+                target = true;//跳转
+                currentDriveModel = flag;//当前驾驶模式
+                Intent intent = new Intent(mContext,LoginActivity.class);
+                intent.putExtra("isFirst",false);
+                startActivityForResult(intent,REQUEST_CODE);
+            }
         }
     }
 
@@ -547,21 +544,25 @@ public class MainActivity extends BaseActivity {
         }else{
             transaction.hide(fragment);
         }
-       transaction.commit();
+       transaction.commitAllowingStateLoss();//不保存状态
     }
 
     /**
      * 显示和隐藏低电量报警Fragment
      */
     private void showLowBatteryFragment(boolean show) {
-        fragmentManager = getSupportFragmentManager();
-        transaction = fragmentManager.beginTransaction();
-        if (show) {
-            transaction.show(lowBatteryFragment);
-        } else {
-            transaction.hide(lowBatteryFragment);
+        try {
+            fragmentManager = getSupportFragmentManager();
+            transaction = fragmentManager.beginTransaction();
+            if (show) {
+                transaction.show(lowBatteryFragment);
+            } else {
+                transaction.hide(lowBatteryFragment);
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        transaction.commit();
     }
 
     /**
@@ -572,7 +573,6 @@ public class MainActivity extends BaseActivity {
      */
     private int whatFragment(JSONObject object) {
         int id = object.getIntValue("id");
-        LogUtil.d(TAG, "id:" + id);
         switch (id) {
             //上部Fragment
             case OBU_LocalTime://本地时间
