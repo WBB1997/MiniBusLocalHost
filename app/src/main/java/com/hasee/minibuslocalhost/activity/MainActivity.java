@@ -62,6 +62,7 @@ public class MainActivity extends BaseActivity {
     public final static int LOCALHOST_SCREEN_LEFT = 1;//主控屏左边部分
     public final static int LOCALHOST_SCREEN_CENTER = 2;//主控屏中间部分
     public final static int LOCALHOST_SCREEN_RIGHT = 3;//主控屏右边部分
+    public final static int LOCALHOST_SCREEN_OTHER = 4;//主控屏其他部分
     private final int MIN_BATTERY = 20;//低电量触发值
     private final int MIN_SPEED = 5;//低速报警值
     private final int REQUEST_CODE = 1;//请求码
@@ -361,6 +362,8 @@ public class MainActivity extends BaseActivity {
                             }
                             rightFragment2.refresh(object);
                         }
+                    } else if(screenId == LOCALHOST_SCREEN_OTHER){
+                        refresh(object);
                     }
                     break;
                 }
@@ -376,6 +379,60 @@ public class MainActivity extends BaseActivity {
             }
         }
     };
+
+    /**
+     * 处理主控屏其他命令
+     * @param object
+     */
+    private void refresh(JSONObject object){
+        int id = object.getIntValue("id");
+        int data = object.getIntValue("data");
+        String msg = "";
+        if(data == 0){
+            msg = "无输入";
+        }
+        switch (id){
+            case RCU_Dig_Ord_SystemStatus:{//RCU系统运行状态信号
+                if(data == 1){
+                    msg = "RCU系统运行正常";
+                }else if(data == 2){
+                    msg = "RCU系统故障";
+                }else if(data == 3){
+                    msg = "预留";
+                }
+                break;
+            }
+            case OBU_Dig_Ord_SystemStatus:{//OBU系统运行状态信号
+                if(data == 1){
+                    msg = "OBU系统运行正常";
+                }else if(data == 2){
+                    msg = "OBU系统故障";
+                }else if(data == 3){
+                    msg = "预留";
+                }
+                break;
+            }
+            case RCU_MainControlChangeFeedBack:{//AD主控请求状态反馈
+                if(data == 1){
+                    msg = "不同意AD主控切换请求";
+                }else if(data == 2){
+                    msg = "同意AD主控切换请求";
+                }
+                break;
+            }
+            case AD_MainControlChangeFeedBack:{//RCU主控请求状态反馈
+                if(data == 1){
+                    msg = "不同意RCU主控切换请求";
+                }else if(data == 2){
+                    msg = "同意RCU主控切换请求";
+                }else if(data == 3){
+                    msg = "请求超时";
+                }
+                break;
+            }
+        }
+        LogUtil.d(TAG,msg);
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -505,18 +562,18 @@ public class MainActivity extends BaseActivity {
     @SuppressLint("RestrictedApi")
     public void handleFragmentMsg(int flag) {
         if (flag == DRIVE_MODEL_AUTO || flag == DRIVE_MODEL_REMOTE) {
-            if(currentDriveModel == flag){//当前已经处于某一种驾驶模式
-                currentDriveModel = flag;//当前驾驶模式
-                showFragment(rightFragment1,false);
-                showFragment(rightFragment2,true);
-                floatBtn.setVisibility(View.VISIBLE);
-            }else{//跳转至登陆页面
+//            if(currentDriveModel == flag){//当前已经处于某一种驾驶模式
+//                currentDriveModel = flag;//当前驾驶模式
+//                showFragment(rightFragment1,false);
+//                showFragment(rightFragment2,true);
+//                floatBtn.setVisibility(View.VISIBLE);
+//            }else{//跳转至登陆页面
                 target = true;//跳转
                 currentDriveModel = flag;//当前驾驶模式
                 Intent intent = new Intent(mContext,LoginActivity.class);
                 intent.putExtra("isFirst",false);
                 startActivityForResult(intent,REQUEST_CODE);
-            }
+//            }
         }
     }
 
@@ -599,6 +656,11 @@ public class MainActivity extends BaseActivity {
 //            //中间Fragment
 //            case HAD_GPSLongitude://经度
 //                return LOCALHOST_SCREEN_CENTER;
+            case RCU_Dig_Ord_SystemStatus://RCU系统运行状态信号
+            case OBU_Dig_Ord_SystemStatus://OBU系统运行状态信号
+            case RCU_MainControlChangeFeedBack://AD主控请求状态反馈
+            case AD_MainControlChangeFeedBack://RCU主控请求状态反馈
+                return LOCALHOST_SCREEN_OTHER;
             default:
                 return -1;
         }
@@ -619,7 +681,7 @@ public class MainActivity extends BaseActivity {
         map.put(HMI_Dig_Ord_Alam, Ord_Alam_ON);//低速报警
         map.put(HMI_Dig_Ord_Driver_model, DRIVE_MODEL_AUTO_AWAIT);//驾驶模式
         map.put(HMI_Dig_Ord_DoorLock, POINTLESS);//门锁控制
-        map.put(HMI_Dig_Ord_air_grade, AIR_GRADE_OFF);//空调档位
+        map.put(HMI_Dig_Ord_air_grade, AIR_GRADE_SIX_GEAR);//空调档位
         map.put(HMI_Dig_Ord_eBooster_Warning, eBooster_Warning_OFF);//制动液面报警
         map.put(HMI_Dig_Ord_FANPWM_Control, AIR_GRADE_OFF);//风扇PWM占空比控制信号
         map.put(HMI_Dig_Ord_Demister_Control, POINTLESS);//除雾控制

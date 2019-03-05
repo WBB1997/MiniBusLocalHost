@@ -38,11 +38,11 @@ public class LogUtil {
     public static void d(String tag,String msg){
         if(level <= DEBUG){
             Log.d(tag, msg);
-//            try {
-//                dumpExceptionToSDCard(null,tag,msg);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
+            try {
+                dumpExceptionToSDCard(null,tag,msg);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -92,7 +92,7 @@ public class LogUtil {
         }
         try {
             PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file,true)));
-            pw.println(time+"---");
+            pw.println(time+"-->");
             pw.println(tag+":"+msg);
             pw.println();
             pw.close();
