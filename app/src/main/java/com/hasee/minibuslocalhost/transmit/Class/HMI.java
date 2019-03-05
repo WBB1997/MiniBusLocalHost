@@ -23,7 +23,6 @@ import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_air_gra
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_air_model;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_eBooster_Warning;
 import static com.hasee.minibuslocalhost.util.ByteUtil.bytesToHex;
-import static com.hasee.minibuslocalhost.util.ByteUtil.setBit;
 import static com.hasee.minibuslocalhost.util.ByteUtil.setBits;
 
 public class HMI extends BaseClass {
@@ -40,8 +39,9 @@ public class HMI extends BaseClass {
     public static final int DRIVE_MODEL_REMOTE = 1; // 远程
     public static final int DRIVE_MODEL_AUTO_AWAIT = 2; // 待定
     // 低速报警
-    public static final int Ord_Alam_ON = 0; // 不报警
+    public static final int Ord_Alam_POINTLESS = 0; // 无输入
     public static final int Ord_Alam_OFF = 1; // 不报警
+    public static final int Ord_Alam_ON = 2; // 报警
     // 空调
     public static final int AIR_MODEL_COOL = 0; // 制冷
     public static final int AIR_MODEL_HEAT = 1; // 制热

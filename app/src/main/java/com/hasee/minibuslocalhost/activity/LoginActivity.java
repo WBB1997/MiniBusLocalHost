@@ -206,7 +206,7 @@ public class LoginActivity extends BaseActivity {
                             loginFlag = false;//登陆失败
                             errorCount++;//错误次数增加
                             Bundle bundle = new Bundle();
-                            if(errorCount > MAX_ERROR_NUM){//已经达到最大容错次数
+                            if(errorCount >= MAX_ERROR_NUM){//已经达到最大容错次数
                                 //跳转至主界面并锁屏
                                 isShow = true;//锁屏
                                 bundle.putInt("key", ERROR2);

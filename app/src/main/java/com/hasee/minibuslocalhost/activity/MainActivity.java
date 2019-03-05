@@ -356,9 +356,9 @@ public class MainActivity extends BaseActivity {
                                 int speed = (int) object.getDoubleValue("data");
                                 if (speed <= MIN_SPEED) {//低速
                                     //发送低速报警消息
-                                    sendToCAN("HMI", HMI_Dig_Ord_Alam, ON);
+                                    sendToCAN("HMI", HMI_Dig_Ord_Alam, Ord_Alam_ON);
                                 } else {
-                                    sendToCAN("HMI", HMI_Dig_Ord_Alam, OFF);
+                                    sendToCAN("HMI", HMI_Dig_Ord_Alam, Ord_Alam_OFF);
                                 }
                             }
                             rightFragment2.refresh(object);
@@ -483,7 +483,8 @@ public class MainActivity extends BaseActivity {
      * 锁屏状态
      */
     private void showShadeDialog() {
-        Dialog dialog = new Dialog(MainActivity.this, R.style.activity_translucent);
+        canThread.interrupt();
+        Dialog dialog = new Dialog(mContext, R.style.activity_translucent);
         dialog.setContentView(R.layout.shade_dialog_layout);
         dialog.setCancelable(false);
         dialog.show();
@@ -541,7 +542,7 @@ public class MainActivity extends BaseActivity {
                 if(resultCode == RESULT_OK){//取消
                     Boolean isShow = data.getBooleanExtra("isShow",false);
                     Boolean loginFlag = data.getBooleanExtra("loginFlag",false);
-                    Log.d(TAG, "onActivityResult: "+isShow+":"+loginFlag);
+//                    Log.d(TAG, "onActivityResult: "+isShow+":"+loginFlag);
                     if(target){//如果页面跳转
                         target = false;
                         playMusic();
@@ -559,9 +560,12 @@ public class MainActivity extends BaseActivity {
                                 readSpeedTimer = rightFragment2.getReadSpeedTimer();
                                 readSpeedTimer.startTimer();
                             }
-                            LogUtil.d(TAG,"登陆成功");
+//                            LogUtil.d(TAG,"登陆成功");
                         }else{//登陆失败
-                            LogUtil.d(TAG,"登陆失败");
+                            if(isShow){
+                                showShadeDialog();
+                            }
+//                            LogUtil.d(TAG,"登陆失败");
                         }
                     }
                 }
@@ -695,7 +699,7 @@ public class MainActivity extends BaseActivity {
         map.put(HMI_Dig_Ord_RearFogLamp, POINTLESS);//后雾灯
         map.put(HMI_Dig_Ord_DangerAlarm, POINTLESS);//警示灯
         map.put(HMI_Dig_Ord_air_model, AIR_MODEL_AWAIT);//制冷，制热，除雾
-        map.put(HMI_Dig_Ord_Alam, Ord_Alam_ON);//低速报警
+        map.put(HMI_Dig_Ord_Alam, Ord_Alam_POINTLESS);//低速报警
         map.put(HMI_Dig_Ord_Driver_model, DRIVE_MODEL_AUTO_AWAIT);//驾驶模式
         map.put(HMI_Dig_Ord_DoorLock, POINTLESS);//门锁控制
         map.put(HMI_Dig_Ord_air_grade, AIR_GRADE_SIX_GEAR);//空调档位
