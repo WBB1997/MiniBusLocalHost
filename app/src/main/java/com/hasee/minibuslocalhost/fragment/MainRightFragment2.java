@@ -180,7 +180,7 @@ public class MainRightFragment2 extends Fragment {
                                 @Override
                                 public void run() {
                                     rightFragment2Speed.setText(String.valueOf((int) newSpeed));
-                                    rightFragment2Zonlic.setText(String.valueOf((int) totalMile));
+                                    rightFragment2Zonlic.setText(String.format("%.2f",totalMile));
                                 }
                             });
                             activity.sendToCAN("HMI", HMI_Dig_Ord_TotalOdmeter, (int) totalMile);

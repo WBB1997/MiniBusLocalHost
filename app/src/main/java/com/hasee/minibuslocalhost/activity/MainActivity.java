@@ -84,6 +84,7 @@ public class MainActivity extends BaseActivity {
     private TimerManager timerManager;//定时发送模拟数据（只模拟）
     public static boolean target = false;//默认没跳转
     private int currentDriveModel = DRIVE_MODEL_AUTO_AWAIT;//当前驾驶状态默认为待定
+    private int lastDriveModel = DRIVE_MODEL_AUTO_AWAIT;
     private MainRightFragment2.ReadSpeedTimer readSpeedTimer;
     private boolean loginFlag = false;//是否登陆成功
     private StationPlayer stationPlayer = null;
@@ -391,6 +392,7 @@ public class MainActivity extends BaseActivity {
         if(data == 0){
             msg = "无输入";
         }
+        boolean changeSu = false;
         switch (id){
             case RCU_Dig_Ord_SystemStatus:{//RCU系统运行状态信号
                 if(data == 1){
@@ -415,21 +417,35 @@ public class MainActivity extends BaseActivity {
             case RCU_MainControlChangeFeedBack:{//AD主控请求状态反馈
                 if(data == 1){
                     msg = "不同意AD主控切换请求";
+                    currentDriveModel = lastDriveModel;
                 }else if(data == 2){
                     msg = "同意AD主控切换请求";
+                    changeSu = true;
+                    currentDriveModel = DRIVE_MODEL_AUTO;//当前为自动驾驶
+                    lastDriveModel = currentDriveModel;
                 }
                 break;
             }
             case AD_MainControlChangeFeedBack:{//RCU主控请求状态反馈
                 if(data == 1){
                     msg = "不同意RCU主控切换请求";
+                    currentDriveModel = lastDriveModel;
                 }else if(data == 2){
+                    changeSu = true;
                     msg = "同意RCU主控切换请求";
+                    currentDriveModel = DRIVE_MODEL_REMOTE;//当前为远程驾驶
+                    lastDriveModel = currentDriveModel;
                 }else if(data == 3){
                     msg = "请求超时";
                 }
                 break;
             }
+        }
+        rightFragment1.changeBtnColor(currentDriveModel);
+        if(changeSu){
+            showFragment(rightFragment1,false);//切换界面
+            showFragment(rightFragment2,true);//切换界面
+            floatBtn.setVisibility(View.VISIBLE);//按钮显示
         }
         LogUtil.d(TAG,msg);
     }
@@ -533,9 +549,9 @@ public class MainActivity extends BaseActivity {
                         if(loginFlag){//登陆成功
                             String clazz = "HMI";
                             int field = HMI_Dig_Ord_Driver_model;
-                            showFragment(rightFragment1,false);//切换界面
-                            showFragment(rightFragment2,true);//切换界面
-                            floatBtn.setVisibility(View.VISIBLE);//按钮显示
+//                            showFragment(rightFragment1,false);//切换界面
+//                            showFragment(rightFragment2,true);//切换界面
+//                            floatBtn.setVisibility(View.VISIBLE);//按钮显示
                             autoDriveModel = true;//驾驶模式打开
                             sendToCAN(clazz,field,currentDriveModel);//发送数据
                             rightFragment1.changeBtnColor(currentDriveModel);//改变驾驶模式按钮颜色
@@ -569,7 +585,8 @@ public class MainActivity extends BaseActivity {
 //                floatBtn.setVisibility(View.VISIBLE);
 //            }else{//跳转至登陆页面
                 target = true;//跳转
-                currentDriveModel = flag;//当前驾驶模式
+                lastDriveModel = flag;
+//                currentDriveModel = flag;//当前驾驶模式
                 Intent intent = new Intent(mContext,LoginActivity.class);
                 intent.putExtra("isFirst",false);
                 startActivityForResult(intent,REQUEST_CODE);
