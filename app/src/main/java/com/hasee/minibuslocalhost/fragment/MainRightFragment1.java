@@ -13,6 +13,7 @@ import com.hasee.minibuslocalhost.R;
 import com.hasee.minibuslocalhost.activity.MainActivity;
 
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.DRIVE_MODEL_AUTO;
+import static com.hasee.minibuslocalhost.transmit.Class.HMI.DRIVE_MODEL_AUTO_AWAIT;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.DRIVE_MODEL_REMOTE;
 
 
@@ -46,6 +47,8 @@ public class MainRightFragment1 extends Fragment {
         rightFragment1LongDrive.setOnClickListener(onClickListener);
         rightFragment1Await = (Button) view.findViewById(R.id.rightFragment1_await);
         rightFragment1Await.setOnClickListener(onClickListener);
+        rightFragment1Await.setBackgroundResource(R.drawable.btn_drawable);//待机默认为点击状态
+        rightFragment1Await.setEnabled(false);//待机默认不可点
         return view;
     }
 
@@ -84,7 +87,7 @@ public class MainRightFragment1 extends Fragment {
 //            rightFragment1LongDrive.setEnabled(true);
             rightFragment1LongDrive.setBackgroundResource(R.drawable.circle_border_pressed);
             //待机状态开
-//            rightFragment1Await.setEnabled(true);
+            rightFragment1Await.setEnabled(true);
             rightFragment1Await.setBackgroundResource(R.drawable.circle_border_pressed);
         }else if(flag == DRIVE_MODEL_REMOTE){//如果当前是远程驾驶
             //远程驾驶状态关
@@ -94,8 +97,10 @@ public class MainRightFragment1 extends Fragment {
 //            rightFragment1AutoDrive.setEnabled(true);
             rightFragment1AutoDrive.setBackgroundResource(R.drawable.circle_border_pressed);
             //待机状态开
-//            rightFragment1Await.setEnabled(true);
+            rightFragment1Await.setEnabled(true);
             rightFragment1Await.setBackgroundResource(R.drawable.circle_border_pressed);
+        }else if(flag == DRIVE_MODEL_AUTO_AWAIT){
+
         }
     }
 

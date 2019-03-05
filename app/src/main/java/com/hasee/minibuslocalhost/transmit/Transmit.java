@@ -1,6 +1,7 @@
 package com.hasee.minibuslocalhost.transmit;
 
 import android.os.Message;
+import android.util.Log;
 import android.util.Pair;
 
 import com.alibaba.fastjson.JSONObject;
@@ -100,9 +101,11 @@ public class Transmit {
 //                    Pair<Pair<byte[], byte[]>, Long> tmp = sendQueue.take();
                     Pair<byte[], Long> tmp = sendQueue.take();
                     for (int i = 0; i < 5; i++) {
+                        Log.d(TAG, "run: "+ByteUtil.bytesToHex(tmp.first));
                         UDP_send(tmp.first);
                     }
                     Thread.sleep(1000);
+                    Log.d(TAG, "run: "+ByteUtil.bytesToHex(bytes));
                     UDP_send(bytes);
                 }
             } catch (InterruptedException e) {
