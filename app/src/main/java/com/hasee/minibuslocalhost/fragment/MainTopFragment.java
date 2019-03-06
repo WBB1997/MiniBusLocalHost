@@ -64,8 +64,8 @@ public class MainTopFragment extends Fragment {
     public void refresh(JSONObject object){
         int id = object.getIntValue("id");
         if(id == OBU_LocalTime){//本地时间
-//            JSONObject data = object.getJSONObject("data");
-//            topFragmentTime.setText(getTime(data));
+            JSONObject data = object.getJSONObject("data");
+            topFragmentTime.setText(getTime(data));
         }
         if(id == BMS_SOC){//动力电池剩余电量SOC
             //电量显示
@@ -85,12 +85,12 @@ public class MainTopFragment extends Fragment {
         StringBuffer stringBuffer = new StringBuffer();
         int hour = object.getIntValue("hour");
         int minute = object.getIntValue("minute");
-        int second = object.getIntValue("second");
+//        int second = object.getIntValue("second");
         stringBuffer.append(hour);
         stringBuffer.append(":");
         stringBuffer.append(minute);
-        stringBuffer.append(":");
-        stringBuffer.append(second);
+//        stringBuffer.append(":");
+//        stringBuffer.append(second);
         return stringBuffer.toString();
     }
 }

@@ -12,12 +12,12 @@ import static com.hasee.minibuslocalhost.util.ByteUtil.countBits;
 
 public class AD1AndRCU1 extends BaseClass {
     private static final String TAG = "AD1AndRCU1";
+    private boolean flag = true;
     private HashMap<Integer, MyPair<Integer>> fields = new HashMap<Integer, MyPair<Integer>>() {{
-        put(56, new MyPair<>(2, IntegerCommand.HAD_Dig_Ord_SystemStatus, MainActivity.SEND_TO_LOCALHOST)); // EPS警告灯
-        put(56, new MyPair<>(2, IntegerCommand.RCU_Dig_Ord_SystemStatus, MainActivity.SEND_TO_LOCALHOST)); // EPS警告灯
+        put(56, new MyPair<>(2, IntegerCommand.SystemStatus, MainActivity.SEND_TO_LOCALHOST)); // EPS警告灯
+//        put(56, new MyPair<>(2, IntegerCommand.HAD_Dig_Ord_SystemStatus, MainActivity.SEND_TO_LOCALHOST)); // EPS警告灯
     }};
     private byte[] bytes = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-
 
     @Override
     public byte[] getBytes() {
@@ -39,9 +39,9 @@ public class AD1AndRCU1 extends BaseClass {
         int index = entry.getKey();
         switch (index) {
             case 56:
-////                return (int) countBits(bytes, 0, index, 1, ByteUtil.Motorola);
-//            case 57:
                 return (int) countBits(bytes, 0, index, 2, ByteUtil.Motorola);
+//            case 57:
+//                return (int) countBits(bytes, 0, index, 2, ByteUtil.Motorola);
             default:
                 LogUtil.d(TAG, "数据下标错误");
                 break;

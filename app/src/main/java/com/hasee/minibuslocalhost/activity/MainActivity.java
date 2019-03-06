@@ -221,6 +221,14 @@ public class MainActivity extends BaseActivity {
         });
     }
 
+    /**
+     * 播放站点音乐
+     */
+    private void playStationMusic(int stationNumber){
+//        pauseMusic();//暂停车载音乐
+//        stationPlayer.playMusic(stationNumber);
+//        playMusic();
+    }
 
     /**
      * 播放音乐
@@ -328,9 +336,10 @@ public class MainActivity extends BaseActivity {
                     int id = object.getIntValue("id");
                     int data = object.getIntValue("data");
                     if (id == HAD_CurrentDrivingRoadIDNum) {//当前行驶路线ID
-                        stationPlayer.setRouteNum(data);
+//                        stationPlayer.setRouteNum(data);
                     } else if (id == HAD_NextStationIDNumb) {//下一个站点ID
-                        stationPlayer.playMusic(data - 1);
+//                        stationPlayer.playMusic(data - 1);
+//                        playStationMusic(data -1);
                     }
                     LogUtil.d(TAG, "发送信息给左车门");
                     break;
@@ -339,13 +348,13 @@ public class MainActivity extends BaseActivity {
                     //改变主控屏的控件状态
                     int screenId = whatFragment(object);
                     if (screenId == LOCALHOST_SCREEN_TOP) {//上部Fragment
+                        topFragment.refresh(object);
                         int battery = object.getIntValue("data");
                         if (battery <= MIN_BATTERY) {//低电量报警
                             showLowBatteryFragment(true);
                         } else {
                             showLowBatteryFragment(false);
                         }
-                        topFragment.refresh(object);
                     } else if (screenId == LOCALHOST_SCREEN_LEFT) {//左边Fragment
                         leftFragment.refresh(object);
                     } else if (screenId == LOCALHOST_SCREEN_CENTER) {//中间Fragment
@@ -397,6 +406,23 @@ public class MainActivity extends BaseActivity {
         }
         boolean changeSu = false;
         switch (id) {
+            case SystemStatus: {//RCU系统运行状态信号
+                changeSu = true;
+                if(data == 0){//自动驾驶正常
+                    msg = "自动驾驶正常";
+                    currentDriveModel = DRIVE_MODEL_AUTO;//当前为自动驾驶
+                }else if (data == 1) {//自动驾驶故障
+                    msg = "自动驾驶故障";
+                    currentDriveModel = DRIVE_MODEL_AUTO;//当前为自动驾驶
+                } else if (data == 2) {//远程驾驶正常
+                    msg = "远程驾驶正常";
+                    currentDriveModel = DRIVE_MODEL_REMOTE;//当前为远程驾驶
+                } else if (data == 3) {//远程驾驶故障
+                    msg = "远程驾驶故障";
+                    currentDriveModel = DRIVE_MODEL_REMOTE;//当前为远程驾驶
+                }
+                break;
+            }
             case RCU_Dig_Ord_SystemStatus: {//RCU系统运行状态信号
                 changeSu = true;
                 if(data == 0){//自动驾驶正常
@@ -705,6 +731,7 @@ public class MainActivity extends BaseActivity {
 //            //中间Fragment
 //            case HAD_GPSLongitude://经度
 //                return LOCALHOST_SCREEN_CENTER;
+            case SystemStatus://RCU主控请求状态反馈
             case HAD_Dig_Ord_SystemStatus://HAD行驶状态
             case RCU_Dig_Ord_SystemStatus://RCU系统运行状态信号
 //            case OBU_Dig_Ord_SystemStatus://OBU系统运行状态信号

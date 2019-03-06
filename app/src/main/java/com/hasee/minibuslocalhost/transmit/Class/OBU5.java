@@ -1,17 +1,16 @@
 package com.hasee.minibuslocalhost.transmit.Class;
 
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 import com.hasee.minibuslocalhost.activity.MainActivity;
 import com.hasee.minibuslocalhost.bean.IntegerCommand;
 import com.hasee.minibuslocalhost.util.ByteUtil;
 import com.hasee.minibuslocalhost.util.LogUtil;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.hasee.minibuslocalhost.util.ByteUtil.*;
+import static com.hasee.minibuslocalhost.util.ByteUtil.countBits;
 
 public class OBU5 extends BaseClass {
     private static final String TAG = "OBU5";
