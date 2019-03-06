@@ -193,6 +193,7 @@ public class Transmit {
             threadFlag = false;
             sendQueue = null;
         }
+        UDP_receive();
     }
 
     // 发到CAN总线
