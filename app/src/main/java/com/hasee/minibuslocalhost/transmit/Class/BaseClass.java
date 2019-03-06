@@ -11,9 +11,9 @@ import java.util.Map;
 
 import static com.hasee.minibuslocalhost.util.ByteUtil.bytesToHex;
 import static com.hasee.minibuslocalhost.util.ByteUtil.countBits;
-import static com.hasee.minibuslocalhost.util.ByteUtil.viewBinary;
 
 public abstract class BaseClass {
+    private boolean flag = true;
     public abstract byte[] getBytes();
     public abstract String getTAG();
     public void setBytes(byte[] bytes){
@@ -30,7 +30,6 @@ public abstract class BaseClass {
         }
         int index;
         int length;
-        boolean flag;
         for (Map.Entry<Integer, MyPair<Integer>> entry : getFields().entrySet()) {
             index = entry.getKey();
             length = entry.getValue().getLength();
@@ -44,7 +43,7 @@ public abstract class BaseClass {
 //                    flag = true;
 //            }
 
-            if(countBits(Local_bytes,0,index,length,state) != countBits(bytes,0,index,length,state)){
+            if(flag ||(countBits(Local_bytes,0,index,length,state) != countBits(bytes,0,index,length,state))){
                 JSONObject jsonObject = new JSONObject();
                 // id
                 jsonObject.put("id", entry.getValue().getSecond().first);
@@ -58,6 +57,7 @@ public abstract class BaseClass {
                 LogUtil.d(TAG, jsonObject.toJSONString());
             }
         }
+        flag = false;
         System.arraycopy(bytes, 0, getBytes(), 0, bytes.length);
         LogUtil.d(TAG, "this.bytes:" + bytesToHex(getBytes()));
     }

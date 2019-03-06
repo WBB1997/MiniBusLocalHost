@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static com.hasee.minibuslocalhost.activity.MainActivity.SEND_TO_LOCALHOST;
+import static com.hasee.minibuslocalhost.activity.MainActivity.SEND_TO_LEFTSCREEN;
 
 /**
  * Created by fangju on 2019/1/25
@@ -164,14 +164,22 @@ public class TimerManager {
         String[] me = new String[]{
             "{\"id\":77,\"data\":10}",//车速信号
             "{\"id\":77,\"data\":14}",//车速信号
-            "{\"id\":85,\"data\":0}",//AD主控请求状态反馈
-                "{\"id\":85,\"data\":1}",//AD主控请求状态反馈
-                "{\"id\":85,\"data\":2}",//AD主控请求状态反馈
+                "{\"id\":34,\"data\":10}",//动力电池剩余电量SOC
+                "{\"id\":34,\"data\":10}",//动力电池剩余电量SOC
+                "{\"id\":34,\"data\":10}",//动力电池剩余电量SOC
+                "{\"id\":34,\"data\":10}",//动力电池剩余电量SOC
+                "{\"id\":34,\"data\":10}",//动力电池剩余电量SOC
+            "{\"id\":68,\"data\":0}",//AD主控请求状态反馈
+                "{\"id\":68,\"data\":1}",//AD主控请求状态反馈
+                "{\"id\":68,\"data\":2}",//AD主控请求状态反馈
 
-                "{\"id\":86,\"data\":0}",//RCU主控请求状态反馈
-                "{\"id\":86,\"data\":1}",//RCU主控请求状态反馈
-                "{\"id\":86,\"data\":2}",//RCU主控请求状态反馈
-                "{\"id\":86,\"data\":3}",//RCU主控请求状态反馈
+                "{\"id\":67,\"data\":0}",//RCU主控请求状态反馈
+                "{\"id\":34,\"data\":10}",//动力电池剩余电量SOC
+                "{\"id\":34,\"data\":10}",//动力电池剩余电量SOC
+                "{\"id\":34,\"data\":10}",//动力电池剩余电量SOC
+                "{\"id\":67,\"data\":1}",//RCU主控请求状态反馈
+                "{\"id\":67,\"data\":2}",//RCU主控请求状态反馈
+                "{\"id\":67,\"data\":3}",//RCU主控请求状态反馈
 
 
             "{\"id\":39,\"data\":20}",////剩余里程数
@@ -187,14 +195,14 @@ public class TimerManager {
 
         };
 
-        addMsg(me);
+        addMsg(wangLeft);
     }
 
     private void addMsg(String[] msgs) {
         for (int i = 0; i < msgs.length; i++) {
             JSONObject object = new JSONObject();
-            object.put("target", SEND_TO_LOCALHOST);//发给谁
-            object.put("delay", 3000);//延时
+            object.put("target", SEND_TO_LEFTSCREEN);//发给谁
+            object.put("delay", 2000);//延时
             JSONObject data = JSON.parseObject(msgs[i]);//发送的数据
             object.put("data", data);
             jsons.add(object);

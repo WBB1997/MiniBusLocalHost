@@ -96,4 +96,5 @@ public class IntegerCommand {
     public static final int HMI_Dig_Ord_SystemRuningStatus = 84; //HMI控制器运行状态
     public static final int RCU_MainControlChangeFeedBack = 85; //AD主控请求状态反馈
     public static final int AD_MainControlChangeFeedBack = 86; //RCU主控请求状态反馈
+    public static final int SystemStatus = 87; //RCU主控请求状态反馈
 }
