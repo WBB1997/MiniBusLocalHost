@@ -123,7 +123,7 @@ public class Transmit {
             HMI_Class.changeStatus(field, o);
         }
         byte[] bytes = HMI_Class.getBytes();
-        LogUtil.d(TAG, "车辆初始化：" + bytesToHex(bytes));
+//        LogUtil.d(TAG, "车辆初始化：" + bytesToHex(bytes));
         UDP_send(bytes);
     }
 
@@ -193,6 +193,7 @@ public class Transmit {
             threadFlag = false;
             sendQueue = null;
         }
+        UDP_receive();
     }
 
     // 发到CAN总线
@@ -259,9 +260,10 @@ public class Transmit {
         String check;
         key = bytesToHex(subBytes(receMsgs, 10, 4));
         check = bytesToHex(subBytes(receMsgs, 0, 2));
-        LogUtil.d(TAG, "接收到的bytes:" + bytesToHex(receMsgs));
-        LogUtil.d(TAG, "key:" + key);
-        LogUtil.d(TAG, "check:" + check);
+        if(key.equals("00000219" )|| key.equals("000004c0"))
+            LogUtil.d(TAG, "接收到的bytes:" + bytesToHex(receMsgs));
+//        LogUtil.d(TAG, "key:" + key);
+//        LogUtil.d(TAG, "check:" + check);
         if(!check.equals("aabb")){
             return;
         }
