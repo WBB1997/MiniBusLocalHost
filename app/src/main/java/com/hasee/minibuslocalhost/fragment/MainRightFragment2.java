@@ -48,6 +48,8 @@ public class MainRightFragment2 extends Fragment {
     private double newSpeed = 0;
     private double lastSpeed = 0;//上一次的速度
     private ReadSpeedTimer readSpeedTimer = null;
+    private double totalRemainKm = 0;//任务进度总里程
+    private boolean totalRemainKmFlag = false;//判断是否是第一次接收到总里程
 
 
     public MainRightFragment2() {
@@ -108,7 +110,11 @@ public class MainRightFragment2 extends Fragment {
         }
         if (id == can_RemainKm) {//剩余里程数
             int data = (int) object.getDoubleValue("data");
-            int d = (int) (((totalMile - data) / totalMile) * 100);
+            if(totalRemainKmFlag){
+                totalRemainKm = data;
+                totalRemainKmFlag = false;
+            }
+            int d = (int) (((totalRemainKm - data) / totalRemainKm) * 100);
             rightFragment2Renwujd.setText(String.valueOf(d));
         }
         if (id == can_num_PackAverageTemp) {//电池包平均温度
@@ -140,6 +146,16 @@ public class MainRightFragment2 extends Fragment {
 //        Log.d(TAG, "新速度: "+newSpeed);
 //        Log.d(TAG, "计算的里程: "+totalMile);
         return totalMile;
+    }
+
+    /**
+     * 计算平均速度
+     * @param newSpeed
+     * @return
+     */
+    private double calculateAvgSpeed(double newSpeed){
+        double avgSpeed = (lastSpeed + newSpeed) / 2.0;
+        return avgSpeed;
     }
 
     /**
@@ -180,7 +196,8 @@ public class MainRightFragment2 extends Fragment {
                                 @Override
                                 public void run() {
                                     rightFragment2Speed.setText(String.valueOf((int) newSpeed));
-                                    rightFragment2Zonlic.setText(String.valueOf((int) totalMile));
+                                    rightFragment2Zonlic.setText(String.format("%.2f",totalMile));
+                                    rightFragment2Pingjunss.setText(String.valueOf((int)calculateAvgSpeed(newSpeed)));
                                 }
                             });
                             activity.sendToCAN("HMI", HMI_Dig_Ord_TotalOdmeter, (int) totalMile);
@@ -188,6 +205,13 @@ public class MainRightFragment2 extends Fragment {
                             carInfo.put("totalMile", totalMile);
                             App.getInstance().setPreferences("carInfo", carInfo.toJSONString());
                             LogUtil.d(TAG, "总里程:" + totalMile);
+                        }else{
+                            activity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    rightFragment2Speed.setText(String.valueOf((int) newSpeed));
+                                }
+                            });
                         }
                     }
                 };

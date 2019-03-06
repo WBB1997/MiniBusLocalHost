@@ -1,10 +1,11 @@
 package com.hasee.minibuslocalhost.transmit;
 
 import android.os.Message;
+import android.util.Log;
 import android.util.Pair;
 
 import com.alibaba.fastjson.JSONObject;
-import com.hasee.minibuslocalhost.transmit.Class.AD1;
+import com.hasee.minibuslocalhost.transmit.Class.AD1AndRCU1;
 import com.hasee.minibuslocalhost.transmit.Class.AD4;
 import com.hasee.minibuslocalhost.transmit.Class.AD_FeedBack;
 import com.hasee.minibuslocalhost.transmit.Class.BCM1;
@@ -20,10 +21,8 @@ import com.hasee.minibuslocalhost.transmit.Class.HAD6;
 import com.hasee.minibuslocalhost.transmit.Class.HMI;
 import com.hasee.minibuslocalhost.transmit.Class.MCU1;
 import com.hasee.minibuslocalhost.transmit.Class.OBU2;
-import com.hasee.minibuslocalhost.transmit.Class.OBU5;
 import com.hasee.minibuslocalhost.transmit.Class.PCGL1;
 import com.hasee.minibuslocalhost.transmit.Class.PCGR1;
-import com.hasee.minibuslocalhost.transmit.Class.RCU1;
 import com.hasee.minibuslocalhost.transmit.Class.RCU_FeedBack;
 import com.hasee.minibuslocalhost.transmit.Class.VCU2;
 import com.hasee.minibuslocalhost.transmit.Class.VCU3;
@@ -95,14 +94,16 @@ public class Transmit {
         @Override
         public void run() {
             try {
-                byte[] bytes = new byte[]{(byte) 0xFF, (byte) 0xAA, 0x03, (byte) 0x83, 0x00, (byte) 0x80, 0x1A, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x02};
+                byte[] bytes = new byte[]{(byte) 0xFF, (byte) 0xAA, 0x03, (byte) 0x83, 0x00, (byte) 0x80, 0x1A, 0x00, 0x20, 0x00, 0x00, 0x00, 0x02, 0x02};
                 while (threadFlag) {
 //                    Pair<Pair<byte[], byte[]>, Long> tmp = sendQueue.take();
                     Pair<byte[], Long> tmp = sendQueue.take();
                     for (int i = 0; i < 5; i++) {
+                        Log.d(TAG, "run: "+ByteUtil.bytesToHex(tmp.first));
                         UDP_send(tmp.first);
                     }
-                    Thread.sleep(1000);
+                    Thread.sleep(400);
+                    Log.d(TAG, "run: "+ByteUtil.bytesToHex(bytes));
                     UDP_send(bytes);
                 }
             } catch (InterruptedException e) {
@@ -219,16 +220,16 @@ public class Transmit {
             new Pair<>("00000300", new MCU1()),
             new Pair<>("00000373", new EPS1()),
             new Pair<>("00000361", new BCM1()),
-            new Pair<>("00000219", new AD1()),
+//            new Pair<>("00000219", new AD1()),
             new Pair<>("000004cf", new AD4()),
             new Pair<>("00000227", new ESC2()),
             new Pair<>("000004c0", new ESC3()),
             new Pair<>("00000331", new PCGL1()),
             new Pair<>("00000333", new PCGR1()),
             new Pair<>("00000383", new HMI()),
-            new Pair<>("00000219", new RCU1()),
+//            new Pair<>("00000219", new RCU1()),
             new Pair<>("00000234", new OBU2()),
-            new Pair<>("00000235", new OBU5()),
+//            new Pair<>("00000235", new OBU5()),
             new Pair<>("00000236", new HAD5()),
             new Pair<>("00000237", new HAD6()),
             new Pair<>("00000260", new BMS1()),
@@ -236,8 +237,9 @@ public class Transmit {
             new Pair<>("00000421", new VCU4()),
             new Pair<>("00000465", new BMS7()),
             new Pair<>("00000081", new AD_FeedBack()),
-            new Pair<>("00000080", new RCU_FeedBack())
-    ));
+            new Pair<>("00000080", new RCU_FeedBack()),
+            new Pair<>("00000219", new AD1AndRCU1())
+            ));
     // 消息标识符键值对，方便查找
     private Map<String, ? super BaseClass> FLAG_AND_CLASS = new HashMap<>();
     private Map<String, ? super BaseClass> NAME_AND_CLASS = new HashMap<>();
@@ -264,6 +266,10 @@ public class Transmit {
             return;
         }
         try {
+//            if (key.equals("00000219")) {
+//                (list.get(5).second).setBytes(subBytes(receMsgs, 2, 8));
+//                (list.get(12).second).setBytes(subBytes(receMsgs, 2, 8));
+//            } else
             if (FLAG_AND_CLASS.containsKey(key))
                 ((BaseClass) FLAG_AND_CLASS.get(key)).setBytes(subBytes(receMsgs, 2, 8));
             else

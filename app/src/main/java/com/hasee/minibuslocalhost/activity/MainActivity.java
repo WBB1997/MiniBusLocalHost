@@ -84,6 +84,8 @@ public class MainActivity extends BaseActivity {
     private TimerManager timerManager;//定时发送模拟数据（只模拟）
     public static boolean target = false;//默认没跳转
     private int currentDriveModel = DRIVE_MODEL_AUTO_AWAIT;//当前驾驶状态默认为待定
+    private int lastDriveModel = DRIVE_MODEL_AUTO_AWAIT;//上一次驾驶模式
+    private int clickDriveModel = DRIVE_MODEL_AUTO_AWAIT;//点击驾驶模式
     private MainRightFragment2.ReadSpeedTimer readSpeedTimer;
     private boolean loginFlag = false;//是否登陆成功
     private StationPlayer stationPlayer = null;
@@ -105,7 +107,7 @@ public class MainActivity extends BaseActivity {
             if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(MainActivity.this, new String[]{
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE
                 }, 1);
             } else {
                 //有权限的话什么都不做
@@ -144,7 +146,7 @@ public class MainActivity extends BaseActivity {
             sreialThread.interrupt();
         }
         //关闭定时读取总里程
-        if(readSpeedTimer != null){
+        if (readSpeedTimer != null) {
             readSpeedTimer.stopTimer();
         }
         //释放语音播报类
@@ -160,15 +162,16 @@ public class MainActivity extends BaseActivity {
 
     /**
      * 从另一个页面携带数据跳转至本页面
+     *
      * @param mContext
      * @param isShow
      * @param loginFlag
      */
-    public static void actionStart(Context mContext, boolean isShow,boolean loginFlag) {
+    public static void actionStart(Context mContext, boolean isShow, boolean loginFlag) {
         Intent intent = new Intent(mContext, MainActivity.class);
         intent.putExtra("isShow", isShow);
-        intent.putExtra("flag",loginFlag);
-        Log.d(TAG, "actionStart: "+loginFlag);
+        intent.putExtra("flag", loginFlag);
+        Log.d(TAG, "actionStart: " + loginFlag);
         mContext.startActivity(intent);
     }
 
@@ -177,7 +180,7 @@ public class MainActivity extends BaseActivity {
      */
     private void classInit() {
         //初始化语音到站类
-        stationPlayer = StationPlayer.getInstance(mContext,2);
+        stationPlayer = StationPlayer.getInstance(mContext, 2);
         //打开CAN监听
         canThread = new Thread(new Runnable() {
             @Override
@@ -266,7 +269,7 @@ public class MainActivity extends BaseActivity {
         //
         transaction = fragmentManager.beginTransaction();
         transaction.add(R.id.right_fragment, rightFragment1);//右边
-        transaction.add(R.id.right_fragment,rightFragment2).hide(rightFragment2);
+        transaction.add(R.id.right_fragment, rightFragment2).hide(rightFragment2);
         transaction.add(R.id.lowBattery_fragment, lowBatteryFragment).hide(lowBatteryFragment);//加入低速报警并隐藏
         transaction.commit();
         if (isShow) {//锁屏
@@ -324,10 +327,10 @@ public class MainActivity extends BaseActivity {
                     new SendToScreenThread(object, SEND_TO_LEFTSCREEN).start();
                     int id = object.getIntValue("id");
                     int data = object.getIntValue("data");
-                    if(id == HAD_CurrentDrivingRoadIDNum){//当前行驶路线ID
+                    if (id == HAD_CurrentDrivingRoadIDNum) {//当前行驶路线ID
                         stationPlayer.setRouteNum(data);
-                    }else if(id == HAD_NextStationIDNumb){//下一个站点ID
-                        stationPlayer.playMusic(data-1);
+                    } else if (id == HAD_NextStationIDNumb) {//下一个站点ID
+                        stationPlayer.playMusic(data - 1);
                     }
                     LogUtil.d(TAG, "发送信息给左车门");
                     break;
@@ -355,14 +358,14 @@ public class MainActivity extends BaseActivity {
                                 int speed = (int) object.getDoubleValue("data");
                                 if (speed <= MIN_SPEED) {//低速
                                     //发送低速报警消息
-                                    sendToCAN("HMI", HMI_Dig_Ord_Alam, ON);
+                                    sendToCAN("HMI", HMI_Dig_Ord_Alam, Ord_Alam_ON);
                                 } else {
-                                    sendToCAN("HMI", HMI_Dig_Ord_Alam, OFF);
+                                    sendToCAN("HMI", HMI_Dig_Ord_Alam, Ord_Alam_OFF);
                                 }
                             }
                             rightFragment2.refresh(object);
                         }
-                    } else if(screenId == LOCALHOST_SCREEN_OTHER){
+                    } else if (screenId == LOCALHOST_SCREEN_OTHER) {
                         refresh(object);
                     }
                     break;
@@ -382,56 +385,96 @@ public class MainActivity extends BaseActivity {
 
     /**
      * 处理主控屏其他命令
+     *
      * @param object
      */
-    private void refresh(JSONObject object){
+    private void refresh(JSONObject object) {
         int id = object.getIntValue("id");
         int data = object.getIntValue("data");
         String msg = "";
-        if(data == 0){
+        if (data == 0) {
             msg = "无输入";
         }
-        switch (id){
-            case RCU_Dig_Ord_SystemStatus:{//RCU系统运行状态信号
-                if(data == 1){
-                    msg = "RCU系统运行正常";
-                }else if(data == 2){
-                    msg = "RCU系统故障";
-                }else if(data == 3){
-                    msg = "预留";
+        boolean changeSu = false;
+        switch (id) {
+            case RCU_Dig_Ord_SystemStatus: {//RCU系统运行状态信号
+                changeSu = true;
+                if(data == 0){//自动驾驶正常
+                    msg = "自动驾驶正常";
+                    currentDriveModel = DRIVE_MODEL_AUTO;//当前为自动驾驶
+                }else if (data == 1) {//自动驾驶故障
+                    msg = "自动驾驶故障";
+                    currentDriveModel = DRIVE_MODEL_AUTO;//当前为自动驾驶
+                } else if (data == 2) {//远程驾驶正常
+                    msg = "远程驾驶正常";
+                    currentDriveModel = DRIVE_MODEL_REMOTE;//当前为远程驾驶
+                } else if (data == 3) {//远程驾驶故障
+                    msg = "远程驾驶故障";
+                    currentDriveModel = DRIVE_MODEL_REMOTE;//当前为远程驾驶
                 }
                 break;
             }
-            case OBU_Dig_Ord_SystemStatus:{//OBU系统运行状态信号
-                if(data == 1){
+            case HAD_Dig_Ord_SystemStatus:{//HAD行驶状态
+                changeSu = true;
+                if(data == 0){//自动驾驶正常
+                    msg = "自动驾驶正常";
+                    currentDriveModel = DRIVE_MODEL_AUTO;//当前为自动驾驶
+                }else if (data == 1) {//自动驾驶故障
+                    msg = "自动驾驶故障";
+                    currentDriveModel = DRIVE_MODEL_AUTO;//当前为自动驾驶
+                } else if (data == 2) {//远程驾驶正常
+                    msg = "远程驾驶正常";
+                    currentDriveModel = DRIVE_MODEL_REMOTE;//当前为远程驾驶
+                } else if (data == 3) {//远程驾驶故障
+                    msg = "远程驾驶故障";
+                    currentDriveModel = DRIVE_MODEL_REMOTE;//当前为远程驾驶
+                }
+                break;
+            }
+            case OBU_Dig_Ord_SystemStatus: {//OBU系统运行状态信号
+                if (data == 1) {
                     msg = "OBU系统运行正常";
-                }else if(data == 2){
+                } else if (data == 2) {
                     msg = "OBU系统故障";
-                }else if(data == 3){
+                } else if (data == 3) {
                     msg = "预留";
                 }
                 break;
             }
-            case RCU_MainControlChangeFeedBack:{//AD主控请求状态反馈
-                if(data == 1){
+            case RCU_MainControlChangeFeedBack: {//AD主控请求状态反馈
+                if (data == 1) {
                     msg = "不同意AD主控切换请求";
-                }else if(data == 2){
+                    currentDriveModel = lastDriveModel;
+                } else if (data == 2) {
                     msg = "同意AD主控切换请求";
+                    changeSu = true;
+                    currentDriveModel = DRIVE_MODEL_AUTO;//当前为自动驾驶
+                    lastDriveModel = currentDriveModel;
                 }
                 break;
             }
-            case AD_MainControlChangeFeedBack:{//RCU主控请求状态反馈
-                if(data == 1){
+            case AD_MainControlChangeFeedBack: {//RCU主控请求状态反馈
+                if (data == 1) {
                     msg = "不同意RCU主控切换请求";
-                }else if(data == 2){
+                    currentDriveModel = lastDriveModel;
+                } else if (data == 2) {
+                    changeSu = true;
                     msg = "同意RCU主控切换请求";
-                }else if(data == 3){
+                    currentDriveModel = DRIVE_MODEL_REMOTE;//当前为远程驾驶
+                    lastDriveModel = currentDriveModel;
+                } else if (data == 3) {
                     msg = "请求超时";
                 }
                 break;
             }
         }
-        LogUtil.d(TAG,msg);
+        rightFragment1.changeBtnColor(currentDriveModel);
+        if (changeSu) {
+            showFragment(rightFragment1, false);//切换界面
+            showFragment(rightFragment2, true);//切换界面
+            floatBtn.setVisibility(View.VISIBLE);//按钮显示
+        }
+        LogUtil.d(TAG, msg);
     }
 
     @Override
@@ -467,7 +510,8 @@ public class MainActivity extends BaseActivity {
      * 锁屏状态
      */
     private void showShadeDialog() {
-        Dialog dialog = new Dialog(MainActivity.this, R.style.activity_translucent);
+        canThread.interrupt();
+        Dialog dialog = new Dialog(mContext, R.style.activity_translucent);
         dialog.setContentView(R.layout.shade_dialog_layout);
         dialog.setCancelable(false);
         dialog.show();
@@ -482,8 +526,8 @@ public class MainActivity extends BaseActivity {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.floatBtn: {//悬浮按钮(退出各种模式)
-                    showFragment(rightFragment2,false);
-                    showFragment(rightFragment1,true);
+                    showFragment(rightFragment2, false);
+                    showFragment(rightFragment1, true);
                     floatBtn.setVisibility(View.INVISIBLE);
                     rightFragment1.changeBtnColor(currentDriveModel);
                     break;
@@ -519,33 +563,35 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        Log.d(TAG, "requestCode: "+requestCode+"----"+"resultCode:"+resultCode);
-        switch (requestCode){
-            case REQUEST_CODE:{
-                if(resultCode == RESULT_OK){//取消
-                    Boolean isShow = data.getBooleanExtra("isShow",false);
-                    Boolean loginFlag = data.getBooleanExtra("loginFlag",false);
-                    Log.d(TAG, "onActivityResult: "+isShow+":"+loginFlag);
-                    if(target){//如果页面跳转
+        Log.d(TAG, "requestCode: " + requestCode + "----" + "resultCode:" + resultCode);
+        switch (requestCode) {
+            case REQUEST_CODE: {
+                if (resultCode == RESULT_OK) {//确定
+                    Boolean isShow = data.getBooleanExtra("isShow", false);
+                    Boolean loginFlag = data.getBooleanExtra("loginFlag", false);
+                    if (target) {//如果页面跳转
                         target = false;
                         playMusic();
-                        Log.d(TAG, "onResume: "+loginFlag);
-                        if(loginFlag){//登陆成功
+                        if (loginFlag) {//登陆成功
                             String clazz = "HMI";
                             int field = HMI_Dig_Ord_Driver_model;
-                            showFragment(rightFragment1,false);//切换界面
-                            showFragment(rightFragment2,true);//切换界面
-                            floatBtn.setVisibility(View.VISIBLE);//按钮显示
+//                            showFragment(rightFragment1,false);//切换界面
+//                            showFragment(rightFragment2,true);//切换界面
+//                            floatBtn.setVisibility(View.VISIBLE);//按钮显示
                             autoDriveModel = true;//驾驶模式打开
-                            sendToCAN(clazz,field,currentDriveModel);//发送数据
+                            Log.d(TAG, "onActivityResult: "+clickDriveModel);
+                            sendToCAN(clazz, field, clickDriveModel);//发送数据
                             rightFragment1.changeBtnColor(currentDriveModel);//改变驾驶模式按钮颜色
-                            if(readSpeedTimer == null){
+                            if (readSpeedTimer == null) {
                                 readSpeedTimer = rightFragment2.getReadSpeedTimer();
                                 readSpeedTimer.startTimer();
                             }
-                            LogUtil.d(TAG,"登陆成功");
-                        }else{//登陆失败
-                            LogUtil.d(TAG,"登陆失败");
+//                            LogUtil.d(TAG,"登陆成功");
+                        } else {//登陆失败
+                            if (isShow) {
+                                showShadeDialog();
+                            }
+//                            LogUtil.d(TAG,"登陆失败");
                         }
                     }
                 }
@@ -568,11 +614,13 @@ public class MainActivity extends BaseActivity {
 //                showFragment(rightFragment2,true);
 //                floatBtn.setVisibility(View.VISIBLE);
 //            }else{//跳转至登陆页面
-                target = true;//跳转
-                currentDriveModel = flag;//当前驾驶模式
-                Intent intent = new Intent(mContext,LoginActivity.class);
-                intent.putExtra("isFirst",false);
-                startActivityForResult(intent,REQUEST_CODE);
+            target = true;//跳转
+//            lastDriveModel = flag;
+            clickDriveModel = flag;
+//                currentDriveModel = flag;//当前驾驶模式
+            Intent intent = new Intent(mContext, LoginActivity.class);
+            intent.putExtra("isFirst", false);
+            startActivityForResult(intent, REQUEST_CODE);
 //            }
         }
     }
@@ -591,17 +639,18 @@ public class MainActivity extends BaseActivity {
 
     /**
      * 隐藏Fragment
+     *
      * @param fragment
      */
-    private void showFragment(Fragment fragment,boolean flag){
+    private void showFragment(Fragment fragment, boolean flag) {
         fragmentManager = getSupportFragmentManager();
         transaction = fragmentManager.beginTransaction();
-        if(flag){
+        if (flag) {
             transaction.show(fragment);
-        }else{
+        } else {
             transaction.hide(fragment);
         }
-       transaction.commitAllowingStateLoss();//不保存状态
+        transaction.commitAllowingStateLoss();//不保存状态
     }
 
     /**
@@ -656,10 +705,11 @@ public class MainActivity extends BaseActivity {
 //            //中间Fragment
 //            case HAD_GPSLongitude://经度
 //                return LOCALHOST_SCREEN_CENTER;
+            case HAD_Dig_Ord_SystemStatus://HAD行驶状态
             case RCU_Dig_Ord_SystemStatus://RCU系统运行状态信号
-            case OBU_Dig_Ord_SystemStatus://OBU系统运行状态信号
-            case RCU_MainControlChangeFeedBack://AD主控请求状态反馈
-            case AD_MainControlChangeFeedBack://RCU主控请求状态反馈
+//            case OBU_Dig_Ord_SystemStatus://OBU系统运行状态信号
+//            case RCU_MainControlChangeFeedBack://AD主控请求状态反馈
+//            case AD_MainControlChangeFeedBack://RCU主控请求状态反馈
                 return LOCALHOST_SCREEN_OTHER;
             default:
                 return -1;
@@ -678,7 +728,7 @@ public class MainActivity extends BaseActivity {
         map.put(HMI_Dig_Ord_RearFogLamp, POINTLESS);//后雾灯
         map.put(HMI_Dig_Ord_DangerAlarm, POINTLESS);//警示灯
         map.put(HMI_Dig_Ord_air_model, AIR_MODEL_AWAIT);//制冷，制热，除雾
-        map.put(HMI_Dig_Ord_Alam, Ord_Alam_ON);//低速报警
+        map.put(HMI_Dig_Ord_Alam, Ord_Alam_POINTLESS);//低速报警
         map.put(HMI_Dig_Ord_Driver_model, DRIVE_MODEL_AUTO_AWAIT);//驾驶模式
         map.put(HMI_Dig_Ord_DoorLock, POINTLESS);//门锁控制
         map.put(HMI_Dig_Ord_air_grade, AIR_GRADE_SIX_GEAR);//空调档位
