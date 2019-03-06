@@ -24,10 +24,10 @@ public abstract class BaseClass {
 //        LogUtil.d(TAG, "bytes:" + bytesToHex(bytes));
 //        LogUtil.d(TAG, "this.bytes:" + bytesToHex(Local_bytes));
         // 如果相同则直接返回
-        if(Arrays.equals(bytes,Local_bytes)) {
-            LogUtil.d(TAG, "数据相同");
-            return;
-        }
+//        if(Arrays.equals(bytes,Local_bytes)) {
+//            LogUtil.d(TAG, "数据相同");
+//            return;
+//        }
         int index;
         int length;
         for (Map.Entry<Integer, MyPair<Integer>> entry : getFields().entrySet()) {
