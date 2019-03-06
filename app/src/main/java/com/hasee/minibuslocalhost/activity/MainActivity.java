@@ -120,13 +120,13 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        LogUtil.d(TAG, "onResume");
+//        LogUtil.d(TAG, "onResume");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        LogUtil.d(TAG, "onPause");
+//        LogUtil.d(TAG, "onPause");
         pauseMusic();
     }
 
@@ -171,7 +171,7 @@ public class MainActivity extends BaseActivity {
         Intent intent = new Intent(mContext, MainActivity.class);
         intent.putExtra("isShow", isShow);
         intent.putExtra("flag", loginFlag);
-        Log.d(TAG, "actionStart: " + loginFlag);
+//        Log.d(TAG, "actionStart: " + loginFlag);
         mContext.startActivity(intent);
     }
 
@@ -323,12 +323,12 @@ public class MainActivity extends BaseActivity {
             switch (msg.what) {
                 case SEND_TO_FRONTSCREEN: {//前风挡
                     new SendToScreenThread(object, SEND_TO_FRONTSCREEN).start();
-                    LogUtil.d(TAG, "发送信息给前风挡");
+//                    LogUtil.d(TAG, "发送信息给前风挡");
                     break;
                 }
                 case SEND_TO_RIGHTSCREEN: {//右车门
                     new SendToScreenThread(object, SEND_TO_RIGHTSCREEN).start();
-                    LogUtil.d(TAG, "发送信息给右车门");
+//                    LogUtil.d(TAG, "发送信息给右车门");
                     break;
                 }
                 case SEND_TO_LEFTSCREEN: {//左车门
@@ -341,7 +341,7 @@ public class MainActivity extends BaseActivity {
 //                        stationPlayer.playMusic(data - 1);
 //                        playStationMusic(data -1);
                     }
-                    LogUtil.d(TAG, "发送信息给左车门");
+//                    LogUtil.d(TAG, "发送信息给左车门");
                     break;
                 }
                 case SEND_TO_LOCALHOST: {//主控屏
@@ -383,7 +383,7 @@ public class MainActivity extends BaseActivity {
                     new SendToScreenThread(object, SEND_TO_FRONTSCREEN).start();
                     new SendToScreenThread(object, SEND_TO_LEFTSCREEN).start();
                     new SendToScreenThread(object, SEND_TO_RIGHTSCREEN).start();
-                    LogUtil.d(TAG, "都发");
+//                    LogUtil.d(TAG, "都发");
                     break;
                 }
                 default:
@@ -589,7 +589,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        Log.d(TAG, "requestCode: " + requestCode + "----" + "resultCode:" + resultCode);
+//        Log.d(TAG, "requestCode: " + requestCode + "----" + "resultCode:" + resultCode);
         switch (requestCode) {
             case REQUEST_CODE: {
                 if (resultCode == RESULT_OK) {//确定

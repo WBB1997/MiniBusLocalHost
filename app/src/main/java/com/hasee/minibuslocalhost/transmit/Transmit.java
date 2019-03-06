@@ -98,11 +98,12 @@ public class Transmit {
                 while (threadFlag) {
 //                    Pair<Pair<byte[], byte[]>, Long> tmp = sendQueue.take();
                     Pair<byte[], Long> tmp = sendQueue.take();
-                    Log.d(TAG, "主机向车辆CAN总线发的信息:"+ByteUtil.bytesToHex(tmp.first));
-                    for (int i = 0; i < 5; i++)
+                    for (int i = 0; i < 5; i++) {
+                        Log.d(TAG, "run: "+ByteUtil.bytesToHex(tmp.first));
                         UDP_send(tmp.first);
-                    Thread.sleep(500);
-                    Log.d(TAG, "主机向车辆CAN总线发的无意义:"+ByteUtil.bytesToHex(bytes));
+                    }
+                    Thread.sleep(400);
+                    Log.d(TAG, "run: "+ByteUtil.bytesToHex(bytes));
                     UDP_send(bytes);
                 }
             } catch (InterruptedException e) {
@@ -185,14 +186,13 @@ public class Transmit {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            // 关闭socket
+            if (datagramSocket != null)
+                datagramSocket.close();
+            threadFlag = false;
+            sendQueue = null;
         }
-//        finally {
-//            // 关闭socket
-//            if (datagramSocket != null)
-//                datagramSocket.close();
-////            threadFlag = false;
-////            sendQueue = null;
-//        }
         UDP_receive();
     }
 
