@@ -205,6 +205,13 @@ public class MainRightFragment2 extends Fragment {
                             carInfo.put("totalMile", totalMile);
                             App.getInstance().setPreferences("carInfo", carInfo.toJSONString());
                             LogUtil.d(TAG, "总里程:" + totalMile);
+                        }else{
+                            activity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    rightFragment2Speed.setText(String.valueOf((int) newSpeed));
+                                }
+                            });
                         }
                     }
                 };

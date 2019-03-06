@@ -406,7 +406,7 @@ public class MainActivity extends BaseActivity {
                     msg = "自动驾驶故障";
                     currentDriveModel = DRIVE_MODEL_AUTO;//当前为自动驾驶
                 } else if (data == 2) {//远程驾驶正常
-                   msg = "远程驾驶正常";
+                    msg = "远程驾驶正常";
                     currentDriveModel = DRIVE_MODEL_REMOTE;//当前为远程驾驶
                 } else if (data == 3) {//远程驾驶故障
                     msg = "远程驾驶故障";
