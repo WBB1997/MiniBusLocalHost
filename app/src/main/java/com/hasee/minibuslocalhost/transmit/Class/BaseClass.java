@@ -21,8 +21,8 @@ public abstract class BaseClass {
         int state = getState();
         byte[] Local_bytes = getBytes();
 
-        LogUtil.d(TAG, "bytes:" + bytesToHex(bytes));
-        LogUtil.d(TAG, "this.bytes:" + bytesToHex(Local_bytes));
+//        LogUtil.d(TAG, "bytes:" + bytesToHex(bytes));
+//        LogUtil.d(TAG, "this.bytes:" + bytesToHex(Local_bytes));
         // 如果相同则直接返回
         if(Arrays.equals(bytes,Local_bytes)) {
             LogUtil.d(TAG, "数据相同");
@@ -59,7 +59,7 @@ public abstract class BaseClass {
         }
         flag = false;
         System.arraycopy(bytes, 0, getBytes(), 0, bytes.length);
-        LogUtil.d(TAG, "this.bytes:" + bytesToHex(getBytes()));
+//        LogUtil.d(TAG, "this.bytes:" + bytesToHex(getBytes()));
     }
     public abstract Object getValue(Map.Entry<Integer, MyPair<Integer>> entry, byte[] bytes);
     public abstract HashMap<Integer, MyPair<Integer>> getFields();
