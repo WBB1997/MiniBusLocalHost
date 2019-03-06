@@ -102,7 +102,7 @@ public class Transmit {
                         Log.d(TAG, "run: "+ByteUtil.bytesToHex(tmp.first));
                         UDP_send(tmp.first);
                     }
-                    Thread.sleep(400);
+                    Thread.sleep(500);
                     Log.d(TAG, "run: "+ByteUtil.bytesToHex(bytes));
                     UDP_send(bytes);
                 }
