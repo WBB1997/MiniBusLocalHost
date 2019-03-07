@@ -22,7 +22,6 @@ import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_TotalOd
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_air_grade;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_air_model;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_eBooster_Warning;
-import static com.hasee.minibuslocalhost.util.ByteUtil.bytesToHex;
 import static com.hasee.minibuslocalhost.util.ByteUtil.setBits;
 
 public class HMI extends BaseClass {
@@ -148,7 +147,6 @@ public class HMI extends BaseClass {
                 LogUtil.d(TAG, "消息转换错误");
                 break;
         }
-        LogUtil.d(TAG, bytesToHex(bytes));
     }
 
     @Override
