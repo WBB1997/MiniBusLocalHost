@@ -2,6 +2,7 @@ package com.hasee.minibuslocalhost.service;
 
 import android.app.Service;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.Environment;
@@ -18,26 +19,28 @@ public class PlayerService extends Service {
     private static final String TAG = "PlayerService";
     private MusicBinder binder;
     private MediaPlayer mediaPlayer;
+    private AudioManager audioManager;
     private int index;//标记当前歌曲的位置
     private File[] filesPath = new File[]{
-            new File(Environment.getExternalStorageDirectory(),"1.mp3"),//音乐1
-            new File(Environment.getExternalStorageDirectory(),"2.mp3"),//音乐2
-            new File(Environment.getExternalStorageDirectory(),"3.mp3")//音乐3
+            new File(Environment.getExternalStorageDirectory(), "1.mp3"),//音乐1
+            new File(Environment.getExternalStorageDirectory(), "2.mp3"),//音乐2
+            new File(Environment.getExternalStorageDirectory(), "3.mp3")//音乐3
     };//文件路径
 
-    public PlayerService(){
+    public PlayerService() {
+//        audioManager = (AudioManager) this.getSystemService(AUDIO_SERVICE);
         index = 0;
         binder = new MusicBinder();
         mediaPlayer = new MediaPlayer();
         initMediaPlayerFile(index);
-        LogUtil.d(TAG,"PlayerService初始化");
+        LogUtil.d(TAG, "PlayerService初始化");
     }
 
 
     @Override
     public void onCreate() {
         super.onCreate();
-        LogUtil.d(TAG,"onCreate");
+        LogUtil.d(TAG, "onCreate");
         mediaPlayer.setOnCompletionListener(onCompletionListener);
         mediaPlayer.setOnErrorListener(onErrorListener);
         binder.playMusic();
@@ -77,6 +80,11 @@ public class PlayerService extends Service {
         public void playMusic() {
             if (!mediaPlayer.isPlaying()) {
                 mediaPlayer.start();
+//                int res = audioManager.requestAudioFocus(afChangerListener,
+//                        AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+//                if (res == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+//                    mediaPlayer.start();
+//                }
             }
         }
 
@@ -111,6 +119,7 @@ public class PlayerService extends Service {
                 mediaPlayer.stop();
                 mediaPlayer.release();
             }
+//            audioManager.abandonAudioFocus(afChangerListener);
         }
 
         /**
@@ -149,8 +158,49 @@ public class PlayerService extends Service {
             mediaPlayer.setDataSource(filesPath[index].getPath());
             mediaPlayer.prepare();
         } catch (Exception e) {
-            LogUtil.d(TAG,"设置资源，准备阶段出错");
+            LogUtil.d(TAG, "设置资源，准备阶段出错");
             e.printStackTrace();
         }
     }
+
+    /**
+     *
+     */
+    private AudioManager.OnAudioFocusChangeListener afChangerListener = new AudioManager.OnAudioFocusChangeListener() {
+        @Override
+        public void onAudioFocusChange(int focusChange) {
+            if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
+                if (mediaPlayer.isPlaying()) {
+                    mediaPlayer.pause();
+                }
+
+            } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
+                if (mediaPlayer == null) {
+                    initMediaPlayerFile(index);
+                } else if (!mediaPlayer.isPlaying()) {
+
+                    mediaPlayer.start();
+
+                }
+                // Resume playback
+            } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
+                if (mediaPlayer.isPlaying()) {
+
+                    mediaPlayer.stop();
+                }
+//                audioManager.abandonAudioFocus(afChangerListener);
+                // Stop playback
+            } else if (focusChange == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+                if (mediaPlayer.isPlaying()) {
+                    mediaPlayer.stop();
+                }
+
+            } else if (focusChange == AudioManager.AUDIOFOCUS_REQUEST_FAILED) {
+                if (mediaPlayer.isPlaying()) {
+                    mediaPlayer.stop();
+                }
+
+            }
+        }
+    };
 }

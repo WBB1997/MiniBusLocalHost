@@ -3,7 +3,6 @@ package com.hasee.minibuslocalhost.transmit.Class;
 import com.alibaba.fastjson.JSONObject;
 import com.hasee.minibuslocalhost.transmit.Transmit;
 import com.hasee.minibuslocalhost.util.ByteUtil;
-import com.hasee.minibuslocalhost.util.LogUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +13,9 @@ public abstract class BaseClass {
     private boolean flag = true;
     public abstract byte[] getBytes();
     public abstract String getTAG();
+    public void setFlag(boolean flag){
+        this.flag = flag;
+    }
     public void setBytes(byte[] bytes){
         String TAG = getTAG();
         int state = getState();

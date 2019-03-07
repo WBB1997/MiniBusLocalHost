@@ -189,7 +189,7 @@ public class MainRightFragment2 extends Fragment {
                     @Override
                     public void run() {
                         //获取车辆的速度和总里程
-                        Log.d(TAG, "run: "+newSpeed);
+//                        Log.d(TAG, "run: "+newSpeed);
                         if(newSpeed != 0){
                             totalMile += calculateTotalMile(newSpeed);
                             lastSpeed = newSpeed;

@@ -64,6 +64,10 @@ public class Transmit {
         init();
     }
 
+    public void setADAndRCUFlag(boolean flag){
+        ((BaseClass) FLAG_AND_CLASS.get("00000219")).setFlag(flag);
+    }
+
     // 主机发送数据给CAN总线
     public void hostToCAN(String clazz, int field, Object o) {
         BaseClass baseClass = (BaseClass) NAME_AND_CLASS.get(clazz);
@@ -272,7 +276,7 @@ public class Transmit {
         String check;
         key = bytesToHex(subBytes(receMsgs, 10, 4));
         check = bytesToHex(subBytes(receMsgs, 0, 2));
-        if(key.equals("00000219" )|| key.equals("000004c0")){
+//        if(key.equals("00000219" )|| key.equals("000004c0")){
 //            new Thread(new Runnable() {
 //                @Override
 //                public void run() {
@@ -283,7 +287,7 @@ public class Transmit {
 //                }
 //            }).start();
             LogUtil.d(TAG, "接收到的bytes:" + bytesToHex(receMsgs));
-        }
+//        }
 //        LogUtil.d(TAG, "key:" + key);
 //        LogUtil.d(TAG, "check:" + check);
         if(!check.equals("aabb")){

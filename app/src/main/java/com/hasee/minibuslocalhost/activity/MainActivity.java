@@ -669,6 +669,7 @@ public class MainActivity extends BaseActivity {
                             String clazz = "HMI";
                             int field = HMI_Dig_Ord_Driver_model;
                             autoDriveModel = true;//驾驶模式打开
+                            Transmit.getInstance().setADAndRCUFlag(true);
 //                            Log.d(TAG, "onActivityResult: "+clickDriveModel);
                             sendToCAN(clazz, field, clickDriveModel);//发送数据
 //                            LogUtil.d(TAG,"登陆成功");
