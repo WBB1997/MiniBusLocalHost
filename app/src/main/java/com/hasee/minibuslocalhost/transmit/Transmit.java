@@ -21,6 +21,7 @@ import com.hasee.minibuslocalhost.transmit.Class.HAD6;
 import com.hasee.minibuslocalhost.transmit.Class.HMI;
 import com.hasee.minibuslocalhost.transmit.Class.MCU1;
 import com.hasee.minibuslocalhost.transmit.Class.OBU2;
+import com.hasee.minibuslocalhost.transmit.Class.OBU5;
 import com.hasee.minibuslocalhost.transmit.Class.PCGL1;
 import com.hasee.minibuslocalhost.transmit.Class.PCGR1;
 import com.hasee.minibuslocalhost.transmit.Class.RCU_FeedBack;
@@ -63,7 +64,6 @@ public class Transmit {
         init();
     }
 
-
     // 主机发送数据给CAN总线
     public void hostToCAN(String clazz, int field, Object o) {
         BaseClass baseClass = (BaseClass) NAME_AND_CLASS.get(clazz);
@@ -79,7 +79,7 @@ public class Transmit {
 //            ((HMI) baseClass).changeStatus(field, 0);
 //        byte[] bytes_2 = baseClass.getBytes();
         byte[] bytes = baseClass.getBytes();
-        LogUtil.d(TAG, "主机向车辆CAN总线发的信息:" + bytesToHex(bytes));
+//        LogUtil.d(TAG, "主机向车辆CAN总线发的信息:" + bytesToHex(bytes));
         synchronized (this) {
             try {
 //            sendQueue.put(new Pair<>(new Pair<>(bytes_1, bytes_2), (long) 0));
@@ -100,12 +100,23 @@ public class Transmit {
                 while (threadFlag) {
 //                    Pair<Pair<byte[], byte[]>, Long> tmp = sendQueue.take();
                     Pair<byte[], Long> tmp = sendQueue.take();
-                    Log.d(TAG, "主机向车辆CAN总线发的信息:"+ByteUtil.bytesToHex(tmp.first));
-                    for (int i = 0; i < 5; i++)
+                    for (int i = 0; i < 5; i++){
+                        final byte[] finaltmp = tmp.first;
                         UDP_send(tmp.first);
+//                        new Thread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                JSONObject object = new JSONObject();
+//                                object.put("id", 1);
+//                                object.put("data", "主机向车辆CAN总线发的信息:"+ByteUtil.bytesToHex(finaltmp));
+//                                callback(object, 10);
+//                            }
+//                        }).start();
+                        Log.d(TAG, i+":"+"主机向车辆CAN总线发的信息:"+ByteUtil.bytesToHex(tmp.first));
+                    }
                     Thread.sleep(400);
-                    Log.d(TAG, "主机向车辆CAN总线发的无意义信息:"+ByteUtil.bytesToHex(bytes));
                     UDP_send(bytes);
+                    Log.d(TAG, "主机向车辆CAN总线发的无意义信息:"+ByteUtil.bytesToHex(bytes));
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -124,7 +135,7 @@ public class Transmit {
             HMI_Class.changeStatus(field, o);
         }
         byte[] bytes = HMI_Class.getBytes();
-//        LogUtil.d(TAG, "车辆初始化：" + bytesToHex(bytes));
+        LogUtil.d(TAG, "车辆初始化：" + bytesToHex(bytes));
         UDP_send(bytes);
     }
 
@@ -231,7 +242,7 @@ public class Transmit {
             new Pair<>("00000383", new HMI()),
 //            new Pair<>("00000219", new RCU1()),
             new Pair<>("00000234", new OBU2()),
-//            new Pair<>("00000235", new OBU5()),
+            new Pair<>("00000235", new OBU5()),
             new Pair<>("00000236", new HAD5()),
             new Pair<>("00000237", new HAD6()),
             new Pair<>("00000260", new BMS1()),
@@ -256,13 +267,23 @@ public class Transmit {
     }
 
     // 处理收到的byte数组
-    private void dispose(byte[] receMsgs) {
+    private void dispose(final byte[] receMsgs) {
         String key;
         String check;
         key = bytesToHex(subBytes(receMsgs, 10, 4));
         check = bytesToHex(subBytes(receMsgs, 0, 2));
-        if(key.equals("00000219" )|| key.equals("000004c0"))
+        if(key.equals("00000219" )|| key.equals("000004c0")){
+//            new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    JSONObject object = new JSONObject();
+//                    object.put("id", 1);
+//                    object.put("data", "接收到的bytes:" + bytesToHex(receMsgs));
+//                    callback(object, 10);
+//                }
+//            }).start();
             LogUtil.d(TAG, "接收到的bytes:" + bytesToHex(receMsgs));
+        }
 //        LogUtil.d(TAG, "key:" + key);
 //        LogUtil.d(TAG, "check:" + check);
         if(!check.equals("aabb")){

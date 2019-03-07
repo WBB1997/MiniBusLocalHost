@@ -29,7 +29,7 @@ public class LogUtil {
 
     public static int level = VERBOSE;//预设等级
 
-    public static void v(String tag,String msg){
+    public static void v(String tag, String msg){
         if(level <= VERBOSE){
             Log.v(tag,msg);
         }

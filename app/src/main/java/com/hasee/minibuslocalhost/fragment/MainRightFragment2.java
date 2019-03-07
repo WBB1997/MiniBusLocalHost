@@ -189,13 +189,14 @@ public class MainRightFragment2 extends Fragment {
                     @Override
                     public void run() {
                         //获取车辆的速度和总里程
+                        Log.d(TAG, "run: "+newSpeed);
                         if(newSpeed != 0){
                             totalMile += calculateTotalMile(newSpeed);
                             lastSpeed = newSpeed;
                             activity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    rightFragment2Speed.setText(String.valueOf((int) newSpeed));
+                                    rightFragment2Speed.setText(String.format("%.1f",newSpeed));
                                     rightFragment2Zonlic.setText(String.format("%.2f",totalMile));
                                     rightFragment2Pingjunss.setText(String.valueOf((int)calculateAvgSpeed(newSpeed)));
                                 }
