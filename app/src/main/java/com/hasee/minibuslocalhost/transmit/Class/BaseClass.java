@@ -5,11 +5,9 @@ import com.hasee.minibuslocalhost.transmit.Transmit;
 import com.hasee.minibuslocalhost.util.ByteUtil;
 import com.hasee.minibuslocalhost.util.LogUtil;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.hasee.minibuslocalhost.util.ByteUtil.bytesToHex;
 import static com.hasee.minibuslocalhost.util.ByteUtil.countBits;
 
 public abstract class BaseClass {
@@ -24,10 +22,10 @@ public abstract class BaseClass {
 //        LogUtil.d(TAG, "bytes:" + bytesToHex(bytes));
 //        LogUtil.d(TAG, "this.bytes:" + bytesToHex(Local_bytes));
         // 如果相同则直接返回
-        if(Arrays.equals(bytes,Local_bytes)) {
-            LogUtil.d(TAG, "数据相同");
-            return;
-        }
+//        if(Arrays.equals(bytes,Local_bytes)) {
+//            LogUtil.d(TAG, "数据相同");
+//            return;
+//        }
         int index;
         int length;
         for (Map.Entry<Integer, MyPair<Integer>> entry : getFields().entrySet()) {
@@ -54,7 +52,7 @@ public abstract class BaseClass {
                 // 发回主函数
                 Transmit.getInstance().callback(jsonObject, target);
                 // debug
-                LogUtil.d(TAG, jsonObject.toJSONString());
+//                    LogUtil.d(TAG, jsonObject.toJSONString());
             }
         }
         flag = false;

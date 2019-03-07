@@ -46,7 +46,7 @@ public class HMI extends BaseClass {
     public static final int AIR_MODEL_COOL = 0; // 制冷
     public static final int AIR_MODEL_HEAT = 1; // 制热
     public static final int AIR_MODEL_DEMIST = 2; // 除雾
-    public static final int AIR_MODEL_AWAIT = 3; // 待定
+    public static final int AIR_MODEL_AWAIT = 2; // 待定
     public static final int AIR_GRADE_OFF = 0; // 关闭
     public static final int AIR_GRADE_FIRST_GEAR = 1; // 1挡
     public static final int AIR_GRADE_SECOND_GEAR = 2; // 2挡
