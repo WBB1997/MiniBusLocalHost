@@ -5,11 +5,9 @@ import com.hasee.minibuslocalhost.transmit.Transmit;
 import com.hasee.minibuslocalhost.util.ByteUtil;
 import com.hasee.minibuslocalhost.util.LogUtil;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.hasee.minibuslocalhost.util.ByteUtil.bytesToHex;
 import static com.hasee.minibuslocalhost.util.ByteUtil.countBits;
 
 public abstract class BaseClass {
@@ -54,7 +52,7 @@ public abstract class BaseClass {
                 // 发回主函数
                 Transmit.getInstance().callback(jsonObject, target);
                 // debug
-                LogUtil.d(TAG, jsonObject.toJSONString());
+//                    LogUtil.d(TAG, jsonObject.toJSONString());
             }
         }
         flag = false;

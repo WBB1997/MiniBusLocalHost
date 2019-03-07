@@ -80,11 +80,13 @@ public class Transmit {
 //        byte[] bytes_2 = baseClass.getBytes();
         byte[] bytes = baseClass.getBytes();
         LogUtil.d(TAG, "主机向车辆CAN总线发的信息:" + bytesToHex(bytes));
-        try {
+        synchronized (this) {
+            try {
 //            sendQueue.put(new Pair<>(new Pair<>(bytes_1, bytes_2), (long) 0));
-            sendQueue.put(new Pair<>(bytes, (long) 0));
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+                sendQueue.put(new Pair<>(bytes, (long) 0));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
