@@ -1,5 +1,6 @@
 package com.hasee.minibuslocalhost.transmit;
 
+import android.content.Context;
 import android.os.Message;
 import android.util.Log;
 import android.util.Pair;
@@ -31,6 +32,7 @@ import com.hasee.minibuslocalhost.transmit.Class.VCU4;
 import com.hasee.minibuslocalhost.util.ByteUtil;
 import com.hasee.minibuslocalhost.util.LogUtil;
 import com.hasee.minibuslocalhost.util.MyHandler;
+import com.hasee.minibuslocalhost.util.NetWorkUtil;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -52,8 +54,9 @@ public class Transmit {
     private final static String IP = "192.168.1.60"; // ip地址
     private final static Transmit instance = new Transmit();
     private MyHandler handler;
+    private Context mContext;
 //    private LinkedBlockingQueue<Pair<Pair<byte[],byte[]>, Long>> sendQueue = new LinkedBlockingQueue<>();
-    private LinkedBlockingQueue<Pair<byte[], Long>> sendQueue = new LinkedBlockingQueue<>();
+    private LinkedBlockingQueue<Pair<byte[], Integer>> sendQueue = new LinkedBlockingQueue<>();
     private boolean threadFlag = true; // 接收线程是否关闭
 
     public static void main(String[] args) {
@@ -62,6 +65,10 @@ public class Transmit {
 
     private Transmit() {
         init();
+    }
+
+    public void setADAndRCUFlag(boolean flag){
+        ((BaseClass) FLAG_AND_CLASS.get("00000219")).setFlag(flag);
     }
 
     // 主机发送数据给CAN总线
@@ -83,7 +90,8 @@ public class Transmit {
         synchronized (this) {
             try {
 //            sendQueue.put(new Pair<>(new Pair<>(bytes_1, bytes_2), (long) 0));
-                sendQueue.put(new Pair<>(bytes, (long) 0));
+                sendQueue.put(new Pair<>(bytes, field));
+//                LogUtil.d(TAG,String.valueOf(field));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -96,12 +104,13 @@ public class Transmit {
         @Override
         public void run() {
             try {
-                byte[] bytes = new byte[]{(byte) 0xFF, (byte) 0xAA, 0x03, (byte) 0x83, 0x00, (byte) 0x80, 0x1A, 0x00, 0x20, 0x00, 0x00, 0x00, 0x02, 0x02};
+//                byte[] bytes = new byte[]{(byte) 0xFF, (byte) 0xAA, 0x03, (byte) 0x83, 0x00, (byte) 0x80, 0x1A, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x02};
+//                byte[] bytes;
                 while (threadFlag) {
 //                    Pair<Pair<byte[], byte[]>, Long> tmp = sendQueue.take();
-                    Pair<byte[], Long> tmp = sendQueue.take();
+                    Pair<byte[], Integer> tmp = sendQueue.take();
                     for (int i = 0; i < 5; i++){
-                        final byte[] finaltmp = tmp.first;
+//                        final byte[] finaltmp = tmp.first;
                         UDP_send(tmp.first);
 //                        new Thread(new Runnable() {
 //                            @Override
@@ -114,7 +123,8 @@ public class Transmit {
 //                        }).start();
                         Log.d(TAG, i+":"+"主机向车辆CAN总线发的信息:"+ByteUtil.bytesToHex(tmp.first));
                     }
-                    Thread.sleep(400);
+                    Thread.sleep(500);
+                    byte[] bytes = ((HMI) NAME_AND_CLASS.get("HMI")).changeNoMain(tmp.second.intValue());
                     UDP_send(bytes);
                     Log.d(TAG, "主机向车辆CAN总线发的无意义信息:"+ByteUtil.bytesToHex(bytes));
                 }
@@ -139,7 +149,8 @@ public class Transmit {
         UDP_send(bytes);
     }
 
-    public void setHandler(MyHandler handler) {
+    public void setHandler(Context mContext,MyHandler handler) {
+        this.mContext = mContext;
         this.handler = handler;
         new Thread(new StartSend()).start(); // 开启发送线程
         UDP_receive(); // 开启接收线程
@@ -215,7 +226,9 @@ public class Transmit {
         try {
             datagramSocket = new DatagramSocket();
             datagramPacket = new DatagramPacket(sendMsgs, sendMsgs.length, InetAddress.getByName(IP), PORT);
-            datagramSocket.send(datagramPacket);
+            if(NetWorkUtil.getInstance(mContext).isAvailable()){
+                datagramSocket.send(datagramPacket);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -272,7 +285,7 @@ public class Transmit {
         String check;
         key = bytesToHex(subBytes(receMsgs, 10, 4));
         check = bytesToHex(subBytes(receMsgs, 0, 2));
-        if(key.equals("00000219" )|| key.equals("000004c0")){
+//        if(key.equals("00000219" )|| key.equals("000004c0")){
 //            new Thread(new Runnable() {
 //                @Override
 //                public void run() {
@@ -283,7 +296,7 @@ public class Transmit {
 //                }
 //            }).start();
             LogUtil.d(TAG, "接收到的bytes:" + bytesToHex(receMsgs));
-        }
+//        }
 //        LogUtil.d(TAG, "key:" + key);
 //        LogUtil.d(TAG, "check:" + check);
         if(!check.equals("aabb")){

@@ -85,12 +85,13 @@ public class MainTopFragment extends Fragment {
         StringBuffer stringBuffer = new StringBuffer();
         int hour = object.getIntValue("hour");
         int minute = object.getIntValue("minute");
-        int second = object.getIntValue("second");
-        stringBuffer.append(hour);
+        hour %= 24;
+        minute %= 60;
+        String finalHour = String.format("%02d",hour);
+        String finalMinute = String.format("%02d",minute);
+        stringBuffer.append(finalHour);
         stringBuffer.append(":");
-        stringBuffer.append(minute);
-        stringBuffer.append(":");
-        stringBuffer.append(second);
+        stringBuffer.append(finalMinute);
         return stringBuffer.toString();
     }
 }

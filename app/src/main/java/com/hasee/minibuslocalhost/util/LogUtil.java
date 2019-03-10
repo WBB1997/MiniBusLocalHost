@@ -38,11 +38,11 @@ public class LogUtil {
     public static void d(String tag,String msg){
         if(level <= DEBUG){
             Log.d(tag, msg);
-            try {
-                dumpExceptionToSDCard(null,tag,msg);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                dumpExceptionToSDCard(null,tag,msg);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
         }
     }
 
@@ -87,7 +87,7 @@ public class LogUtil {
         long current = System.currentTimeMillis();
         String time = new SimpleDateFormat("yyyy-MM-dd").format(new Date(current));
         File file = new File(PATH + FILE_NAME + time + FILE_NAME_SUFFIX);
-        if(!file.exists()){
+        if(!file.exists()){//文件不存在
             file.createNewFile();
         }
         try {

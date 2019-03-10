@@ -1,12 +1,9 @@
 package com.hasee.minibuslocalhost.util;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.media.MediaPlayer;
-import android.os.Build;
-import android.os.Environment;
-import android.speech.tts.TextToSpeech;
 import android.text.TextUtils;
-import android.util.Log;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -14,30 +11,28 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
+import java.util.List;
 import java.util.Map;
 
 public class StationPlayer {
     private static final String TAG = "StationPlayer";
-    private final int PLAY_PATH = 1;//播放站点音乐
-    private final int PLAY_CHS = 2;//播放TTS站点语音
-    private final int  ARRIVED= 1;//已经到达
-    private final int ARRIVING = 2;//即将到达
+    private final int ARRIVED= 1;//到站和下车
+    private final int ARRIVING = 2;//即将到站
+    private final int ARRIVING_TERMINAL_STATION = 3;//即将到达终点站
+    private final int ARRIVED_TERMINAL_STATION = 4;//到达终点站b
+    private String basePath = "sound/";
     private Context mContext;
     private static StationPlayer instance = null;
     private MediaPlayer mediaPlayer = null;
-    private TextToSpeech tts = null;
+    private AssetManager assetManager = null;
     private int currentRouteNum = 0;//默认路线号
-    private int playType = 1;//播放类型，默认为根据文件名播放音乐
-    private int arriveFlag = 1;//到达方式
     private static Map<Integer, Map<Integer,String>> routeMap = new HashMap<>();
 
-    private StationPlayer(Context mContext, int playType){
+    private StationPlayer(Context mContext){
         this.mContext = mContext;
-        this.playType = playType;
         mediaPlayer = new MediaPlayer();
-        tts = new TextToSpeech(mContext,onInitListener);
         try {
             InputStream in = mContext.getAssets().open("RouteInfo.xml");
             routeMap = parseXMLWithPull(in);
@@ -50,68 +45,52 @@ public class StationPlayer {
         this.currentRouteNum = routeNum;
     }
 
-    public void setArriveFlag(int arriveFlag) {
-        this.arriveFlag = arriveFlag;
-    }
-
-    public static StationPlayer getInstance(Context mContext, int playType){
+    public static StationPlayer getInstance(Context mContext){
         if(instance == null){
-            instance = new StationPlayer(mContext,playType);
+            instance = new StationPlayer(mContext);
         }
         return instance;
     }
 
     /**
      * 播放音乐
+     * @param playType
      * @param stationNum
      */
-    public void playMusic(int stationNum){
-        if(playType == PLAY_CHS){
-            playMusicByChs(stationNum);
-        }else if(playType == PLAY_PATH){
-            playMusicByPath(stationNum);
-        }
-    }
-
-    /**
-     * 根据站点号播放站点中文信息
-     * @param stationNum
-     */
-    private void playMusicByChs(int stationNum){
-        String chsName = getStaMusicInfo(stationNum);
-        if(!TextUtils.isEmpty(chsName.trim())){
-            if(tts.isSpeaking()){
-                tts.stop();
-            }
-            //设置音调，值越大声音越尖（女生），值越小则变成男声,1.0是常规
-            tts.setPitch(1.0f);
-            //设置语速
-            tts.setSpeechRate(1.0f);
-            //设置语言
-            tts.setLanguage(Locale.CHINESE);
-            //播放语音
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                String speekText = "";
-                if(arriveFlag == ARRIVED){
-                    speekText = chsName+"到了，下车的乘客请从后门下车";
-                }else if(arriveFlag == ARRIVING){
-                    speekText = chsName+"即将到达，下车的乘客请做好准备";
-                }
-                tts.speak(speekText, TextToSpeech.QUEUE_ADD, null,null);
-            }
-        }
-    }
-
-    /**
-     * 根据站点号播放站点音乐
-     * @param stationNum 站点号
-     */
-    private void playMusicByPath(int stationNum){
-        String path = getStaMusicInfo(stationNum);
+    public void playMusicByPath(int playType,int stationNum){
+        String path = getStaMusicInfo(stationNum);//当前站点语音路径
         if(!TextUtils.isEmpty(path)){
-            try {
-                File file = new File(Environment.getExternalStorageDirectory(),"/RouteMusic/"+path);
-//            Log.d(TAG, "playMusicByPath: "+file.getPath());
+            List<File> files = new ArrayList<>();
+            if(playType == ARRIVED){//到站和下车{XXX 到了，下车请注意}
+                files.add(new File(basePath +path));
+                files.add(new File(basePath +"到了.wav"));
+                files.add(new File(basePath +"下车请注意.wav"));
+            }else if(playType == ARRIVING){//即将到站{前方即将到站 XXX，请做好下车准备}
+                files.add(new File(basePath +"前方即将到站.wav"));
+                files.add(new File(basePath +path));
+                files.add(new File(basePath +"请做好下车准备.wav"));
+            }else if(playType == ARRIVED_TERMINAL_STATION){//到达终点站{终点站 XXX 到了，开门请当心，下车请注意}
+                files.add(new File(basePath +"终点站.wav"));
+                files.add(new File(basePath +path));
+                files.add(new File(basePath +"开门请当心下车请注意.wav"));
+            }else if(playType == ARRIVING_TERMINAL_STATION){//即将到达终点站{前方即将到达终点站 XXX， 请做好下车准备}
+                files.add(new File(basePath +"前方即将到达终点站.wav"));
+                files.add(new File(basePath +path));
+                files.add(new File(basePath +"请做好下车准备.wav"));
+            }
+            playMusic(files);
+        }
+    }
+
+    /**
+     *
+     * 播放语音
+     * @param files
+     */
+    private void playMusic(List<File> files){
+        try {
+            for (int i = 0; i < files.size(); i++) {
+                File file = files.get(i);
                 if(mediaPlayer.isPlaying()){
                     mediaPlayer.reset();
                 }
@@ -120,11 +99,9 @@ public class StationPlayer {
                 if(!mediaPlayer.isPlaying()){
                     mediaPlayer.start();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
             }
-        }else{
-
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -132,27 +109,11 @@ public class StationPlayer {
      * 关闭资源
      */
     public void destory(){
-        if(tts != null){
-            tts.stop();
-            tts.shutdown();
-        }
         if(mediaPlayer != null){
             mediaPlayer.stop();
             mediaPlayer.release();
         }
     }
-
-    /**
-     * TTS监听器
-     */
-    private TextToSpeech.OnInitListener onInitListener = new TextToSpeech.OnInitListener() {
-        @Override
-        public void onInit(int status) {
-            if(status == TextToSpeech.SUCCESS){
-
-            }
-        }
-    };
 
     /**
      * 返回相应站点的信息
@@ -170,7 +131,7 @@ public class StationPlayer {
                 }
             }
         }
-        Log.d(TAG, "getStaMusicInfo: "+info);
+//        Log.d(TAG, "getStaMusicInfo: "+info);
         return info;
     }
 
@@ -215,17 +176,12 @@ public class StationPlayer {
                         }else if("item".equals(nodeName)){//站点
                             id++;
                         }else if("chs".equals(nodeName)){//站点中文名
-                            if(playType == PLAY_CHS){
-                                chsName = xmlPullParser.nextText();
-                                route.put(id,chsName);
-                            }
+
                         }else if("en".equals(nodeName)){//站点英文名
 
                         }else if("path".equals(nodeName)){//站点音乐路径
-                            if(playType == PLAY_PATH){
                                 path = xmlPullParser.nextText();
                                 route.put(id,path);
-                            }
                         }
                         break;
                     }
