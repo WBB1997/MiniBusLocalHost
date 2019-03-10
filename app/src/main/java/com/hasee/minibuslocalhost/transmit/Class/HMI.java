@@ -73,7 +73,8 @@ public class HMI extends BaseClass {
         this.NAME_AND_CLASS = NAME_AND_CLASS;
     }
 
-    private byte[] bytes = {(byte) 0xFF, (byte) 0xAA, 0x03, (byte) 0x83, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x02};
+    //    private byte[] bytes = {(byte) 0xFF, (byte) 0xAA, 0x03, (byte) 0x83, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x02};
+    private byte[] bytes = {(byte) 0xFF, (byte) 0xAA, 0x03, (byte) 0x83, 0x00, (byte) 0x80, 0x1A, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x02};
 
     public void changeStatus(int command, Object status) {
         switch (command) {
@@ -131,7 +132,7 @@ public class HMI extends BaseClass {
         }
     }
 
-    public byte[] changeNoMain(int command){
+    public byte[] changeNoMain(int command) {
         switch (command) {
             case HMI_Dig_Ord_HighBeam:
                 setBits(bytes, POINTLESS, offset, 0, 2, ByteUtil.Motorola);

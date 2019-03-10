@@ -12,7 +12,6 @@ import static com.hasee.minibuslocalhost.util.ByteUtil.countBits;
 
 public class AD1AndRCU1 extends BaseClass {
     private static final String TAG = "AD1AndRCU1";
-    private boolean flag = true;
     private HashMap<Integer, MyPair<Integer>> fields = new HashMap<Integer, MyPair<Integer>>() {{
         put(56, new MyPair<>(2, IntegerCommand.SystemStatus, MainActivity.SEND_TO_LOCALHOST)); // EPS警告灯
 //        put(56, new MyPair<>(2, IntegerCommand.HAD_Dig_Ord_SystemStatus, MainActivity.SEND_TO_LOCALHOST)); // EPS警告灯

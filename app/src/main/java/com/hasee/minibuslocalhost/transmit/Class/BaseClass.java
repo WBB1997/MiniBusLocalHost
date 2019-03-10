@@ -3,6 +3,7 @@ package com.hasee.minibuslocalhost.transmit.Class;
 import com.alibaba.fastjson.JSONObject;
 import com.hasee.minibuslocalhost.transmit.Transmit;
 import com.hasee.minibuslocalhost.util.ByteUtil;
+import com.hasee.minibuslocalhost.util.LogUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,6 +31,7 @@ public abstract class BaseClass {
 //        }
         int index;
         int length;
+//        LogUtil.d(TAG,ByteUtil.bytesToHex(bytes));
         for (Map.Entry<Integer, MyPair<Integer>> entry : getFields().entrySet()) {
             index = entry.getKey();
             length = entry.getValue().getLength();
