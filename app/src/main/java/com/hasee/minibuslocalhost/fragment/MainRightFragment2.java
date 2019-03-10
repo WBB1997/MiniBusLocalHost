@@ -100,7 +100,7 @@ public class MainRightFragment2 extends Fragment {
     public void refresh(JSONObject object) {
         int id = object.getIntValue("id");
         if (id == Wheel_Speed_ABS) {//车速
-            newSpeed = (int) object.getDoubleValue("data");//新速度
+            newSpeed = object.getDoubleValue("data");//新速度
         }
         if (id == BCM_InsideTemp) {//车内温度
 
@@ -110,7 +110,7 @@ public class MainRightFragment2 extends Fragment {
         }
         if (id == can_RemainKm) {//剩余里程数
             int data = (int) object.getDoubleValue("data");
-            if(totalRemainKmFlag){
+            if (totalRemainKmFlag) {
                 totalRemainKm = data;
                 totalRemainKmFlag = false;
             }
@@ -150,10 +150,11 @@ public class MainRightFragment2 extends Fragment {
 
     /**
      * 计算平均速度
+     *
      * @param newSpeed
      * @return
      */
-    private double calculateAvgSpeed(double newSpeed){
+    private double calculateAvgSpeed(double newSpeed) {
         double avgSpeed = (lastSpeed + newSpeed) / 2.0;
         return avgSpeed;
     }
@@ -190,15 +191,15 @@ public class MainRightFragment2 extends Fragment {
                     public void run() {
                         //获取车辆的速度和总里程
 //                        Log.d(TAG, "run: "+newSpeed);
-                        if(newSpeed != 0){
+//                        if (newSpeed != 0) {
                             totalMile += calculateTotalMile(newSpeed);
                             lastSpeed = newSpeed;
                             activity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    rightFragment2Speed.setText(String.format("%.1f",newSpeed));
-                                    rightFragment2Zonlic.setText(String.format("%.2f",totalMile));
-                                    rightFragment2Pingjunss.setText(String.valueOf((int)calculateAvgSpeed(newSpeed)));
+                                    rightFragment2Speed.setText(String.format("%.1f", newSpeed));
+                                    rightFragment2Zonlic.setText(String.format("%.2f", totalMile));
+                                    rightFragment2Pingjunss.setText(String.valueOf((int) calculateAvgSpeed(newSpeed)));
                                 }
                             });
                             activity.sendToCAN("HMI", HMI_Dig_Ord_TotalOdmeter, (int) totalMile);
@@ -206,14 +207,14 @@ public class MainRightFragment2 extends Fragment {
                             carInfo.put("totalMile", totalMile);
                             App.getInstance().setPreferences("carInfo", carInfo.toJSONString());
                             LogUtil.d(TAG, "总里程:" + totalMile);
-                        }else{
-                            activity.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    rightFragment2Speed.setText(String.valueOf((int) newSpeed));
-                                }
-                            });
-                        }
+//                        } else {
+//                            activity.runOnUiThread(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    rightFragment2Speed.setText(String.valueOf((int) newSpeed));
+//                                }
+//                            });
+//                        }
                     }
                 };
             }

@@ -1,5 +1,7 @@
 package com.hasee.minibuslocalhost.util;
 
+import android.content.Context;
+
 import com.alibaba.fastjson.JSONObject;
 
 import java.net.DatagramPacket;
@@ -21,8 +23,10 @@ public class SendToScreenThread extends Thread {
     private byte[] buffer = null;//数据报大小
     private JSONObject object = null;//接收的can总线信息
     private int target = -1;//屏幕编号
+    private Context mContext = null;
 
-    public SendToScreenThread(JSONObject object,int target){
+    public SendToScreenThread(Context mContext,JSONObject object, int target){
+        this.mContext = mContext;
         this.object = object;
         this.target = target;
     }
@@ -38,10 +42,10 @@ public class SendToScreenThread extends Thread {
             dSocket = new DatagramSocket();
             dPacket = new DatagramPacket(buffer,buffer.length,address,port);
             //发送数据
-            dSocket.send(dPacket);
-            LogUtil.d(TAG,"发送成功");
-            //接收数据
-
+            if(NetWorkUtil.getInstance(mContext).isAvailable()){
+                dSocket.send(dPacket);
+                LogUtil.d(TAG,"发送成功");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }finally {

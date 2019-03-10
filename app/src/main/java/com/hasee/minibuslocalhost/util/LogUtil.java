@@ -38,11 +38,11 @@ public class LogUtil {
     public static void d(String tag,String msg){
         if(level <= DEBUG){
             Log.d(tag, msg);
-            try {
-                dumpExceptionToSDCard(null,tag,msg);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                dumpExceptionToSDCard(null,tag,msg);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
         }
     }
 

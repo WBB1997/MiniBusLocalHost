@@ -19,6 +19,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
@@ -227,12 +228,12 @@ public class MainActivity extends BaseActivity {
      */
     private void classInit() {
         //初始化语音到站类
-        stationPlayer = StationPlayer.getInstance(mContext, 2);
+        stationPlayer = StationPlayer.getInstance(mContext);
         //打开CAN监听
         canThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                Transmit.getInstance().setHandler(handler);
+                Transmit.getInstance().setHandler(mContext,handler);
             }
         });
         canThread.start();
@@ -369,17 +370,17 @@ public class MainActivity extends BaseActivity {
             LogUtil.d(TAG, object.toJSONString());
             switch (msg.what) {
                 case SEND_TO_FRONTSCREEN: {//前风挡
-                    new SendToScreenThread(object, SEND_TO_FRONTSCREEN).start();
+                    new SendToScreenThread(mContext,object, SEND_TO_FRONTSCREEN).start();
 //                    LogUtil.d(TAG, "发送信息给前风挡");
                     break;
                 }
                 case SEND_TO_RIGHTSCREEN: {//右车门
-                    new SendToScreenThread(object, SEND_TO_RIGHTSCREEN).start();
+                    new SendToScreenThread(mContext,object, SEND_TO_RIGHTSCREEN).start();
 //                    LogUtil.d(TAG, "发送信息给右车门");
                     break;
                 }
                 case SEND_TO_LEFTSCREEN: {//左车门
-                    new SendToScreenThread(object, SEND_TO_LEFTSCREEN).start();
+                    new SendToScreenThread(mContext,object, SEND_TO_LEFTSCREEN).start();
                     int id = object.getIntValue("id");
                     int data = object.getIntValue("data");
                     if (id == HAD_CurrentDrivingRoadIDNum) {//当前行驶路线ID
@@ -430,9 +431,9 @@ public class MainActivity extends BaseActivity {
                     break;
                 }
                 case SEND_TO_SCREEN: {//发送给前风挡、左右车门
-                    new SendToScreenThread(object, SEND_TO_FRONTSCREEN).start();
-                    new SendToScreenThread(object, SEND_TO_LEFTSCREEN).start();
-                    new SendToScreenThread(object, SEND_TO_RIGHTSCREEN).start();
+                    new SendToScreenThread(mContext,object, SEND_TO_FRONTSCREEN).start();
+                    new SendToScreenThread(mContext,object, SEND_TO_LEFTSCREEN).start();
+                    new SendToScreenThread(mContext,object, SEND_TO_RIGHTSCREEN).start();
 //                    LogUtil.d(TAG, "都发");
                     break;
                 }
@@ -670,7 +671,7 @@ public class MainActivity extends BaseActivity {
                             int field = HMI_Dig_Ord_Driver_model;
                             autoDriveModel = true;//驾驶模式打开
                             Transmit.getInstance().setADAndRCUFlag(true);
-//                            Log.d(TAG, "onActivityResult: "+clickDriveModel);
+                            Log.d(TAG, "onActivityResult: "+clickDriveModel);
                             sendToCAN(clazz, field, clickDriveModel);//发送数据
 //                            LogUtil.d(TAG,"登陆成功");
                         } else {//登陆失败
