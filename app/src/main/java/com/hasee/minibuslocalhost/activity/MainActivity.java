@@ -47,53 +47,8 @@ import java.util.Map;
 
 import android_serialport_api.SreialComm;
 
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_ACBlowingLevel;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_DemisterStatus;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_Flg_Stat_DangerAlarmLamp;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_Flg_Stat_HighBeam;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_Flg_Stat_LeftTurningLamp;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_Flg_Stat_LowBeam;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_Flg_Stat_RearFogLamp;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_Flg_Stat_RightTurningLamp;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.BMS_SOC;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HAD_CurrentDrivingRoadIDNum;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HAD_Dig_Ord_SystemStatus;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HAD_GPSPositioningStatus;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HAD_NextStationIDNumb;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_Alam;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_DangerAlarm;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_Demister_Control;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_DoorLock;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_Driver_model;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_FANPWM_Control;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_HighBeam;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_LeftTurningLamp;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_LowBeam;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_RearFogLamp;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_RightTurningLamp;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_SystemRuningStatus;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_TotalOdmeter;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_air_grade;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_air_model;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_eBooster_Warning;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.OBU_Dig_Ord_SystemStatus;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.OBU_LocalTime;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.RCU_Dig_Ord_SystemStatus;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.SystemStatus;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.Wheel_Speed_ABS;
-import static com.hasee.minibuslocalhost.bean.IntegerCommand.can_num_PackAverageTemp;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_GRADE_OFF;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_GRADE_SIX_GEAR;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_MODEL_AWAIT;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.DRIVE_MODEL_AUTO;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.DRIVE_MODEL_AUTO_AWAIT;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.DRIVE_MODEL_REMOTE;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.Ord_Alam_OFF;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.Ord_Alam_ON;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.Ord_Alam_POINTLESS;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.Ord_SystemRuningStatus_ONINPUT;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.POINTLESS;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.eBooster_Warning_OFF;
+import static com.hasee.minibuslocalhost.bean.IntegerCommand.*;
+import static com.hasee.minibuslocalhost.transmit.Class.HMI.*;
 
 
 public class MainActivity extends BaseActivity {
@@ -129,11 +84,11 @@ public class MainActivity extends BaseActivity {
     private TimerManager timerManager;//定时发送模拟数据（只模拟）
     public static boolean target = false;//默认没跳转
     private int currentDriveModel = DRIVE_MODEL_AUTO_AWAIT;//当前驾驶状态默认为待定
-    private int lastDriveModel = DRIVE_MODEL_AUTO_AWAIT;//上一次驾驶模式
     private int clickDriveModel = DRIVE_MODEL_AUTO_AWAIT;//点击驾驶模式
     private MainRightFragment2.ReadSpeedTimer readSpeedTimer;
     private boolean loginFlag = false;//是否登陆成功
-    private StationPlayer stationPlayer = null;
+    private StationPlayer stationPlayer = null;//播放站点音乐
+    private int lastStationId = 0;//下一站点id
     //
 //    private LogFragment logFragment = null;
 
@@ -245,7 +200,7 @@ public class MainActivity extends BaseActivity {
                 sreialComm.receive();
             }
         });
-        sreialThread.start();
+//        sreialThread.start();
         //模拟定时发送
 //        timerManager = new TimerManager(handler);
 //        timerManager.startTimer();
@@ -272,10 +227,21 @@ public class MainActivity extends BaseActivity {
     /**
      * 播放站点音乐
      */
-    private void playStationMusic(int stationNumber){
-//        pauseMusic();//暂停车载音乐
-//        stationPlayer.playMusic(stationNumber);
-//        playMusic();
+    private void playStationMusic(JSONObject object){
+        int id = object.getIntValue("id");
+        int data = object.getIntValue("data");
+        if (id == HAD_CurrentDrivingRoadIDNum) {//当前行驶路线ID
+            stationPlayer.setRouteNum(data);
+        } else if (id == HAD_NextStationIDNumb) {//下一个站点ID
+            lastStationId = data;
+        } else if(id == HAD_ArrivingSiteRemind){//到站提醒
+            stationPlayer.playMusicByPath(data,lastStationId);
+        } else if(id == HAD_StartingSitedepartureRemind){//起始站出发提醒
+            if(data == 2){//起始站出发提醒
+                lastStationId = 1;//下一站为1
+                stationPlayer.playMusicByPath(3,lastStationId);
+            }
+        }
     }
 
     /**
@@ -381,14 +347,7 @@ public class MainActivity extends BaseActivity {
                 }
                 case SEND_TO_LEFTSCREEN: {//左车门
                     new SendToScreenThread(mContext,object, SEND_TO_LEFTSCREEN).start();
-                    int id = object.getIntValue("id");
-                    int data = object.getIntValue("data");
-                    if (id == HAD_CurrentDrivingRoadIDNum) {//当前行驶路线ID
-//                        stationPlayer.setRouteNum(data);
-                    } else if (id == HAD_NextStationIDNumb) {//下一个站点ID
-//                        stationPlayer.playMusic(data - 1);
-//                        playStationMusic(data -1);
-                    }
+                    playStationMusic(object);
 //                    LogUtil.d(TAG, "发送信息给左车门");
                     break;
                 }
@@ -474,40 +433,6 @@ public class MainActivity extends BaseActivity {
                 }
                 break;
             }
-//            case RCU_Dig_Ord_SystemStatus: {//RCU系统运行状态信号
-//                changeSu = true;
-//                if(data == 0){//自动驾驶正常
-//                    msg = "自动驾驶正常";
-//                    currentDriveModel = DRIVE_MODEL_AUTO;//当前为自动驾驶
-//                }else if (data == 1) {//自动驾驶故障
-//                    msg = "自动驾驶故障";
-//                    currentDriveModel = DRIVE_MODEL_AUTO;//当前为自动驾驶
-//                } else if (data == 2) {//远程驾驶正常
-//                    msg = "远程驾驶正常";
-//                    currentDriveModel = DRIVE_MODEL_REMOTE;//当前为远程驾驶
-//                } else if (data == 3) {//远程驾驶故障
-//                    msg = "远程驾驶故障";
-//                    currentDriveModel = DRIVE_MODEL_REMOTE;//当前为远程驾驶
-//                }
-//                break;
-//            }
-//            case HAD_Dig_Ord_SystemStatus:{//HAD行驶状态
-//                changeSu = true;
-//                if(data == 0){//自动驾驶正常
-//                    msg = "自动驾驶正常";
-//                    currentDriveModel = DRIVE_MODEL_AUTO;//当前为自动驾驶
-//                }else if (data == 1) {//自动驾驶故障
-//                    msg = "自动驾驶故障";
-//                    currentDriveModel = DRIVE_MODEL_AUTO;//当前为自动驾驶
-//                } else if (data == 2) {//远程驾驶正常
-//                    msg = "远程驾驶正常";
-//                    currentDriveModel = DRIVE_MODEL_REMOTE;//当前为远程驾驶
-//                } else if (data == 3) {//远程驾驶故障
-//                    msg = "远程驾驶故障";
-//                    currentDriveModel = DRIVE_MODEL_REMOTE;//当前为远程驾驶
-//                }
-//                break;
-//            }
             case OBU_Dig_Ord_SystemStatus: {//OBU系统运行状态信号
                 if (data == 0) {
                     msg = "无输入";
@@ -520,36 +445,6 @@ public class MainActivity extends BaseActivity {
                 }
                 break;
             }
-//            case RCU_MainControlChangeFeedBack: {//AD主控请求状态反馈
-//                if (data == 0) {
-//                    msg = "无输入";
-//                }else if (data == 1) {
-//                    msg = "不同意AD主控切换请求";
-//                    currentDriveModel = lastDriveModel;
-//                } else if (data == 2) {
-//                    msg = "同意AD主控切换请求";
-//                    changeSu = true;
-//                    currentDriveModel = DRIVE_MODEL_AUTO;//当前为自动驾驶
-//                    lastDriveModel = currentDriveModel;
-//                }
-//                break;
-//            }
-//            case AD_MainControlChangeFeedBack: {//RCU主控请求状态反馈
-//                if (data == 0) {
-//                    msg = "无输入";
-//                }else if (data == 1) {
-//                    msg = "不同意RCU主控切换请求";
-//                    currentDriveModel = lastDriveModel;
-//                } else if (data == 2) {
-//                    changeSu = true;
-//                    msg = "同意RCU主控切换请求";
-//                    currentDriveModel = DRIVE_MODEL_REMOTE;//当前为远程驾驶
-//                    lastDriveModel = currentDriveModel;
-//                } else if (data == 3) {
-//                    msg = "请求超时";
-//                }
-//                break;
-//            }
         }
         if(data == 1 || data == 3){
             ToastUtil.getInstance(mContext).showLengthToast(msg);
@@ -784,8 +679,8 @@ public class MainActivity extends BaseActivity {
 //            case HAD_GPSLongitude://经度
 //                return LOCALHOST_SCREEN_CENTER;
             case SystemStatus://RCU主控请求状态反馈
-            case HAD_Dig_Ord_SystemStatus://HAD行驶状态
-            case RCU_Dig_Ord_SystemStatus://RCU系统运行状态信号
+//            case HAD_Dig_Ord_SystemStatus://HAD行驶状态
+//            case RCU_Dig_Ord_SystemStatus://RCU系统运行状态信号
 //            case OBU_Dig_Ord_SystemStatus://OBU系统运行状态信号
 //            case RCU_MainControlChangeFeedBack://AD主控请求状态反馈
 //            case AD_MainControlChangeFeedBack://RCU主控请求状态反馈
