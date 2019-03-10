@@ -52,7 +52,7 @@ public class Transmit {
     private final static int MESSAGELENGTH = 14;
     private final int PORT = 4001;   // port号
     private final static String IP = "192.168.1.60"; // ip地址
-    private final static Transmit instance = new Transmit();
+//    private static Transmit instance = new Transmit();
     private MyHandler handler;
     private Context mContext;
     private LinkedBlockingQueue<Pair<byte[], Integer>> sendQueue = new LinkedBlockingQueue<>();
@@ -60,6 +60,10 @@ public class Transmit {
 
     public static void main(String[] args) {
         new Transmit();
+    }
+
+    private static class Holder{
+        public static Transmit instance = new Transmit();
     }
 
     private Transmit() {
@@ -136,7 +140,8 @@ public class Transmit {
     }
 
     public static Transmit getInstance() {
-        return instance;
+//        return instance;
+        return Holder.instance;
     }
 
     // 以下为私有方法，对外部是隐藏的
