@@ -11,6 +11,7 @@ import android.widget.Button;
 
 import com.hasee.minibuslocalhost.R;
 import com.hasee.minibuslocalhost.activity.MainActivity;
+import com.hasee.minibuslocalhost.view.CustomOnClickListener;
 
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.DRIVE_MODEL_AUTO;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.DRIVE_MODEL_AUTO_AWAIT;
@@ -55,9 +56,9 @@ public class MainRightFragment1 extends Fragment {
     /**
      * 事件点击监听器
      */
-    private View.OnClickListener onClickListener = new View.OnClickListener() {
+    private CustomOnClickListener onClickListener = new CustomOnClickListener(200) {
         @Override
-        public void onClick(View v) {
+        public void onSingleClick(View v) {
             switch (v.getId()){
                 case R.id.rightFragment1_autoDrive:{//自动驾驶
                     activity.handleFragmentMsg(DRIVE_MODEL_AUTO);//自动
