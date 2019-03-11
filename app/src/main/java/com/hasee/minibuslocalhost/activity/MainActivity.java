@@ -41,6 +41,7 @@ import com.hasee.minibuslocalhost.util.MyHandler;
 import com.hasee.minibuslocalhost.util.SendToScreenThread;
 import com.hasee.minibuslocalhost.util.StationPlayer;
 import com.hasee.minibuslocalhost.util.ToastUtil;
+import com.hasee.minibuslocalhost.view.CustomOnClickListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -154,8 +155,11 @@ public class MainActivity extends BaseActivity {
         }
         //释放语音播报类
         stationPlayer.destory();
-        //关闭音乐
-        destroyMusic();
+        //关闭播放器
+        if (musicBinder != null) {
+            musicBinder.closeMusic();
+            unbindService(connection);
+        }
         //关闭定时发送
 //        if(timerManager != null){
 //            timerManager.stopTimer();
@@ -262,16 +266,6 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    /**
-     * 销毁音乐
-     */
-    private void destroyMusic() {
-        //关闭播放器
-        if (musicBinder != null) {
-            musicBinder.closeMusic();
-            unbindService(connection);
-        }
-    }
 
     /**
      * 初始化控件
@@ -509,10 +503,10 @@ public class MainActivity extends BaseActivity {
     /**
      * 点击事件监听器
      */
-    private View.OnClickListener onClickListener = new View.OnClickListener() {
+    private CustomOnClickListener onClickListener = new CustomOnClickListener(200) {
         @SuppressLint("RestrictedApi")
         @Override
-        public void onClick(View v) {
+        public void onSingleClick(View v) {
             switch (v.getId()) {
                 case R.id.floatBtn: {//悬浮按钮(退出各种模式)
                     showFragment(rightFragment2, false);

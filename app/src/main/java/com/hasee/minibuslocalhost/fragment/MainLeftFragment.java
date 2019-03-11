@@ -20,6 +20,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.hasee.minibuslocalhost.R;
 import com.hasee.minibuslocalhost.activity.MainActivity;
 import com.hasee.minibuslocalhost.test.TimerManager;
+import com.hasee.minibuslocalhost.view.CustomOnClickListener;
 
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_ACBlowingLevel;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.BCM_DemisterStatus;
@@ -192,9 +193,9 @@ public class MainLeftFragment extends Fragment {
     /**
      * 事件点击监听器
      */
-    private View.OnClickListener onClickListener = new View.OnClickListener() {
+    private CustomOnClickListener onClickListener = new CustomOnClickListener(200) {
         @Override
-        public void onClick(View v) {
+        public void onSingleClick(View v) {
             switch (v.getId()) {
                 case R.id.leftFragment_lowBeam: {//近光灯
                     leftFragmentLowBeam.setActivated(!leftFragmentLowBeam.isActivated());
@@ -464,7 +465,7 @@ public class MainLeftFragment extends Fragment {
             }
             case BCM_ACBlowingLevel: {//空调风量档位
                 int index = object.getIntValue("data");//接收档位
-                if(index != AIR_GRADE_SIX_GEAR){
+                if (index != AIR_GRADE_SIX_GEAR) {
                     seekBarIndex = index;//当前档位
                     leftFragmentConditionSize.setText(String.valueOf(seekBarIndex));//设置档位数值
                     leftFragmentSeekBar.setProgress(seekBarIndex * 20);//设置滑动条
