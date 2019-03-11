@@ -79,7 +79,7 @@ public class HMI extends BaseClass {
     //    private byte[] bytes = {(byte) 0xFF, (byte) 0xAA, 0x03, (byte) 0x83, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x02};
     private volatile byte[] bytes = {(byte) 0xFF, (byte) 0xAA, 0x03, (byte) 0x83, 0x00, (byte) 0x80, 0x1A, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x02};
 
-    public Pair<byte[], byte[]> changeStatus(int command, Object status) {
+    public synchronized void changeStatus(int command, Object status) {
         switch (command) {
             case HMI_Dig_Ord_HighBeam:
                 setBits(bytes, (int) status, offset, 0, 2, ByteUtil.Motorola);
@@ -141,68 +141,19 @@ public class HMI extends BaseClass {
                 LogUtil.d(TAG, "消息转换错误");
                 break;
         }
-        byte[] bytes_1 = new byte[14];
-        byte[] bytes_2;
-        System.arraycopy(bytes, 0, bytes_1, 0, bytes.length);
-        bytes_2 = changeNoMain(command);
-        return new Pair<>(bytes_1,bytes_2);
     }
 
-    private byte[] changeNoMain(int command) {
-//        byte[] bytes = new byte[14];
-//        System.arraycopy(this.bytes, 0, bytes, 0, this.bytes.length);
-        switch (command) {
-            case HMI_Dig_Ord_HighBeam:
-            case HMI_Dig_Ord_LowBeam:
-                setBits(bytes, POINTLESS, offset, 2, 2, ByteUtil.Motorola);
-                setBits(bytes, POINTLESS, offset, 0, 2, ByteUtil.Motorola);
-                break;
-            case HMI_Dig_Ord_LeftTurningLamp:
-            case HMI_Dig_Ord_RightTurningLamp:
-                setBits(bytes, POINTLESS, offset, 6, 2, ByteUtil.Motorola);
-                setBits(bytes, POINTLESS, offset, 4, 2, ByteUtil.Motorola);
-                break;
-            case HMI_Dig_Ord_RearFogLamp:
-                setBits(bytes, POINTLESS, offset, 8, 2, ByteUtil.Motorola);
-                break;
-            case HMI_Dig_Ord_DoorLock:
-                setBits(bytes, POINTLESS, offset, 10, 2, ByteUtil.Motorola);
-                break;
-            case HMI_Dig_Ord_Alam:
-                setBits(bytes, POINTLESS, offset, 12, 2, ByteUtil.Motorola);
-                break;
-            case HMI_Dig_Ord_Driver_model:
-                setBits(bytes, DRIVE_MODEL_AUTO_AWAIT, offset, 14, 2, ByteUtil.Motorola);
-                break;
-            case HMI_Dig_Ord_air_model:
-                setBits(bytes, AIR_MODEL_AWAIT, offset, 16, 2, ByteUtil.Motorola);
-                break;
-            case HMI_Dig_Ord_air_grade:
-                setBits(bytes, AIR_GRADE_SIX_GEAR, offset, 18, 3, ByteUtil.Motorola);
-                break;
-            case HMI_Dig_Ord_eBooster_Warning:
-//                setBits(bytes, POINTLESS, offset, 21, 1, ByteUtil.Motorola);
-                break;
-            case HMI_Dig_Ord_DangerAlarm:
-                setBits(bytes, POINTLESS, offset, 22, 2, ByteUtil.Motorola);
-                break;
-            case HMI_Dig_Ord_FANPWM_Control:
-//                setBits(bytes, (int) status, offset, 24, 8, ByteUtil.Motorola);
-                break;
-            case HMI_Dig_Ord_Demister_Control:
-                setBits(bytes, POINTLESS, offset, 38, 2, ByteUtil.Motorola);
-                break;
-            case HMI_Dig_Ord_TotalOdmeter:
-//                setBits(bytes, (int) status, offset, 48, 20, ByteUtil.Motorola);
-                break;
-            case HMI_Dig_Ord_SystemRuningStatus:
-//                setBits(bytes, POINTLESS, offset, 36, 2, ByteUtil.Motorola);
-                break;
-            default:
-                LogUtil.d(TAG, "消息转换错误");
-                break;
-        }
-        return bytes;
+    public synchronized Pair<byte[], byte[]> getPairByte() {
+        byte[] first = new byte[14];
+        byte[] second = new byte[14];
+        System.arraycopy(bytes, 0, first, 0, first.length);
+        bytes = new byte[]{(byte) 0xFF, (byte) 0xAA, 0x03, (byte) 0x83, 0x00, (byte) 0x80, 0x1A, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x02};
+        setBits(bytes, (int) countBits(first, offset, 21, 1, ByteUtil.Motorola), offset, 21, 1, ByteUtil.Motorola);
+        setBits(bytes, (int) countBits(first, offset, 24, 8, ByteUtil.Motorola), offset, 24, 8, ByteUtil.Motorola);
+        setBits(bytes, (int) countBits(first, offset, 48, 20, ByteUtil.Motorola), offset, 48, 20, ByteUtil.Motorola);
+        setBits(bytes, (int) countBits(first, offset, 36, 2, ByteUtil.Motorola), offset, 36, 2, ByteUtil.Motorola);
+        System.arraycopy(bytes, 0, second, 0, second.length);
+        return new Pair<>(first, second);
     }
 
     @Override

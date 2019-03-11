@@ -55,7 +55,7 @@ public class Transmit {
 //    private static Transmit instance = new Transmit();
     private MyHandler handler;
     private Context mContext;
-    private final LinkedBlockingQueue<Pair<byte[], byte[]>> sendQueue = new LinkedBlockingQueue<>();
+//    private final LinkedBlockingQueue<Pair<byte[], byte[]>> sendQueue = new LinkedBlockingQueue<>();
     private boolean threadFlag = true; // 接收线程是否关闭
 
     public static void main(String[] args) {
@@ -81,17 +81,17 @@ public class Transmit {
             LogUtil.d(TAG, "类转换错误");
             return;
         }
-//        if (baseClass instanceof HMI)
-//            ((HMI) baseClass).changeStatus(field, o);
+        if (baseClass instanceof HMI)
+            ((HMI) baseClass).changeStatus(field, o);
 
 
-        synchronized (this) {
-            try {
-                sendQueue.put(((HMI) baseClass).changeStatus(field, o));
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+//        synchronized (this) {
+//            try {
+//                sendQueue.put(((HMI) baseClass).changeStatus(field, o));
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
     }
 
     // 发送队列线程
@@ -101,17 +101,18 @@ public class Transmit {
         public void run() {
             try {
                 while (threadFlag) {
-                    Pair<byte[], byte[]> First = sendQueue.take();
+//                    Pair<byte[], byte[]> First = sendQueue.take();
+                    Pair<byte[], byte[]> tmp = ((HMI) NAME_AND_CLASS.get("HMI")).getPairByte();
 //                    while (solveQueue(First, sendQueue.peek()));
-                    int size = sendQueue.size();
+//                    int size = sendQueue.size();
                     for (int i = 0; i < 5; i++) {
-                        UDP_send(First.first);
-//                        Thread.sleep(200);
-                        Log.d(TAG, size + "   " + i + ":" + "主机向车辆CAN总线发的信息:" + ByteUtil.bytesToHex(First.first));
+                        UDP_send(tmp.first);
+                        Thread.sleep(190);
+                        Log.d(TAG,i + ":" + "主机向车辆CAN总线发的信息:" + ByteUtil.bytesToHex(tmp.first));
                     }
-                    Thread.sleep(500);
-                    UDP_send(First.second);
-                    Log.d(TAG, "主机向车辆CAN总线发的无意义信息:" + ByteUtil.bytesToHex(First.second));
+                    Thread.sleep(190);
+                    UDP_send(tmp.second);
+                    Log.d(TAG, "主机向车辆CAN总线发的无意义信息:" + ByteUtil.bytesToHex(tmp.second));
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
