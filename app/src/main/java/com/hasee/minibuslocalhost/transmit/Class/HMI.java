@@ -1,5 +1,7 @@
 package com.hasee.minibuslocalhost.transmit.Class;
 
+import android.util.Pair;
+
 import com.hasee.minibuslocalhost.util.ByteUtil;
 import com.hasee.minibuslocalhost.util.LogUtil;
 
@@ -22,6 +24,7 @@ import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_TotalOd
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_air_grade;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_air_model;
 import static com.hasee.minibuslocalhost.bean.IntegerCommand.HMI_Dig_Ord_eBooster_Warning;
+import static com.hasee.minibuslocalhost.util.ByteUtil.countBits;
 import static com.hasee.minibuslocalhost.util.ByteUtil.setBits;
 
 public class HMI extends BaseClass {
@@ -74,21 +77,29 @@ public class HMI extends BaseClass {
     }
 
     //    private byte[] bytes = {(byte) 0xFF, (byte) 0xAA, 0x03, (byte) 0x83, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x02};
-    private byte[] bytes = {(byte) 0xFF, (byte) 0xAA, 0x03, (byte) 0x83, 0x00, (byte) 0x80, 0x1A, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x02};
+    private volatile byte[] bytes = {(byte) 0xFF, (byte) 0xAA, 0x03, (byte) 0x83, 0x00, (byte) 0x80, 0x1A, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x02};
 
-    public void changeStatus(int command, Object status) {
+    public Pair<byte[], byte[]> changeStatus(int command, Object status) {
         switch (command) {
             case HMI_Dig_Ord_HighBeam:
                 setBits(bytes, (int) status, offset, 0, 2, ByteUtil.Motorola);
+                if ((int) status != POINTLESS)
+                    setBits(bytes, OFF, offset, 2, 2, ByteUtil.Motorola);
                 break;
             case HMI_Dig_Ord_LowBeam:
                 setBits(bytes, (int) status, offset, 2, 2, ByteUtil.Motorola);
+                if ((int) status != POINTLESS)
+                    setBits(bytes, OFF, offset, 0, 2, ByteUtil.Motorola);
                 break;
             case HMI_Dig_Ord_LeftTurningLamp:
                 setBits(bytes, (int) status, offset, 4, 2, ByteUtil.Motorola);
+                if ((int) status != POINTLESS)
+                    setBits(bytes, OFF, offset, 6, 2, ByteUtil.Motorola);
                 break;
             case HMI_Dig_Ord_RightTurningLamp:
                 setBits(bytes, (int) status, offset, 6, 2, ByteUtil.Motorola);
+                if ((int) status != POINTLESS)
+                    setBits(bytes, OFF, offset, 4, 2, ByteUtil.Motorola);
                 break;
             case HMI_Dig_Ord_RearFogLamp:
                 setBits(bytes, (int) status, offset, 8, 2, ByteUtil.Motorola);
@@ -130,21 +141,26 @@ public class HMI extends BaseClass {
                 LogUtil.d(TAG, "消息转换错误");
                 break;
         }
+        byte[] bytes_1 = new byte[14];
+        byte[] bytes_2;
+        System.arraycopy(bytes, 0, bytes_1, 0, bytes.length);
+        bytes_2 = changeNoMain(command);
+        return new Pair<>(bytes_1,bytes_2);
     }
 
-    public byte[] changeNoMain(int command) {
+    private byte[] changeNoMain(int command) {
+//        byte[] bytes = new byte[14];
+//        System.arraycopy(this.bytes, 0, bytes, 0, this.bytes.length);
         switch (command) {
             case HMI_Dig_Ord_HighBeam:
-                setBits(bytes, POINTLESS, offset, 0, 2, ByteUtil.Motorola);
-                break;
             case HMI_Dig_Ord_LowBeam:
                 setBits(bytes, POINTLESS, offset, 2, 2, ByteUtil.Motorola);
+                setBits(bytes, POINTLESS, offset, 0, 2, ByteUtil.Motorola);
                 break;
             case HMI_Dig_Ord_LeftTurningLamp:
-                setBits(bytes, POINTLESS, offset, 4, 2, ByteUtil.Motorola);
-                break;
             case HMI_Dig_Ord_RightTurningLamp:
                 setBits(bytes, POINTLESS, offset, 6, 2, ByteUtil.Motorola);
+                setBits(bytes, POINTLESS, offset, 4, 2, ByteUtil.Motorola);
                 break;
             case HMI_Dig_Ord_RearFogLamp:
                 setBits(bytes, POINTLESS, offset, 8, 2, ByteUtil.Motorola);

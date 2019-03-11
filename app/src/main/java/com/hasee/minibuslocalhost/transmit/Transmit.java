@@ -55,7 +55,7 @@ public class Transmit {
 //    private static Transmit instance = new Transmit();
     private MyHandler handler;
     private Context mContext;
-    private LinkedBlockingQueue<Pair<byte[], Integer>> sendQueue = new LinkedBlockingQueue<>();
+    private final LinkedBlockingQueue<Pair<byte[], byte[]>> sendQueue = new LinkedBlockingQueue<>();
     private boolean threadFlag = true; // 接收线程是否关闭
 
     public static void main(String[] args) {
@@ -81,13 +81,13 @@ public class Transmit {
             LogUtil.d(TAG, "类转换错误");
             return;
         }
-        if (baseClass instanceof HMI)
-            ((HMI) baseClass).changeStatus(field, o);
+//        if (baseClass instanceof HMI)
+//            ((HMI) baseClass).changeStatus(field, o);
 
-        byte[] bytes = baseClass.getBytes();
+
         synchronized (this) {
             try {
-                sendQueue.put(new Pair<>(bytes, field));
+                sendQueue.put(((HMI) baseClass).changeStatus(field, o));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -101,15 +101,17 @@ public class Transmit {
         public void run() {
             try {
                 while (threadFlag) {
-                    Pair<byte[], Integer> tmp = sendQueue.take();
+                    Pair<byte[], byte[]> First = sendQueue.take();
+//                    while (solveQueue(First, sendQueue.peek()));
+                    int size = sendQueue.size();
                     for (int i = 0; i < 5; i++) {
-                        UDP_send(tmp.first);
-                        Log.d(TAG, i + ":" + "主机向车辆CAN总线发的信息:" + ByteUtil.bytesToHex(tmp.first));
+                        UDP_send(First.first);
+//                        Thread.sleep(200);
+                        Log.d(TAG, size + "   " + i + ":" + "主机向车辆CAN总线发的信息:" + ByteUtil.bytesToHex(First.first));
                     }
-                    byte[] bytes = ((HMI) NAME_AND_CLASS.get("HMI")).changeNoMain(tmp.second.intValue());
                     Thread.sleep(500);
-                    UDP_send(bytes);
-                    Log.d(TAG, "主机向车辆CAN总线发的无意义信息:" + ByteUtil.bytesToHex(bytes));
+                    UDP_send(First.second);
+                    Log.d(TAG, "主机向车辆CAN总线发的无意义信息:" + ByteUtil.bytesToHex(First.second));
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -131,6 +133,16 @@ public class Transmit {
         LogUtil.d(TAG, "车辆初始化：" + bytesToHex(bytes));
         UDP_send(bytes);
     }
+
+//    // 队列数据处理
+//    private boolean solveQueue(Pair<byte[], byte[]> First, Pair<byte[], byte[]> Second) throws InterruptedException {
+//        // 如果头为空，就直接返回
+//        if(Second == null)
+//            return false;
+//        if()
+//        sendQueue.take();
+//        return true;
+//    }
 
     public void setHandler(Context mContext, MyHandler handler) {
         this.mContext = mContext;
@@ -173,15 +185,15 @@ public class Transmit {
     }
 
     // 发到CAN总线
-    private void UDP_send(final byte[] sendMsgs) {
+    private synchronized void UDP_send(final byte[] sendMsgs) {
         DatagramSocket datagramSocket = null;
         DatagramPacket datagramPacket;
         try {
             datagramSocket = new DatagramSocket();
             datagramPacket = new DatagramPacket(sendMsgs, sendMsgs.length, InetAddress.getByName(IP), PORT);
-            if (NetWorkUtil.getInstance(mContext).isAvailable()) {
-                datagramSocket.send(datagramPacket);
-            }
+//            if (NetWorkUtil.getInstance(mContext).isAvailable()) {
+            datagramSocket.send(datagramPacket);
+//            }
         } catch (IOException e) {
             e.printStackTrace();
         } finally {

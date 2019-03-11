@@ -341,7 +341,7 @@ public class MainActivity extends BaseActivity {
                 }
                 case SEND_TO_LEFTSCREEN: {//左车门
                     new SendToScreenThread(mContext,object, SEND_TO_LEFTSCREEN).start();
-                    playStationMusic(object);
+//                    playStationMusic(object);
 //                    LogUtil.d(TAG, "发送信息给左车门");
                     break;
                 }
