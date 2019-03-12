@@ -47,8 +47,8 @@ public class HMI extends BaseClass {
     // 空调
     public static final int AIR_MODEL_COOL = 0; // 制冷
     public static final int AIR_MODEL_HEAT = 1; // 制热
-    public static final int AIR_MODEL_DEMIST = 2; // 除雾
-    public static final int AIR_MODEL_AWAIT = 2; // 待定
+    public static final int ARI_MODEL_CLOSE = 2; // 关闭
+    public static final int AIR_MODEL_AWAIT = 3; // 待定
     public static final int AIR_GRADE_OFF = 0; // 关闭
     public static final int AIR_GRADE_FIRST_GEAR = 1; // 1挡
     public static final int AIR_GRADE_SECOND_GEAR = 2; // 2挡
@@ -77,7 +77,7 @@ public class HMI extends BaseClass {
     }
 
     //    private byte[] bytes = {(byte) 0xFF, (byte) 0xAA, 0x03, (byte) 0x83, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x02};
-    private volatile byte[] bytes = {(byte) 0xFF, (byte) 0xAA, 0x03, (byte) 0x83, 0x00, (byte) 0x80, 0x1A, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x02};
+    private volatile byte[] bytes = {(byte) 0xFF, (byte) 0xAA, 0x03, (byte) 0x83, 0x00, (byte) 0x80, 0x1B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x02};
 
     public synchronized void changeStatus(int command, Object status) {
         switch (command) {
@@ -147,7 +147,7 @@ public class HMI extends BaseClass {
         byte[] first = new byte[14];
         byte[] second = new byte[14];
         System.arraycopy(bytes, 0, first, 0, first.length);
-        bytes = new byte[]{(byte) 0xFF, (byte) 0xAA, 0x03, (byte) 0x83, 0x00, (byte) 0x80, 0x1A, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x02};
+        bytes = new byte[]{(byte) 0xFF, (byte) 0xAA, 0x03, (byte) 0x83, 0x00, (byte) 0x80, 0x1B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x02};
         setBits(bytes, (int) countBits(first, offset, 21, 1, ByteUtil.Motorola), offset, 21, 1, ByteUtil.Motorola);
         setBits(bytes, (int) countBits(first, offset, 24, 8, ByteUtil.Motorola), offset, 24, 8, ByteUtil.Motorola);
         setBits(bytes, (int) countBits(first, offset, 48, 20, ByteUtil.Motorola), offset, 48, 20, ByteUtil.Motorola);
