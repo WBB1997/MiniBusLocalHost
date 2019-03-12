@@ -661,6 +661,7 @@ public class MainActivity extends BaseActivity {
             case BCM_Flg_Stat_DangerAlarmLamp://危险报警灯控制（双闪）状态信号
             case BCM_ACBlowingLevel://空调风量档位
             case BCM_DemisterStatus://除雾状态
+//            case VCU_ACWorkingStatus://空调工作模式信号
                 return LOCALHOST_SCREEN_LEFT;
             //右边Fragment
 //            case BCM_InsideTemp://车内温度
