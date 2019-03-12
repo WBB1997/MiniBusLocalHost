@@ -83,15 +83,6 @@ public class Transmit {
         }
         if (baseClass instanceof HMI)
             ((HMI) baseClass).changeStatus(field, o);
-
-
-//        synchronized (this) {
-//            try {
-//                sendQueue.put(((HMI) baseClass).changeStatus(field, o));
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
     }
 
     // 发送队列线程
@@ -101,16 +92,13 @@ public class Transmit {
         public void run() {
             try {
                 while (threadFlag) {
-//                    Pair<byte[], byte[]> First = sendQueue.take();
                     Pair<byte[], byte[]> tmp = ((HMI) NAME_AND_CLASS.get("HMI")).getPairByte();
-//                    while (solveQueue(First, sendQueue.peek()));
-//                    int size = sendQueue.size();
                     for (int i = 0; i < 5; i++) {
+                        Thread.sleep(200);
                         UDP_send(tmp.first);
-                        Thread.sleep(190);
                         Log.d(TAG,i + ":" + "主机向车辆CAN总线发的信息:" + ByteUtil.bytesToHex(tmp.first));
                     }
-                    Thread.sleep(190);
+                    Thread.sleep(200);
                     UDP_send(tmp.second);
                     Log.d(TAG, "主机向车辆CAN总线发的无意义信息:" + ByteUtil.bytesToHex(tmp.second));
                 }
@@ -135,16 +123,6 @@ public class Transmit {
         UDP_send(bytes);
     }
 
-//    // 队列数据处理
-//    private boolean solveQueue(Pair<byte[], byte[]> First, Pair<byte[], byte[]> Second) throws InterruptedException {
-//        // 如果头为空，就直接返回
-//        if(Second == null)
-//            return false;
-//        if()
-//        sendQueue.take();
-//        return true;
-//    }
-
     public void setHandler(Context mContext, MyHandler handler) {
         this.mContext = mContext;
         this.handler = handler;
@@ -153,7 +131,6 @@ public class Transmit {
     }
 
     public static Transmit getInstance() {
-//        return instance;
         return Holder.instance;
     }
 
@@ -192,9 +169,7 @@ public class Transmit {
         try {
             datagramSocket = new DatagramSocket();
             datagramPacket = new DatagramPacket(sendMsgs, sendMsgs.length, InetAddress.getByName(IP), PORT);
-//            if (NetWorkUtil.getInstance(mContext).isAvailable()) {
             datagramSocket.send(datagramPacket);
-//            }
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
