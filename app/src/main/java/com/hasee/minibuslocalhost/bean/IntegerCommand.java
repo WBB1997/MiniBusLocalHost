@@ -97,4 +97,5 @@ public class IntegerCommand {
     public static final int RCU_MainControlChangeFeedBack = 85; //AD主控请求状态反馈
     public static final int AD_MainControlChangeFeedBack = 86; //RCU主控请求状态反馈
     public static final int SystemStatus = 87; //RCU主控请求状态反馈
+    public static final int VCU_ACWorkingStatus = 88; //空调工作模式信号
 }

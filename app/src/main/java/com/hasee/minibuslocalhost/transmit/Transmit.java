@@ -26,6 +26,7 @@ import com.hasee.minibuslocalhost.transmit.Class.OBU5;
 import com.hasee.minibuslocalhost.transmit.Class.PCGL1;
 import com.hasee.minibuslocalhost.transmit.Class.PCGR1;
 import com.hasee.minibuslocalhost.transmit.Class.RCU_FeedBack;
+import com.hasee.minibuslocalhost.transmit.Class.VCU1;
 import com.hasee.minibuslocalhost.transmit.Class.VCU2;
 import com.hasee.minibuslocalhost.transmit.Class.VCU3;
 import com.hasee.minibuslocalhost.transmit.Class.VCU4;
@@ -182,28 +183,29 @@ public class Transmit {
 
     // 消息标识符
     private ArrayList<Pair<String, ? extends BaseClass>> list = new ArrayList<>(Arrays.asList(
-            new Pair<>("00000220", new VCU2()),
-            new Pair<>("000003e1", new EPB1()),
-            new Pair<>("00000300", new MCU1()),
-            new Pair<>("00000373", new EPS1()),
+//            new Pair<>("00000220", new VCU2()),
+//            new Pair<>("000003e1", new EPB1()),
+//            new Pair<>("00000300", new MCU1()),
+//            new Pair<>("00000373", new EPS1()),
             new Pair<>("00000361", new BCM1()),
             new Pair<>("000004cf", new AD4()),
-            new Pair<>("00000227", new ESC2()),
+//            new Pair<>("00000227", new ESC2()),
             new Pair<>("000004c0", new ESC3()),
             new Pair<>("00000331", new PCGL1()),
             new Pair<>("00000333", new PCGR1()),
             new Pair<>("00000383", new HMI()),
-            new Pair<>("00000234", new OBU2()),
+//            new Pair<>("00000234", new OBU2()),
             new Pair<>("00000235", new OBU5()),
             new Pair<>("00000236", new HAD5()),
             new Pair<>("00000237", new HAD6()),
             new Pair<>("00000260", new BMS1()),
-            new Pair<>("00000420", new VCU3()),
+//            new Pair<>("00000420", new VCU3()),
             new Pair<>("00000421", new VCU4()),
             new Pair<>("00000465", new BMS7()),
-            new Pair<>("00000081", new AD_FeedBack()),
-            new Pair<>("00000080", new RCU_FeedBack()),
-            new Pair<>("00000219", new AD1AndRCU1())
+//            new Pair<>("00000081", new AD_FeedBack()),
+//            new Pair<>("00000080", new RCU_FeedBack()),
+            new Pair<>("00000219", new AD1AndRCU1()),
+            new Pair<>("00000222", new VCU1())
     ));
     // 消息标识符键值对，方便查找
     private Map<String, ? super BaseClass> FLAG_AND_CLASS = new HashMap<>();
