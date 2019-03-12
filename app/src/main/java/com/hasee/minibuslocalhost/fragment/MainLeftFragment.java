@@ -47,9 +47,9 @@ import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_GRADE_OFF;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_GRADE_SECOND_GEAR;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_GRADE_SIX_GEAR;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_GRADE_THIRD_GEAR;
-import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_MODEL_AWAIT;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_MODEL_COOL;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.AIR_MODEL_HEAT;
+import static com.hasee.minibuslocalhost.transmit.Class.HMI.ARI_MODEL_CLOSE;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.OFF;
 import static com.hasee.minibuslocalhost.transmit.Class.HMI.ON;
 
@@ -315,7 +315,7 @@ public class MainLeftFragment extends Fragment {
                         o = AIR_MODEL_COOL;//制冷模式
                     } else {
                         if (!leftFragmentHotAir.isActivated()) {//空调冷气和暖气都关闭
-                            o = AIR_MODEL_AWAIT;//关闭
+                            o = ARI_MODEL_CLOSE;//关闭
                             //滑动条不可点击
                             seekBarIndex = AIR_GRADE_SIX_GEAR;//变为OFF档
                             leftFragmentSeekBar.setEnabled(false);
@@ -343,7 +343,7 @@ public class MainLeftFragment extends Fragment {
                         o = AIR_MODEL_HEAT;//制热模式
                     } else {
                         if (!leftFragmentCoolAir.isActivated()) {//空调冷气和暖气都关闭
-                            o = AIR_MODEL_AWAIT;//关闭
+                            o = ARI_MODEL_CLOSE;//关闭
                             //滑动条不可点击
                             seekBarIndex = AIR_GRADE_SIX_GEAR;
                             leftFragmentSeekBar.setEnabled(false);
@@ -371,7 +371,7 @@ public class MainLeftFragment extends Fragment {
                 activity.sendToCAN(clazz, field, o);
                 if (field == HMI_Dig_Ord_air_model) {//如果当前是空调模式
                     activity.sendToCAN(clazz, HMI_Dig_Ord_air_grade, seekBarIndex);//档位
-                    if (AIR_MODEL_AWAIT == (int) o) {//空调关闭
+                    if (ARI_MODEL_CLOSE == (int) o) {//空调关闭
                         // 风扇PWM占比控制信号
                         activity.sendToCAN(clazz, HMI_Dig_Ord_FANPWM_Control, 0);
                     }
@@ -394,15 +394,15 @@ public class MainLeftFragment extends Fragment {
      * 更新布局
      */
     public void refresh(JSONObject object) {
-        boolean data = object.getBoolean("data");
         int id = object.getIntValue("id");
+        Object data = object.get("data");
 //        LogUtil.d(TAG, "id:" + id);
         switch (id) {
             case BCM_Flg_Stat_LeftTurningLamp: {// 左转
-                leftFragmentLeftLight.setActivated(data);
-                if (data) {//要求左转开
+                leftFragmentLeftLight.setActivated((boolean)data);
+                if ((boolean)data) {//要求左转开
                     leftFragmentRightLight.setActivated(false);//右转向灯关
-                    leftFragmentErrorLight.setActivated(false);//双闪关
+//                    leftFragmentErrorLight.setActivated(false);//双闪关
                     leftFragmentCarLeftlightOpen.setVisibility(View.VISIBLE);
                 } else {
                     leftFragmentCarLeftlightOpen.setVisibility(View.INVISIBLE);
@@ -410,18 +410,18 @@ public class MainLeftFragment extends Fragment {
                 break;
             }
             case BCM_Flg_Stat_RightTurningLamp: {// 右转
-                leftFragmentRightLight.setActivated(data);
-                if (data) {
+                leftFragmentRightLight.setActivated((boolean)data);
+                if ((boolean)data) {
                     leftFragmentLeftLight.setActivated(false);//左转向灯关
-                    leftFragmentErrorLight.setActivated(false);//双闪关
+//                    leftFragmentErrorLight.setActivated(false);//双闪关
                 } else {
 //
                 }
                 break;
             }
             case BCM_Flg_Stat_HighBeam: {// 远光灯
-                leftFragmentHighBeam.setActivated(data);
-                if (data) {
+                leftFragmentHighBeam.setActivated((boolean)data);
+                if ((boolean)data) {
                     leftFragmentLowBeam.setActivated(false);//近光灯关
                     leftFragmentCarLowbeamOpen.setVisibility(View.INVISIBLE);
                     leftFragmentCarHighbeamOpen.setVisibility(View.VISIBLE);
@@ -431,8 +431,8 @@ public class MainLeftFragment extends Fragment {
                 break;
             }
             case BCM_Flg_Stat_LowBeam: {// 近光灯
-                leftFragmentLowBeam.setActivated(data);
-                if (data) {
+                leftFragmentLowBeam.setActivated((boolean)data);
+                if ((boolean)data) {
                     leftFragmentHighBeam.setActivated(false);//远光灯关
                     leftFragmentCarHighbeamOpen.setVisibility(View.INVISIBLE);
                     leftFragmentCarLowbeamOpen.setVisibility(View.VISIBLE);
@@ -442,8 +442,8 @@ public class MainLeftFragment extends Fragment {
                 break;
             }
             case BCM_Flg_Stat_RearFogLamp: {// 后雾灯
-                leftFragmentBackFogLight.setActivated(data);
-                if (data) {
+                leftFragmentBackFogLight.setActivated((boolean)data);
+                if ((boolean)data) {
                     leftFragmentCarFoglightOpen.setVisibility(View.VISIBLE);
                 } else {
                     leftFragmentCarFoglightOpen.setVisibility(View.INVISIBLE);
@@ -451,7 +451,7 @@ public class MainLeftFragment extends Fragment {
                 break;
             }
             case BCM_Flg_Stat_DangerAlarmLamp: {// 双闪
-                leftFragmentErrorLight.setActivated(data);
+                leftFragmentErrorLight.setActivated((boolean)data);
 //                if (data) {//要求双闪开
 //                    leftFragmentLeftLight.setActivated(true);
 //                    leftFragmentRightLight.setActivated(true);
@@ -473,9 +473,21 @@ public class MainLeftFragment extends Fragment {
                 break;
             }
             case BCM_DemisterStatus: {//除雾状态
-                leftFragmentDeFog.setActivated(data);
+                leftFragmentDeFog.setActivated((boolean)data);
                 break;
             }
+//            case VCU_ACWorkingStatus:{//空调工作模式信号
+//                int flag = (int)data;
+//                if(flag == 0){//制冷
+//
+//                }else if(flag == 1){
+//
+//                }else if(flag == 2){
+//
+//                }
+//                break;
+//            }
+
         }
     }
 
