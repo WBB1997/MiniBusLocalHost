@@ -204,7 +204,7 @@ public class MainActivity extends BaseActivity {
                 sreialComm.receive();
             }
         });
-//        sreialThread.start();
+        sreialThread.start();
         //模拟定时发送
 //        timerManager = new TimerManager(handler);
 //        timerManager.startTimer();
